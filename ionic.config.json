@@ -1,0 +1,7 @@
+{
+  "name": "tradekings-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
