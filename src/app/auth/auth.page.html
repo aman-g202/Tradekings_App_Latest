@@ -1,9 +1,33 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>auth</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
+  <ion-row>
+    <ion-col class="logo-wrapper" size="12">
+      <img src="assets/imgs/avatar.png" alt="logo">
+    </ion-col>
+  </ion-row>
+  <form [formGroup]="loginForm">
+    <ion-grid>
+      <ion-row>
+        <ion-item size="12">
+          <ion-label position="floating">Login Id</ion-label>
+          <ion-input type="text" formControlName="userLoginId"></ion-input>
+        </ion-item>
+        <ion-icon name="log-in" [ngClass]=" isActive ? 'item-active': 'item-inactive'"></ion-icon>
+      </ion-row>
+      <p *ngIf="loginForm.get('userLoginId').hasError('required') && loginForm.get('userLoginId').touched" class="error">*Login Id is required</p>
+      <ion-row>
+        <ion-item size="12">
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type="{{passwordFieldType}}" formControlName="password"></ion-input>
+        </ion-item>
+        <ion-icon name="eye" (click)="showPassword()" [ngClass]=" isActive ? 'item-active': 'item-inactive'"></ion-icon>
+      </ion-row>
+      <p *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched" class="error">*Password is required</p>
+    </ion-grid>
+    <ion-grid>
+      <ion-button expand="full" [disabled]="loginForm.invalid" (click)="login()">
+        Login
+        <ion-spinner name="dots" *ngIf="showLoginLoader"></ion-spinner>
+      </ion-button>
+    </ion-grid>
+  </form>
 </ion-content>

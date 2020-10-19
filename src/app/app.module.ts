@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthPage } from './auth/auth.page';
 import { DashboardPage } from './shared/dashboard/dashboard.page';
 import { NavigationDrawerPage } from './shared/navigation-drawer/navigation-drawer.page';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PaymentHistoryPage } from './shared/payment-history/payment-history.page';
 import { AddPaymentPage } from './shared/add-payment/add-payment.page';
 import { CapturePricePage } from './shared/capture-price/capture-price.page';
@@ -25,6 +26,11 @@ import { AddUserPage } from './admin/add-user/add-user.page';
 import { AddCategoryPage } from './admin/add-category/add-category.page';
 import { AddProductPage } from './admin/add-product/add-product.page';
 import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DashboardService } from '../../src/providers/services/dashboard/dashboard.service'
+import { CategoriesService } from '../../src/providers/services/categories/categories.service';
+import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -48,11 +54,18 @@ import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
     AddTKProductPage
   ],
   entryComponents: [CategoryTotalModalPage],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    DashboardService,
+    CategoriesService,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass : TokenInterceptor,
+      multi : true
+    }
   ],
   bootstrap: [AppComponent]
 })

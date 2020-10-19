@@ -1,0 +1,42 @@
+//header
+ion-header,
+ion-toolbar.toolbar,
+ion-navbar.toolbar {
+  .toolbar-background{
+    background: #225F93;
+  }
+  .searchbar .searchbar-input {
+    background: #fff;
+  }
+}
+
+//ios header
+.toolbar-content .toolbar-title {
+  color: #fff;
+}
+//header
+ion-toolbar.toolbar {
+  padding: 10px 15px;
+  ion-title {
+    position: relative;
+    padding: 0;
+    .toolbar-title {
+      font-size: 12px;
+      color: #fff;
+      text-align: center
+    }
+    span {
+      font-size: 18px;
+      display: block;
+      padding-left: 5px;
+      margin-top: 4px;
+    }
+  }
+  > div {
+    text-align: center;
+    &.toolbar-content {
+      border-bottom: 1px solid #fff;
+      padding-bottom: 20px;
+    }
+  }
+}
