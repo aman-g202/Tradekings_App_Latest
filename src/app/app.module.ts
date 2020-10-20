@@ -27,9 +27,9 @@ import { AddCategoryPage } from './admin/add-category/add-category.page';
 import { AddProductPage } from './admin/add-product/add-product.page';
 import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DashboardService } from '../../src/providers/services/dashboard/dashboard.service'
-import { CategoriesService } from '../../src/providers/services/categories/categories.service';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
+import { IonicStorageModule } from "@ionic/storage";
+import { StorageServiceProvider } from '../../src/providers/services/storage/storage.service';
 
 
 @NgModule({
@@ -54,12 +54,18 @@ import { TokenInterceptor } from '../../src/providers/interceptors/http.intercep
     AddTKProductPage
   ],
   entryComponents: [CategoryTotalModalPage],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
+    IonicStorageModule.forRoot(
+      { 
+        name: '__tradekings',
+        driverOrder: ['localstorage']
+      }
+    ),
+  ],
   providers: [
     StatusBar,
     SplashScreen,
-    DashboardService,
-    CategoriesService,
+    StorageServiceProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide : HTTP_INTERCEPTORS,

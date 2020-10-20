@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AuthService {
@@ -9,7 +9,7 @@ export class AuthService {
     private httpClient: HttpClient
   ) {}
 
-  login (data) : any {
-    return this.httpClient.post(environment.baseUrl + 'api/user/authenticate', data)
+  login (data : FormData) {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.login, data)
   }
 }

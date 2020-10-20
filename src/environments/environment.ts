@@ -5,7 +5,11 @@
 export const environment = {
   production: false,
   baseUrl: 'http://41.218.83.178:3002/',
-  endPoints: {},
+  endPoints: {
+    login: 'api/user/authenticate',
+    getDashboard: 'api/user/get/dashboard',
+    getParentCategory: 'api/category/list/parent'
+  },
   storageKeys: {}
 };
 

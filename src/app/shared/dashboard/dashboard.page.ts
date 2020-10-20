@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { DashboardService } from '../../../providers/services/dashboard/dashboard.service'
 import { CategoriesService } from '../../../providers/services/categories/categories.service'
-import { LoadingController } from '@ionic/angular';
+import { WidgetUtilService } from '../../../providers/utils/widget'
+import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,16 +23,17 @@ export class DashboardPage implements OnInit {
   categoryList: any = []
   data: any = {}
   loader: any
+  profile: any
+  loaderDownloading;
   externalId: string = ''
 
   constructor(
     private dashboardService: DashboardService,
     private categoriesServices: CategoriesService,
-    public loadingController: LoadingController) { }
+    public widgetUtil: WidgetUtilService,
+    private storageService: StorageServiceProvider) { }
 
   ngOnInit() {
-    let profile = JSON.parse(localStorage.getItem('profile'));
-    this.partyName = profile.name;
     this.getData();
   }
 
@@ -71,38 +73,33 @@ export class DashboardPage implements OnInit {
 
 
   async getData () {
-    const loading = await this.loadingController.create({
-      message: 'Please wait...',
-      duration: 2000
-    });
-    loading.present();
+    this. profile = await this.storageService.getFromStorage('profile')
+    this.partyName = this.profile.name;
+    this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     try {
-      let profile = JSON.parse(localStorage.getItem('profile'));
       // this.partyName = profile['name']
-      if ((profile['userType'] === 'SALESMAN') || (profile['userType'] === 'SALESMANAGER')) {
-        let profile = JSON.parse(localStorage.getItem('profile'));
-        this.partyName = profile.name
-        this.externalId = profile.externalId
+      if ((this.profile['userType'] === 'SALESMAN') || (this.profile['userType'] === 'SALESMANAGER')) {
+        this.partyName = this.profile['name']
+        this.externalId = this.profile['externalId']
         this.userTypeCustomer = false;
       }
       else {
-        this.partyName = profile.name
-        this.externalId = profile.externalId
+        this.partyName = this.profile['name']
+        this.externalId = this.profile['externalId']
         this.userTypeCustomer = true;
       }
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0]
-        console.log("============dashboarddata", this.dashboardData)
         this.categoriesServices.getParentCategoryList(0,20).subscribe((res:any) => {
           this.categoryList = res.body
           this.prepareData('Total')
         })
       })
-      loading.onDidDismiss();
+      this.loaderDownloading.onDidDismiss();
     }
     catch (err) {
       console.log('Error: Profile Details could not Load', err)
-      loading.onDidDismiss();
+      this.loaderDownloading.onDidDismiss();
     }
   }
 
@@ -125,9 +122,7 @@ export class DashboardPage implements OnInit {
       this.data.lymtdGrowthPercentage = 0
       //Preparing Data for Graph
       this.mtdAchieved = this.data.achievement
-      //this.target = this.data.balanceToDo
       this.target = 1
-      this.displayChart()
     }
 
     else{
@@ -170,11 +165,9 @@ export class DashboardPage implements OnInit {
       else{
         this.target = this.data.balanceToDo
       }
-      console.log("=========data", this.data);
       this.mtdAchieved = this.data.achievement
-      // this.data.target = 123456789
-      this.displayChart()
     }
+    this.displayChart()
     
   }
 

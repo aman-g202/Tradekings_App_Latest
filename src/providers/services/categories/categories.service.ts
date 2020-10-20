@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CategoriesService {
 
   constructor(
@@ -10,6 +10,7 @@ export class CategoriesService {
   ) {}
 
   getParentCategoryList (skip: number, limit:number): any {
-    return this.httpClient.get(environment.baseUrl + 'api/category/list/parent?skip='+skip.toString() + "&limit="+ limit.toString())
+    let data = {skip: skip.toString(), limit: limit.toString()}
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getParentCategory, {params: data})
   }
 }

@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/services/auth/auth.service';
-import { ToastController } from '@ionic/angular';
+import { WidgetUtilService } from '../../providers/utils/widget';
 import { CONSTANTS } from '../../providers/utils/constants';
+import { StorageServiceProvider } from '../../providers/services/storage/storage.service';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class AuthPage implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    public toastController: ToastController
+    public widgetUtil: WidgetUtilService,
+    private storageService: StorageServiceProvider
     ) { }
 
   ngOnInit() {
@@ -34,33 +36,25 @@ export class AuthPage implements OnInit {
 
   async login() {
     this.showLoginLoader = true;
-    console.log("============value", this.loginForm.value);
     this.authService.login(this.loginForm.value).subscribe((responseData: any) => {
       this.showLoginLoader = false;
-      console.log(responseData);
       if (responseData.status === 200) { 
-        localStorage.setItem('token', responseData.body[0].token)
-        localStorage.setItem('profile', JSON.stringify(responseData.body[0]))
-        localStorage.setItem('userType', responseData.body[0].userType)
+        this.storageService.setToStorage('token', responseData.body[0].token)
+        this.storageService.setToStorage('profile', responseData.body[0])
+        this.storageService.setToStorage('userType', responseData.body[0].userType)
+        localStorage.setItem('token', responseData.body[0].token);
         this.router.navigateByUrl('/dashboard');
       }
     }, (error:any) => {
       this.showLoginLoader = false;
       if (error.statusText === 'Unknown Error'){
-        this.presentToast(CONSTANTS.INTERNET_ISSUE)
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
       } else {
-        this.presentToast(CONSTANTS.AUTH_FAIL)
+        this.widgetUtil.presentToast(CONSTANTS.AUTH_FAIL)
       }
     });
   }
 
-  async presentToast(message) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000
-    });
-    toast.present();
-  }
 
 
   showPassword (){
