@@ -29,7 +29,7 @@ const routes: Routes = [
     component: AuthPage
   },
   {
-    path: 'dashboard',
+    path: 'dashboard/:userType',
     component: DashboardPage
   },
   {

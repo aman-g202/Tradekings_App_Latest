@@ -23,7 +23,6 @@ export class DashboardPage implements OnInit {
   categoryList: any = []
   data: any = {}
   loader: any
-  profile: any
   loaderDownloading;
   externalId: string = ''
 
@@ -73,19 +72,17 @@ export class DashboardPage implements OnInit {
 
 
   async getData () {
-    this. profile = await this.storageService.getFromStorage('profile')
-    this.partyName = this.profile.name;
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     try {
-      // this.partyName = profile['name']
-      if ((this.profile['userType'] === 'SALESMAN') || (this.profile['userType'] === 'SALESMANAGER')) {
-        this.partyName = this.profile['name']
-        this.externalId = this.profile['externalId']
+      let profile = await this.storageService.getFromStorage('profile')
+      if ((profile['userType'] === 'SALESMAN') || (profile['userType'] === 'SALESMANAGER')) {
+        this.partyName = profile['name']
+        this.externalId = profile['externalId']
         this.userTypeCustomer = false;
       }
       else {
-        this.partyName = this.profile['name']
-        this.externalId = this.profile['externalId']
+        this.partyName = profile['name']
+        this.externalId = profile['externalId']
         this.userTypeCustomer = true;
       }
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
