@@ -7,9 +7,9 @@ export class AuthService {
 
   constructor(
     private httpClient: HttpClient
-  ) {}
+  ) { }
 
-  login (data : FormData) {
-    return this.httpClient.post(environment.baseUrl + environment.endPoints.login, data)
+  login(data: FormData) {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.login, data);
   }
 }

@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthPage } from './auth/auth.page';
 import { DashboardPage } from './shared/dashboard/dashboard.page';
 import { NavigationDrawerPage } from './shared/navigation-drawer/navigation-drawer.page';
-import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PaymentHistoryPage } from './shared/payment-history/payment-history.page';
 import { AddPaymentPage } from './shared/add-payment/add-payment.page';
 import { CapturePricePage } from './shared/capture-price/capture-price.page';
@@ -28,9 +28,7 @@ import { AddProductPage } from './admin/add-product/add-product.page';
 import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
-import { IonicStorageModule } from "@ionic/storage";
-import { StorageServiceProvider } from '../../src/providers/services/storage/storage.service';
-
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -56,23 +54,22 @@ import { StorageServiceProvider } from '../../src/providers/services/storage/sto
   entryComponents: [CategoryTotalModalPage],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
     IonicStorageModule.forRoot(
-      { 
+      {
         name: '__tradekings',
-        driverOrder: ['localstorage']
+        driverOrder: ['indexeddb', 'sqlite', 'websql', 'localstorage']
       }
     ),
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    StorageServiceProvider,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
-      provide : HTTP_INTERCEPTORS,
-      useClass : TokenInterceptor,
-      multi : true
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

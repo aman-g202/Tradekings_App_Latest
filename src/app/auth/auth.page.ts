@@ -15,9 +15,9 @@ import { StorageServiceProvider } from '../../providers/services/storage/storage
 })
 export class AuthPage implements OnInit {
   loginForm: FormGroup;
-  showLoginLoader : boolean = false;
-  isActive:boolean = false;
-  passwordFieldType: string = 'password';
+  showLoginLoader = false;
+  isActive = false;
+  passwordFieldType = 'password';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,7 +25,7 @@ export class AuthPage implements OnInit {
     private router: Router,
     public widgetUtil: WidgetUtilService,
     private storageService: StorageServiceProvider
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -38,32 +38,32 @@ export class AuthPage implements OnInit {
     this.showLoginLoader = true;
     this.authService.login(this.loginForm.value).subscribe((responseData: any) => {
       this.showLoginLoader = false;
-      if (responseData.status === 200) { 
-        this.storageService.setToStorage('token', responseData.body[0].token)
-        this.storageService.setToStorage('profile', responseData.body[0])
-        this.storageService.setToStorage('userType', responseData.body[0].userType)
+      if (responseData.status === 200) {
+        this.storageService.setToStorage('token', responseData.body[0].token);
+        this.storageService.setToStorage('profile', responseData.body[0]);
+        this.storageService.setToStorage('userType', responseData.body[0].userType);
         localStorage.setItem('token', responseData.body[0].token);
-        this.router.navigateByUrl('/dashboard/'+responseData.body[0].userType);
+        this.router.navigateByUrl('/dashboard/' + responseData.body[0].userType);
       }
-    }, (error:any) => {
+    }, (error: any) => {
       this.showLoginLoader = false;
-      if (error.statusText === 'Unknown Error'){
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
+      if (error.statusText === 'Unknown Error') {
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else {
-        this.widgetUtil.presentToast(CONSTANTS.AUTH_FAIL)
+        this.widgetUtil.presentToast(CONSTANTS.AUTH_FAIL);
       }
     });
   }
 
 
 
-  showPassword (){
-    this.isActive = !this.isActive; 
-    console.log('pass-eye Clicked!')
-    if(this.passwordFieldType === 'password')
+  showPassword() {
+    this.isActive = !this.isActive;
+    if (this.passwordFieldType === 'password') {
       this.passwordFieldType = 'text';
-    else
-    this.passwordFieldType = 'password';
-   }
+    } else {
+      this.passwordFieldType = 'password';
+    }
+  }
 
 }

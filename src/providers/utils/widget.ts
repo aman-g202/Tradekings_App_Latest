@@ -2,27 +2,29 @@ import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class WidgetUtilService {
-  constructor (
+  constructor(
     private loadingController: LoadingController,
     public toastController: ToastController) {
   }
 
-  async showLoader (message:string, duration:number) {
+  async showLoader(message: string, duration: number) {
     const loaderDownloading = await this.loadingController.create({
-        message: message,
-        duration: duration
+      message,
+      duration
     });
-    return new Promise((resolve, reject) => {
-        loaderDownloading.present();
-        resolve(loaderDownloading);
-    });
+    loaderDownloading.present();
+    return loaderDownloading;
+    // return new Promise((resolve, reject) => {
+    //   loaderDownloading.present();
+    //   resolve(loaderDownloading);
+    // });
   }
 
-  async presentToast(message) {
+  async presentToast(message: string) {
     const toast = await this.toastController.create({
-      message: message,
+      message,
       duration: 2000
     });
     toast.present();
