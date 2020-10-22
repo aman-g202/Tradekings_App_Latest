@@ -11,7 +11,7 @@
           <ion-label position="floating">Login Id</ion-label>
           <ion-input type="text" formControlName="userLoginId"></ion-input>
         </ion-item>
-        <ion-icon name="log-in" [ngClass]=" isActive ? 'item-active': 'item-inactive'"></ion-icon>
+        <ion-icon name="log-in" class="item-inactive"></ion-icon>
       </ion-row>
       <p *ngIf="loginForm.get('userLoginId').hasError('required') && loginForm.get('userLoginId').touched" class="error">*Login Id is required</p>
       <ion-row>
@@ -19,7 +19,7 @@
           <ion-label position="floating">Password</ion-label>
           <ion-input type="{{passwordFieldType}}" formControlName="password"></ion-input>
         </ion-item>
-        <ion-icon name="eye" (click)="showPassword()" [ngClass]=" isActive ? 'item-active': 'item-inactive'"></ion-icon>
+        <ion-icon name="eye" (click)="showPassword()" [ngClass]="isActive ? 'item-active': 'item-inactive'"></ion-icon>
       </ion-row>
       <p *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched" class="error">*Password is required</p>
     </ion-grid>

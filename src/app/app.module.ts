@@ -29,6 +29,7 @@ import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
 import { IonicStorageModule } from '@ionic/storage';
+import { SideBarComponent } from './shared/side-bar/side-bar.component';
 
 @NgModule({
   declarations: [
@@ -49,9 +50,10 @@ import { IonicStorageModule } from '@ionic/storage';
     AddUserPage,
     AddCategoryPage,
     AddProductPage,
-    AddTKProductPage
+    AddTKProductPage,
+    SideBarComponent
   ],
-  entryComponents: [CategoryTotalModalPage],
+  entryComponents: [CategoryTotalModalPage, SideBarComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
     IonicStorageModule.forRoot(
       {

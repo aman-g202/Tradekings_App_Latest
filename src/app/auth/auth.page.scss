@@ -13,7 +13,6 @@
         position: absolute;
         right: 13px;
         bottom: 25px;
-        color: #bebebe;
         z-index: 2;
     }
   }
@@ -25,7 +24,7 @@
   
   ion-item {
       margin-bottom: 10px;
-      color: #bebebe;
+      color: #1d1d1d;
       width: 100%;  
   }
 
@@ -42,7 +41,7 @@
     text-align: left;
     color: #f53d3d;
     margin-top: 0;
-
+    margin-left: 15px;
   }
 
   .item-active{

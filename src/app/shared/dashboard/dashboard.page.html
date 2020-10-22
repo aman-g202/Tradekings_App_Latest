@@ -1,9 +1,15 @@
+<app-side-bar [partyName]="partyName" [userType]="userType"></app-side-bar>
 <ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-button (click)="toggleMenu()">
+      <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
   <ion-title>{{partyName}}</ion-title>
 </ion-toolbar>
 
 
-<ion-content class="full-background">
+<ion-content class="full-background" id="main">
   
   <ion-card class="tabs-wrapper">
       <ion-card-header class="card-title">
@@ -12,9 +18,9 @@
         <ion-card-title>
           <ion-item>
             <ion-label>TARGET vs ACHIEVEMENT</ion-label>
-            <ion-select placeholder="Total">
-              <ion-select-option selected="true" value="total" (ionSelect)="totalCategorySelected()">Total</ion-select-option>
-              <ion-select-option *ngFor="let category of categoryList" [value]="category" (ionSelect)="targetCategorySelectionChanged(category)">{{category.name}}</ion-select-option>
+            <ion-select placeholder="Total" interface="popover" (ionChange)="targetCategorySelectionChanged($event)">
+              <ion-select-option selected="true" value="total">Total</ion-select-option>
+              <ion-select-option *ngFor="let category of categoryList" [value]="category.name">{{category.name}}</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-card-title>

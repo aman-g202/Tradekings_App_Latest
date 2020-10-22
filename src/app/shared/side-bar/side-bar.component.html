@@ -1,0 +1,20 @@
+<ion-menu side="start" menuId="menu" contentId="main" type="overlay" class="custom-menu">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <div>
+        <ion-avatar>
+          <img src="assets/imgs/avatar.png">
+        </ion-avatar>
+      </div>
+      <ion-title class="ion-content">Welcome <span>Mr. {{partyName}}</span></ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let p of pages">
+        <img src="assets/icon/{{p.icon}}.svg" alt="{{p.icon}}"/>
+        <span class="ion-content">{{p.title}}</span>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>

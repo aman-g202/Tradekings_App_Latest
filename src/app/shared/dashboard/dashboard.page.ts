@@ -4,6 +4,8 @@ import { DashboardService } from '../../../providers/services/dashboard/dashboar
 import { CategoriesService } from '../../../providers/services/categories/categories.service'
 import { WidgetUtilService } from '../../../providers/utils/widget'
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +15,7 @@ import { StorageServiceProvider } from '../../../providers/services/storage/stor
 export class DashboardPage implements OnInit {
   partyName = '';
   @ViewChild('pieCanvas') pieCanvas;
+  userType: string;
   mtdAchieved: number;
   target: number;
   pieChart: any;
@@ -30,10 +33,13 @@ export class DashboardPage implements OnInit {
     private dashboardService: DashboardService,
     private categoriesServices: CategoriesService,
     public widgetUtil: WidgetUtilService,
-    private storageService: StorageServiceProvider) { }
+    private storageService: StorageServiceProvider,
+    private route: ActivatedRoute,
+    private menuCtrl: MenuController) { }
 
   ngOnInit() {
     this.getData();
+    this.userType = this.route.snapshot.params.userType;
   }
 
   displayChart() {
@@ -127,10 +133,10 @@ export class DashboardPage implements OnInit {
       this.target = 1;
     } else {
       if (selectedValue !== 'Total') {
-        this.data.target = (this.dashboardData['target' + selectedValue.name.charAt(0)]).toFixed(2);
-        this.data.achievement = (this.dashboardData['achive' + selectedValue.name.charAt(0)]).toFixed(2);
-        this.data.lmtdAchieve = (this.dashboardData['lmtdAchive' + selectedValue.name.charAt(0)]).toFixed(2);
-        this.data.lymtdAchieve = (this.dashboardData['lymtdAchive' + selectedValue.name.charAt(0)]).toFixed(2);
+        this.data.target = (this.dashboardData['target' + selectedValue.charAt(0)]).toFixed(2);
+        this.data.achievement = (this.dashboardData['achive' + selectedValue.charAt(0)]).toFixed(2);
+        this.data.lmtdAchieve = (this.dashboardData['lmtdAchive' + selectedValue.charAt(0)]).toFixed(2);
+        this.data.lymtdAchieve = (this.dashboardData['lymtdAchive' + selectedValue.charAt(0)]).toFixed(2);
       } else {
         this.data.target = (this.dashboardData['targetC'] + this.dashboardData['targetP'] + this.dashboardData['targetH']
           + this.dashboardData['targetL']).toFixed(2);
@@ -171,5 +177,17 @@ export class DashboardPage implements OnInit {
       this.mtdAchieved = this.data.achievement;
     }
     this.displayChart();
+  }
+
+  targetCategorySelectionChanged(event: CustomEvent) {
+    if (event.detail.value === 'total') {
+      this.prepareData('Total');
+    } else {
+      this.prepareData(event.detail.value);
+    }
+  }
+
+  toggleMenu() {
+    this.menuCtrl.toggle('menu');
   }
 }
