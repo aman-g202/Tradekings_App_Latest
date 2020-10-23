@@ -1,9 +1,64 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>product</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="shop">
+    </ion-back-button>
+  </ion-buttons>
+  <ion-title>{{categoryName}}</ion-title>
+</ion-toolbar>
 
 <ion-content>
-
+  <ion-list *ngIf="productListAvailable &&  (filteredProductList.length > 0)">
+    <ion-card *ngFor="let product of filteredProductList">
+      <ion-card-content>
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <ion-icon name="cube" color="grey"></ion-icon>
+              <span>{{product.name}} [{{product.productCode}}]</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <ion-icon name="cash" color="grey"></ion-icon>
+            Price: <span>{{product.price}} ZMW</span>
+          </ion-col>
+          <ion-col>
+            Type: <span>{{product.priceType}}</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            SysCode: <span>{{product.productSysCode}}</span>
+          </ion-col>
+          <ion-col >
+            CaseSize: <span>{{product.currentCaseSize}}</span>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="product.tkPoint" class="ion-align-items-center">
+          <ion-col>
+            <ion-icon name="cog" color="grey"></ion-icon>
+            Net Weight: <span>{{product.netWeight | number: '.2-2'}} Kg</span>
+          </ion-col>
+        </ion-row>
+        <hr>
+        <div *ngIf="loggedInUserStore.length" class="warehouse">
+          <ion-row *ngFor="let assocStores of loggedInUserStore">
+            <ng-container *ngFor="let store of product.inventoryDetails">
+              <ion-col col-8 *ngIf="assocStores === store.storeName" class="store-name">{{assocStores}}</ion-col>
+              <ion-col col-4 *ngIf="assocStores === store.storeName">{{store.inventory}}<span class="in-transit">({{store.inTransit}})</span></ion-col>
+            </ng-container>
+          </ion-row>
+        </div>
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <ion-button fill="outline" color="secondary" [disabled]="!isUserAuthorized ? 'disabled': null" color="secondary" ion-button outline (click)="editProduct(product)">
+              <ion-icon name="create"></ion-icon>Edit
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-list>
 </ion-content>

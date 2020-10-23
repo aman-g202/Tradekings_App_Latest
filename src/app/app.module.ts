@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { CommonModule } from '@angular/common';  
 import { AuthPage } from './auth/auth.page';
 import { DashboardPage } from './shared/dashboard/dashboard.page';
 import { NavigationDrawerPage } from './shared/navigation-drawer/navigation-drawer.page';
@@ -54,7 +55,7 @@ import { SideBarComponent } from './shared/side-bar/side-bar.component';
     SideBarComponent
   ],
   entryComponents: [CategoryTotalModalPage, SideBarComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
+  imports: [BrowserModule, CommonModule,IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
     IonicStorageModule.forRoot(
       {
         name: '__tradekings',

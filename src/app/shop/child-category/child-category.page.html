@@ -1,9 +1,29 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>child-category</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="shop">
+    </ion-back-button>
+  </ion-buttons>
+  <ion-title>{{categoryName}}</ion-title>
+</ion-toolbar>
+<form (ngSubmit)="submitSearch($event)">
+  <ion-searchbar (ionInput)="getItems($event)" placeholder="Search any product in {{categoryName}}"></ion-searchbar>
+</form>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item *ngFor="let category of childCategoryList" (click)="getProducts(category)">
+        <img src="assets/imgs/productcategory.svg">{{category.name}}
+        <ion-buttons slot="end">
+          <ion-button clear color="secondary" item-end><ion-icon name="arrow-forward"></ion-icon></ion-button>
+        </ion-buttons>
+    </ion-item>
+  </ion-list>
+  <ion-card *ngIf="categoryListAvailable && (childCategoryList.length < 1)">
+    <ion-card-header text-center>
+      <h4>No record found</h4>
+    </ion-card-header>
+  </ion-card>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

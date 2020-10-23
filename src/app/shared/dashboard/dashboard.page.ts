@@ -81,6 +81,7 @@ export class DashboardPage implements OnInit {
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     try {
       const profile = await this.storageService.getFromStorage('profile');
+      console.log("======profile", profile);
       // tslint:disable-next-line: no-string-literal
       this.partyName = profile['name'];
       // tslint:disable-next-line: no-string-literal

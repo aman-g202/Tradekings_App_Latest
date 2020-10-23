@@ -3,7 +3,7 @@
     <ion-toolbar color="primary">
       <div>
         <ion-avatar>
-          <img src="assets/imgs/avatar.png">
+          <img src="assets/imgs/avatar.png"> 
         </ion-avatar>
       </div>
       <ion-title class="ion-content">Welcome <span>Mr. {{partyName}}</span></ion-title>
@@ -11,9 +11,11 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item *ngFor="let p of pages">
-        <img src="assets/icon/{{p.icon}}.svg" alt="{{p.icon}}"/>
-        <span class="ion-content">{{p.title}}</span>
+      <ion-item *ngFor="let p of pages" lines="none" (click)="onSelectNavigationItem(p)">
+        <div>
+          <img src="assets/icon/{{p.icon}}.svg" alt="{{p.icon}}"/>
+        </div>
+        <p class="ion-content">{{p.title}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

@@ -1,9 +1,26 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>parent-category</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-back-button [defaultHref]="hrefTag">
+    </ion-back-button>
+  </ion-buttons>
+  <ion-title>Parent Category</ion-title>
+</ion-toolbar>
 
-<ion-content>
-
-</ion-content>
+<ion-content> 
+  <ion-list *ngIf="categoryListAvailable && (parentCategoryList.length > 0)">
+    <ion-item *ngFor="let category of parentCategoryList" (click)="getChildCategory(category)">
+      <img src="./assets/imgs/productcategory.svg">{{category.name}}
+      <ion-buttons slot="end">
+        <ion-button clear color="secondary" item-end><ion-icon name="arrow-forward"></ion-icon></ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+  <ion-card *ngIf="categoryListAvailable && (parentCategoryList.length < 1)">
+    <ion-card-header text-center>
+      <h4>No record found</h4>
+    </ion-card-header>
+  </ion-card>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  </ion-content>
