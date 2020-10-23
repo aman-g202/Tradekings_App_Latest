@@ -5,6 +5,8 @@
   </ion-buttons>
   <ion-title>{{categoryName}}</ion-title>
 </ion-toolbar>
+<ion-searchbar *ngIf="keyword == undefind && keyword != ''" #q (ionChange)="searchProducts(q.value)" placeholder="Search any product in {{categoryName}}"></ion-searchbar>
+<ion-label *ngIf="keyword && keyword != ''" class="search-result">Matching Results For : <b>&nbsp;{{ keyword }}</b></ion-label>
 
 <ion-content>
   <ion-list *ngIf="productListAvailable &&  (filteredProductList.length > 0)">

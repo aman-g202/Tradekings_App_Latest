@@ -23,7 +23,6 @@ export class ProductPage implements OnInit {
   filteredProductList: Array<any> = [];
   isUserAuthorized = false;
   loggedInUserStore = []
-  allProducts = []
   storeList = []
 
   constructor(private widgetUtil: WidgetUtilService,
@@ -108,6 +107,12 @@ export class ProductPage implements OnInit {
       } else {
         this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
       }
+    })
+  }
+
+  searchProducts (searchQuery) {
+    this.filteredProductList = this.productList.filter(item => {
+      return item.name.toLowerCase().includes(searchQuery.toLowerCase());
     })
   }
 
