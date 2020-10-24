@@ -8,7 +8,11 @@ export const environment = {
   endPoints: {
     login: 'api/user/authenticate',
     getDashboard: 'api/user/get/dashboard',
-    getParentCategory: 'api/category/list/parent'
+    getParentCategory: 'api/category/list/parent',
+    getChildCategory: 'api/category/list/child/',
+    getOrderList: 'api/order/list/user/',
+    getProductList: 'api/product/list/category/',
+    searchProductInParentCategory: 'api/product/search/parentCategory/'
   },
   storageKeys: {}
 };
