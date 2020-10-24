@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { CommonModule } from '@angular/common';  
 import { AuthPage } from './auth/auth.page';
 import { DashboardPage } from './shared/dashboard/dashboard.page';
 import { NavigationDrawerPage } from './shared/navigation-drawer/navigation-drawer.page';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PaymentHistoryPage } from './shared/payment-history/payment-history.page';
 import { AddPaymentPage } from './shared/add-payment/add-payment.page';
 import { CapturePricePage } from './shared/capture-price/capture-price.page';
@@ -27,9 +29,7 @@ import { AddUserPage } from './admin/add-user/add-user.page';
 import { AddCategoryPage } from './admin/add-category/add-category.page';
 import { AddProductPage } from './admin/add-product/add-product.page';
 import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
-import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
-import { IonicStorageModule } from '@ionic/storage';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 
 @NgModule({
@@ -55,7 +55,7 @@ import { SideBarComponent } from './shared/side-bar/side-bar.component';
     SideBarComponent
   ],
   entryComponents: [CategoryTotalModalPage, SideBarComponent],
-  imports: [BrowserModule, CommonModule,IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
+  imports: [BrowserModule, CommonModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
     IonicStorageModule.forRoot(
       {
         name: '__tradekings',

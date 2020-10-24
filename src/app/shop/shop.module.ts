@@ -8,6 +8,8 @@ import { ShopPageRoutingModule } from './shop-routing.module';
 import { ParentCategoryPage } from './parent-category/parent-category.page';
 import { ChildCategoryPage } from './child-category/child-category.page';
 import { ProductPage } from './product/product.page';
+import { ProductService } from '../../providers/services/products/products.service';
+import { CategoriesService } from '../../providers/services/categories/categories.service';
 
 @NgModule({
   imports: [
@@ -16,6 +18,7 @@ import { ProductPage } from './product/product.page';
     IonicModule,
     ShopPageRoutingModule
   ],
-  declarations: [ParentCategoryPage, ChildCategoryPage, ProductPage]
+  declarations: [ParentCategoryPage, ChildCategoryPage, ProductPage],
+  providers: [ProductService, CategoriesService]
 })
 export class ShopPageModule {}

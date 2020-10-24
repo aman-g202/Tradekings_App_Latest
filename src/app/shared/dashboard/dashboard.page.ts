@@ -1,16 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
-import { DashboardService } from '../../../providers/services/dashboard/dashboard.service'
-import { CategoriesService } from '../../../providers/services/categories/categories.service'
-import { WidgetUtilService } from '../../../providers/utils/widget'
-import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
-import { ActivatedRoute } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+
+import { Chart } from 'chart.js';
+
+import { DashboardService } from '../../../providers/services/dashboard/dashboard.service';
+import { CategoriesService } from '../../../providers/services/categories/categories.service';
+import { WidgetUtilService } from '../../../providers/utils/widget';
+import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
+import { ProfileModel } from '../../../providers/models/profile.model';
+import { CategoryItemModel } from '../../../providers/models/category.model';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
+  providers: [DashboardService, CategoriesService]
 })
 export class DashboardPage implements OnInit {
   partyName = '';
@@ -23,7 +28,7 @@ export class DashboardPage implements OnInit {
   userTypeCustomer = false;
   targetCategory: any = 'Total';
   dashboardData: any;
-  categoryList: any = [];
+  categoryList: CategoryItemModel[] = [];
   data: any = {};
   loader: any;
   loaderDownloading: any;
@@ -80,15 +85,11 @@ export class DashboardPage implements OnInit {
   async getData() {
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     try {
-      const profile = await this.storageService.getFromStorage('profile');
-      console.log("======profile", profile);
-      // tslint:disable-next-line: no-string-literal
-      this.partyName = profile['name'];
-      // tslint:disable-next-line: no-string-literal
-      this.externalId = profile['externalId'];
+      const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
+      this.partyName = profile.name;
+      this.externalId = profile.externalId;
 
-      // tslint:disable-next-line: no-string-literal
-      if ((profile['userType'] === 'SALESMAN') || (profile['userType'] === 'SALESMANAGER')) {
+      if ((profile.userType === 'SALESMAN') || (profile.userType === 'SALESMANAGER')) {
         this.userTypeCustomer = false;
       }
       else {
@@ -97,8 +98,8 @@ export class DashboardPage implements OnInit {
 
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0];
-        this.categoriesServices.getParentCategoryList(0, 20).subscribe((res: any) => {
-          this.categoryList = res.body;
+        this.categoriesServices.getParentCategoryList(0, 20).subscribe((resp: any) => {
+          this.categoryList = resp.body;
           this.prepareData('Total');
           this.loaderDownloading.dismiss();
         });
@@ -162,11 +163,11 @@ export class DashboardPage implements OnInit {
       const tempTodo = this.data.target - this.data.achievement;
       this.data.balanceToDo = (tempTodo > 0) ? (tempTodo.toFixed(2)) : 0;
 
-      this.data.creditLimit = this.dashboardData.creditLimit ? this.dashboardData.creditLimit : 'NA'
-      this.data.currentOutStanding = this.dashboardData.currentOutStanding ? this.dashboardData.currentOutStanding : 0
-      this.data.thirtyDaysOutStanding = this.dashboardData.thirtyDaysOutStanding ? this.dashboardData.thirtyDaysOutStanding : 0
+      this.data.creditLimit = this.dashboardData.creditLimit ? this.dashboardData.creditLimit : 'NA';
+      this.data.currentOutStanding = this.dashboardData.currentOutStanding ? this.dashboardData.currentOutStanding : 0;
+      this.data.thirtyDaysOutStanding = this.dashboardData.thirtyDaysOutStanding ? this.dashboardData.thirtyDaysOutStanding : 0;
       // tslint:disable-next-line: max-line-length
-      this.data.availableCreditLimit = this.data.creditLimit != 'NA' && this.data.currentOutStanding != 0 ? ((this.data.creditLimit - this.data.currentOutStanding).toFixed(2)) : 'NA';
+      this.data.availableCreditLimit = this.data.creditLimit !== 'NA' && this.data.currentOutStanding != 0 ? ((this.data.creditLimit - this.data.currentOutStanding).toFixed(2)) : 'NA';
 
       // Preparing Data for Graph
       if (!(this.data.achievement && this.data.balanceToDo)) {
