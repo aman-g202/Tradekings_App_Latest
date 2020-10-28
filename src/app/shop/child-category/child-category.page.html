@@ -4,8 +4,17 @@
     </ion-back-button>
   </ion-buttons>
   <ion-title>{{categoryName}}</ion-title>
+  <ion-buttons slot="end" *ngIf="placeOrder">
+    <ion-button class="cart-btn" fill="clear" (click)="reviewAndSubmitOrder()">
+      <ion-icon slot="icon-only" name="cart"></ion-icon>
+      <ion-badge class="cart-badge">{{cart.length}}</ion-badge>
+    </ion-button>
+    <ion-button (click)="presentPopover($event)" fill="clear">
+      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-toolbar>
-<form (ngSubmit)="submitSearch($event)">
+<form (ngSubmit)="submitSearch($event)" class="search">
   <ion-searchbar (ionInput)="getItems($event)" placeholder="Search any product in {{categoryName}}"></ion-searchbar>
 </form>
 
@@ -13,8 +22,8 @@
   <ion-list>
     <ion-item *ngFor="let category of childCategoryList" (click)="getProducts(category)">
         <img src="assets/imgs/productcategory.svg">{{category.name}}
-        <ion-buttons slot="end">
-          <ion-button clear color="secondary" item-end><ion-icon name="arrow-forward"></ion-icon></ion-button>
+        <ion-buttons slot="end" fill="clear">
+          <ion-button color="secondary" item-end><ion-icon name="arrow-forward"></ion-icon></ion-button>
         </ion-buttons>
     </ion-item>
   </ion-list>

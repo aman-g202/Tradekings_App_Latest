@@ -8,7 +8,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { CommonModule } from '@angular/common';  
 import { AuthPage } from './auth/auth.page';
 import { DashboardPage } from './shared/dashboard/dashboard.page';
 import { NavigationDrawerPage } from './shared/navigation-drawer/navigation-drawer.page';
@@ -31,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
 import { IonicStorageModule } from '@ionic/storage';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
+import { PopoverComponent } from '../app/shared/popover/popover.component';
 
 @NgModule({
   declarations: [
@@ -52,10 +52,11 @@ import { SideBarComponent } from './shared/side-bar/side-bar.component';
     AddCategoryPage,
     AddProductPage,
     AddTKProductPage,
-    SideBarComponent
+    SideBarComponent,
+    PopoverComponent
   ],
   entryComponents: [CategoryTotalModalPage, SideBarComponent],
-  imports: [BrowserModule, CommonModule,IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
     IonicStorageModule.forRoot(
       {
         name: '__tradekings',

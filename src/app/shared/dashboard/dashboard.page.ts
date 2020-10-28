@@ -4,7 +4,7 @@ import { DashboardService } from '../../../providers/services/dashboard/dashboar
 import { CategoriesService } from '../../../providers/services/categories/categories.service'
 import { WidgetUtilService } from '../../../providers/utils/widget'
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 
 @Component({
@@ -35,7 +35,8 @@ export class DashboardPage implements OnInit {
     public widgetUtil: WidgetUtilService,
     private storageService: StorageServiceProvider,
     private route: ActivatedRoute,
-    private menuCtrl: MenuController) { }
+    private menuCtrl: MenuController,
+    private router: Router) { }
 
   ngOnInit() {
     this.getData();
@@ -76,12 +77,15 @@ export class DashboardPage implements OnInit {
     });
   }
 
+  presentPopover (myEvent) {
+    this.widgetUtil.presentPopover(myEvent)
+  }
+
 
   async getData() {
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     try {
       const profile = await this.storageService.getFromStorage('profile');
-      console.log("======profile", profile);
       // tslint:disable-next-line: no-string-literal
       this.partyName = profile['name'];
       // tslint:disable-next-line: no-string-literal
@@ -110,6 +114,10 @@ export class DashboardPage implements OnInit {
       console.log('Error: Profile Details could not Load', err);
       this.loaderDownloading.dismiss();
     }
+  }
+
+  openShopPage () {
+    this.router.navigate(['/shop'] , {queryParams: {placeOrder: true}});  
   }
 
   async prepareData(selectedValue) {

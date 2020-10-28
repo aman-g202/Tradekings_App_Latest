@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CONSTANTS } from '../../../providers/utils/constants';
 import { WidgetUtilService } from '../../../providers/utils/widget';
 import { CategoriesService } from '../../../providers/services/categories/categories.service';
+import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
@@ -18,11 +19,15 @@ export class ChildCategoryPage implements OnInit {
   limit: number = CONSTANTS.PAGINATION_LIMIT
   searchQuery: string = ''  
   categoryName: string = ''
+  cart: any = []
+  placeOrder: boolean;
+  tkPoint: any = 0
 
   constructor(private widgetUtil: WidgetUtilService,
     private categoryService: CategoriesService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private storageService: StorageServiceProvider,) { }
 
   ngOnInit() {
     this.route.queryParams
@@ -31,11 +36,13 @@ export class ChildCategoryPage implements OnInit {
       this.parentCategoryId = params.parentCategoryId
       this.categoryName = params.categoryName
       this.categoryListAvailable = false
+      this.placeOrder = params.placeOrder
       this.childCategoryList = []
       this.skipValue = 0
       this.limit = CONSTANTS.PAGINATION_LIMIT
       this.getList()
-    });
+      this.getCartItems();
+    }); 
   }
 
   async getList () {
@@ -56,10 +63,12 @@ export class ChildCategoryPage implements OnInit {
   }
 
   async getProducts (category) {
+    let profile = await this.storageService.getFromStorage('profile')
     const categoryObj = {
       'parentCategoryId': category.parentCategoryId,
       'categoryId' : category._id,
-      'categoryName': category.name
+      'categoryName': category.name,
+      'placeOrder': this.placeOrder
     }
     this.router.navigate(['/product'] , {queryParams: categoryObj});
   }
@@ -83,6 +92,20 @@ export class ChildCategoryPage implements OnInit {
     })
   }
 
+  presentPopover (myEvent) {
+    this.widgetUtil.presentPopover(myEvent)
+  }
+
+  async reviewAndSubmitOrder () {
+    if (this.cart.length <= 0) {
+      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY)
+    }else {
+      let orderTotal = await this.storageService.getFromStorage('orderTotal')
+      this.router.navigate(['/submit-order'] , {queryParams: {'orderTotal': orderTotal}}); 
+    }
+  }
+
+
   doRefresh (refresher) : void {
     this.getList()
     setTimeout(() => {
@@ -98,16 +121,37 @@ export class ChildCategoryPage implements OnInit {
   }
 
   async submitSearch (ev: any) {
+    
     if (this.searchQuery && this.searchQuery.trim() != '') {
+      let profile = await this.storageService.getFromStorage('profile')
       let data = {
         'keyword': this.searchQuery,
         'parentCategoryId': this.parentCategoryId,
         'isSearch': true,
-        'categoryName': this.categoryName
+        'categoryName': this.categoryName,
+        'placeOrder': this.placeOrder
       };
       this.searchQuery  = ''
-      this.router.navigate(['/product'] , {queryParams: data});
+      if(profile['type'] === 'admin') {
+        this.router.navigate(['/product'] , {queryParams: data});
+      } else{
+        this.router.navigate(['/product'] , {queryParams: data});
+      }
     }
   }
+
+  async getCartItems () {
+    const storedEditedOrder: any = await this.storageService.getFromStorage('order')
+    // update cart count badge when edit order flow is in active state
+    if (storedEditedOrder) {
+      this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : []
+      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0
+    } else {
+      this.cart = await this.storageService.getCartFromStorage()
+      this.storageService.getTkPointsFromStorage().then(res => {
+        this.tkPoint = res
+      })
+    }
+   }
 
 }

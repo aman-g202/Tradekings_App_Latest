@@ -6,6 +6,11 @@
     </ion-button>
   </ion-buttons>
   <ion-title>{{partyName}}</ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="presentPopover($event)" fill="clear">
+      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-toolbar>
 
 
@@ -118,43 +123,53 @@
         OUTSTANDING
       </ion-card-header>
       
-          <ion-row>
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                    Total Credit Limit
-                </p>
-                <p class="tab-label-lg">
-                  {{data.creditLimit !== 'NA' ? (data.creditLimit | number: '.2') : data.creditLimit}}
-                </p>
-            </ion-col>
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                    Total Outstanding
-                  </p>
-                  <p class="tab-label-lg">
-                    {{data.currentOutStanding !== 'NA' ? (data.currentOutStanding | number: '.2') : data.currentOutStanding}}
-                </p>
-            </ion-col>
-          </ion-row>
+      <ion-row>
+        <ion-col class="tabs">
+            <p class="tab-label-sm">
+                Total Credit Limit
+            </p>
+            <p class="tab-label-lg">
+              {{data.creditLimit !== 'NA' ? (data.creditLimit | number: '.2') : data.creditLimit}}
+            </p>
+        </ion-col>
+        <ion-col class="tabs">
+            <p class="tab-label-sm">
+                Total Outstanding
+              </p>
+              <p class="tab-label-lg">
+                {{data.currentOutStanding !== 'NA' ? (data.currentOutStanding | number: '.2') : data.currentOutStanding}}
+            </p>
+        </ion-col>
+      </ion-row>
 
-          <ion-row *ngIf="data.thirtyDaysOutStanding !== undefined">
-              <ion-col class="tabs">
-                  <p class="tab-label-sm">
-                      > 30- Days Outstanding
-                  </p>
-                  <p class="tab-label-lg">
-                    {{data.thirtyDaysOutStanding !== 'NA' ? (data.thirtyDaysOutStanding | number: '.2') : data.thirtyDaysOutStanding }}
-                  </p>
-              </ion-col>
-              <ion-col class="tabs">
-                  <p class="tab-label-sm">
-                      Available Credit Limit
-                    </p>
-                    <p class="tab-label-lg">
-                      {{data.availableCreditLimit !== 'NA' ? (data.availableCreditLimit | number: '.2') : data.availableCreditLimit}}
-                  </p>
-              </ion-col>
-            </ion-row>
+      <ion-row *ngIf="data.thirtyDaysOutStanding !== undefined">
+        <ion-col class="tabs">
+            <p class="tab-label-sm">
+                > 30- Days Outstanding
+            </p>
+            <p class="tab-label-lg">
+              {{data.thirtyDaysOutStanding !== 'NA' ? (data.thirtyDaysOutStanding | number: '.2') : data.thirtyDaysOutStanding }}
+            </p>
+        </ion-col>
+        <ion-col class="tabs">
+            <p class="tab-label-sm">
+                Available Credit Limit
+              </p>
+              <p class="tab-label-lg">
+                {{data.availableCreditLimit !== 'NA' ? (data.availableCreditLimit | number: '.2') : data.availableCreditLimit}}
+            </p>
+        </ion-col>
+      </ion-row>
   </ion-card>
 
 </ion-content>
+<ion-footer>
+  <ion-button padding class="customerdashboardBtn btn-left" (click)="openPaymentModal()"
+      [ngClass]=" customerDashboard ? 'item-hidden': 'item-visible'">
+    <ion-icon name="cash"></ion-icon>Add Payment
+  </ion-button>
+  <ion-button padding class="customerdashboardBtn" (click)="openShopPage()"
+    [ngClass]=" customerDashboard ? 'item-hidden': 'item-visible'">
+    <ion-icon name="cart"></ion-icon>Place Order
+  </ion-button>
+</ion-footer>

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { AddCategoryPage } from './admin/add-category/add-category.page';
@@ -20,6 +21,7 @@ import { ViewStatementPage } from './shared/view-statement/view-statement.page';
 import { ChildCategoryPage } from '../app/shop/child-category/child-category.page'
 import { ProductPage } from '../app/shop/product/product.page'
 import { OrderDetailPage } from '../app/orders/order-detail/order-detail.page';
+import { EditOrderPage } from '../app/orders/edit-order/edit-order.page';
 
 const routes: Routes = [
   {
@@ -96,6 +98,10 @@ const routes: Routes = [
     component: OrderDetailPage
   },
   {
+    path: 'submit-order',
+    component: EditOrderPage
+  },
+  {
     path: 'product',
     component: ProductPage
   },
@@ -119,6 +125,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    CommonModule,
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule]

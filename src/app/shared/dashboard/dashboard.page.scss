@@ -82,3 +82,21 @@ ion-title{
         right: 8%;
     }
   }
+
+  ion-footer{
+    box-shadow: 0 0px 10px rgba(34, 95, 147, 0.5);
+    background: #225f93;
+  }
+
+  .customerdashboardBtn{
+    background-color: #229BD0;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 900;
+    width: 48%;
+    box-shadow: none;
+  }
+
+  ion-icon {
+    margin-right: 5px;
+  }

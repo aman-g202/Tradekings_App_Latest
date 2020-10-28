@@ -1,0 +1,56 @@
+ion-label {
+    display: block;
+}
+.acc-label {
+    position: relative;
+    white-space: normal;
+    &::after{
+        content: '+';
+        position: absolute;
+        right: 0;
+        background: #229bd0;
+        border-radius: 12px;
+        height: 24px;
+        width: 24px;
+        color: #fff;
+        text-align: center;
+        line-height: 23px;
+        z-index: -1;
+    }
+    &.expand {
+        &::after{
+            content: '-';
+        }
+    }
+    ion-col {
+        padding: 5px 40px 10px 0;
+    }
+}
+
+.cnt-badge{
+    background: #229BD0;
+    height: 22px;
+    width: 22px;
+    font-size: 16px;
+    display: inline-block;
+    color: #fff;
+    text-align: center;
+}
+.expand-wrapper {
+    height: auto !important;
+    transition: 0.2s linear;
+}  
+
+.item-visible{
+    display: inline-block;
+    text-transform: capitalize;
+    color: #6b6b6b;
+}
+
+.item-hidden{
+    display: none;
+}
+
+ion-icon {
+    margin-right: 5px;
+}

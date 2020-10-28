@@ -19,7 +19,6 @@ export class OrdersPage implements OnInit {
   userId: string = ''
   userName: string = ''
   userType: string = ''
-  hrefTag:string = '' 
   loaderDownloading: any;
 
   constructor(private storageService: StorageServiceProvider,
@@ -37,7 +36,6 @@ export class OrdersPage implements OnInit {
     this.userId = profile['userType'] === 'SALESMAN' ? profile['externalId'] : profile['_id']
     this.userName = profile['name']
     this.userType = profile['userType']
-    this.hrefTag = '/dashboard/' + this.userType;
     const isSalesman = ((profile['userType'] === 'SALESMAN') || (profile['userType'] === 'SALESMANAGER')) ? true : false
     this.orderService.getOrderListByUser(this.userId, this.skipValue, this.limit, isSalesman, profile['externalId']).subscribe((result) => {
       this.orderList = result.body
@@ -54,6 +52,10 @@ export class OrdersPage implements OnInit {
     })
   }
 
+  presentPopover (myEvent) {
+    this.widgetUtil.presentPopover(myEvent)
+  }
+
   async doInfinite (infiniteScroll) {
     this.skipValue = this.skipValue + this.limit
     const profile = await this.storageService.getFromStorage('profile')
@@ -66,9 +68,7 @@ export class OrdersPage implements OnInit {
       } else {
         this.skipValue = this.limit
       }
-      infiniteScroll.complete();
     }, (error) => {
-      infiniteScroll.complete();
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
       } else {

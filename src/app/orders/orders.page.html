@@ -1,9 +1,14 @@
 <ion-toolbar color="primary">
   <ion-buttons slot="start">
-    <ion-back-button [defaultHref]="hrefTag">
+    <ion-back-button defaultHref="">
     </ion-back-button>
   </ion-buttons>
   <ion-title>Order List</ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="presentPopover($event)" fill="clear">
+      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-toolbar>
 
 <ion-content class="full-background">
