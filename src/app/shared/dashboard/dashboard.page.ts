@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Chart } from 'chart.js';
 
@@ -40,7 +40,8 @@ export class DashboardPage implements OnInit {
     public widgetUtil: WidgetUtilService,
     private storageService: StorageServiceProvider,
     private route: ActivatedRoute,
-    private menuCtrl: MenuController) { }
+    private menuCtrl: MenuController,
+    private router: Router) { }
 
   ngOnInit() {
     this.getData();
@@ -81,6 +82,10 @@ export class DashboardPage implements OnInit {
     });
   }
 
+  presentPopover (myEvent) {
+    this.widgetUtil.presentPopover(myEvent)
+  }
+
 
   async getData() {
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
@@ -111,6 +116,10 @@ export class DashboardPage implements OnInit {
       console.log('Error: Profile Details could not Load', err);
       this.loaderDownloading.dismiss();
     }
+  }
+
+  openShopPage () {
+    this.router.navigate(['/shop'] , {queryParams: {placeOrder: true}});  
   }
 
   async prepareData(selectedValue) {

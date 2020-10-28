@@ -3,7 +3,16 @@
     <ion-back-button [defaultHref]="hrefTag">
     </ion-back-button>
   </ion-buttons>
-  <ion-title>Parent Category</ion-title>
+  <ion-title>Parent Category</ion-title> 
+  <ion-buttons slot="end" *ngIf="placeOrder">
+    <ion-button class="cart-btn" fill="clear" (click)="reviewAndSubmitOrder()">
+      <ion-icon slot="icon-only" name="cart"></ion-icon>
+      <ion-badge class="cart-badge">{{cart.length}}</ion-badge>
+    </ion-button>
+    <ion-button (click)="presentPopover($event)" fill="clear">
+      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-toolbar>
 
 <ion-content> 

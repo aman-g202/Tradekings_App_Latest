@@ -35,4 +35,44 @@ export class StorageServiceProvider {
   clearStorage() {
     this.storage.clear();
   }
+
+  getCartFromStorage () {
+    return new Promise((resolve, reject) => {
+      this.storage.get('cart')
+        .then(result => {
+          if(result) {
+            resolve(result)
+          } else {
+            this.storage.set('cart', []).then(res => {
+              resolve(res)
+            })
+          }
+        }).catch(err => {
+          reject(err)
+      })
+    })
+  }
+
+  getTkPointsFromStorage () {
+    return new Promise((resolve, reject) => {
+      this.storage.get('tkpoint')
+        .then(result => {
+          if(result) {
+            resolve(result)
+          } else {
+            this.storage.set('tkpoint', 0).then(res => {
+              resolve(res)
+            })
+          }
+        }).catch(err => {
+        reject(err)
+      })
+    })
+  }
+
+  async clearCart () {
+    await this.setToStorage('cart', [])
+    await this.removeFromStorage('tkpoint')
+    await this.setToStorage('totalNetWeight', 0)
+  }
 }
