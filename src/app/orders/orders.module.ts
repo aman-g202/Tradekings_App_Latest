@@ -9,6 +9,7 @@ import { OrdersPageRoutingModule } from './orders-routing.module';
 import { OrdersPage } from './orders.page';
 import { OrderDetailPage } from './order-detail/order-detail.page';
 import { EditOrderPage } from './edit-order/edit-order.page';
+import { OrderService } from '../../providers/services/orders/order.service';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { EditOrderPage } from './edit-order/edit-order.page';
     IonicModule,
     OrdersPageRoutingModule
   ],
-  declarations: [OrdersPage, OrderDetailPage, EditOrderPage]
+  declarations: [OrdersPage, OrderDetailPage, EditOrderPage],
+  providers: [OrderService]
 })
 export class OrdersPageModule {}

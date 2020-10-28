@@ -18,10 +18,6 @@ import { EditUserPage } from './shared/edit-user/edit-user.page';
 import { PaymentHistoryPage } from './shared/payment-history/payment-history.page';
 import { UserListPage } from './shared/user-list/user-list.page';
 import { ViewStatementPage } from './shared/view-statement/view-statement.page';
-import { ChildCategoryPage } from '../app/shop/child-category/child-category.page'
-import { ProductPage } from '../app/shop/product/product.page'
-import { OrderDetailPage } from '../app/orders/order-detail/order-detail.page';
-import { EditOrderPage } from '../app/orders/edit-order/edit-order.page';
 
 const routes: Routes = [
   {
@@ -74,10 +70,6 @@ const routes: Routes = [
     component: ViewStatementPage
   },
   {
-    path: 'child-category',
-    component: ChildCategoryPage
-  },
-  {
     path: 'admin/add-user',
     component: AddUserPage
   },
@@ -92,18 +84,6 @@ const routes: Routes = [
   {
     path: 'admin/add-tk-product',
     component: AddTKProductPage
-  },
-  {
-    path: 'order-detail',
-    component: OrderDetailPage
-  },
-  {
-    path: 'submit-order',
-    component: EditOrderPage
-  },
-  {
-    path: 'product',
-    component: ProductPage
   },
   {
     path: 'admin/add-comp-product',

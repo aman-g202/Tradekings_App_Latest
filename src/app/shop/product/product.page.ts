@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { CONSTANTS } from '../../../providers/utils/constants';
 import { WidgetUtilService } from '../../../providers/utils/widget';
-import { CategoriesService } from '../../../providers/services/categories/categories.service';
 import { OrderService } from '../../../providers/services/orders/order.service';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service'
-import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService } from '../../../providers/services/products/products.service';
+import { ProductModel } from '../../../providers/models/product.model';
 
 @Component({
   selector: 'app-product',
@@ -12,16 +14,16 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./product.page.scss'],
 })
 export class ProductPage implements OnInit {
-  skipValue: number = 0
-  limit: number = CONSTANTS.PAGINATION_LIMIT
-  productList: Array<any> = [];
-  productListAvailable: Boolean = false
-  categoryId: string = ''
-  keyword: string = ''
-  categoryName: string = ''
-  parentCategoryId: string = ''
-  isSearch: Boolean = false
-  filteredProductList: Array<any> = [];
+  skipValue = 0;
+  limit: number = CONSTANTS.PAGINATION_LIMIT;
+  productList: Array<ProductModel> = [];
+  productListAvailable = false;
+  categoryId = '';
+  keyword = '';
+  categoryName = '';
+  parentCategoryId = '';
+  isSearch = false;
+  filteredProductList: Array<ProductModel> = [];
   isUserAuthorized = false;
   loggedInUserStore = []
   storeList = []
@@ -34,19 +36,19 @@ export class ProductPage implements OnInit {
   isEditOrderFlow: boolean = false;
   totalNetWeight: number = 0
 
-  constructor(private widgetUtil: WidgetUtilService,
-    private categoryService: CategoriesService,
+  constructor(
+    private widgetUtil: WidgetUtilService,
+    private productService: ProductService,
     private orderService: OrderService,
     private route: ActivatedRoute,
     private storageService: StorageServiceProvider,
     private router: Router) { }
 
   ngOnInit() {
-    this.skipValue = 0
-    this.limit = CONSTANTS.PAGINATION_LIMIT
+    this.skipValue = 0;
+    this.limit = CONSTANTS.PAGINATION_LIMIT;
     this.route.queryParams
     .subscribe(params => {
-      console.log(params);
       this.parentCategoryId = params.parentCategoryId
       this.categoryId = params.categoryId;
       this.categoryName = params.categoryName
@@ -64,68 +66,69 @@ export class ProductPage implements OnInit {
     this.widgetUtil.presentPopover(myEvent)
   }
 
-  async getProductList () {
-    let loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
-    if(!this.isSearch) {
-      this.categoryService.getProductListByCategory(this.categoryId, this.skipValue, this.limit).subscribe((result) => {
-        this.productList = result.body
-        this.productList.map(value => {
-          value.quantity = 1
-          value.price = (parseFloat((Math.round(value.price * 100) / 100).toString()).toFixed(2))
-          value.currentCaseSize=Number(value.currentCaseSize).toFixed(2);
-        })
-        this.filteredProductList = this.productList
-        this.productListAvailable = true
-        loaderDownloading.dismiss()
+  async getProductList() {
+    const loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
+    if (!this.isSearch) {
+      this.productService.getProductListByCategory(this.categoryId, this.skipValue, this.limit).subscribe((result) => {
+        this.productList = result.body;
+        this.productList.map((value) => {
+          value.quantity = 1;
+          value.price = (parseFloat((Math.round(+value.price * 100) / 100).toString()).toFixed(2));
+          value.currentCaseSize = Number(value.currentCaseSize).toFixed(2);
+        });
+        this.filteredProductList = this.productList;
+        this.productListAvailable = true;
+        loaderDownloading.dismiss();
       }, (error) => {
         if (error.statusText === 'Unknown Error') {
-          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {
-          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
         }
-        this.productListAvailable = true
-        loaderDownloading.dismiss()
-      })
+        this.productListAvailable = true;
+        loaderDownloading.dismiss();
+      });
     } else {
-      this.categoryService.searchProductInParentCategory(this.skipValue, this.limit, this.parentCategoryId, this.keyword).subscribe((result) => {
-        this.productList = result.body
-        this.productList.map(value => {
-          value.quantity = 1
-          value.price = (parseFloat((Math.round(value.price * 100) / 100).toString()).toFixed(2))
-        })
-        this.filteredProductList = this.productList
-        this.productListAvailable = true
-        loaderDownloading.dismiss()
+      // tslint:disable-next-line: max-line-length
+      this.productService.searchProductInParentCategory(this.skipValue, this.limit, this.parentCategoryId, this.keyword).subscribe((result) => {
+        this.productList = result.body;
+        this.productList.map((value) => {
+          value.quantity = 1;
+          value.price = (parseFloat((Math.round(+value.price * 100) / 100).toString()).toFixed(2));
+        });
+        this.filteredProductList = this.productList;
+        this.productListAvailable = true;
+        loaderDownloading.dismiss();
       }, (error) => {
         if (error.statusText === 'Unknown Error') {
-          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {
-          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
         }
-        this.productListAvailable = true
-        loaderDownloading.dismiss()
-      })
+        this.productListAvailable = true;
+        loaderDownloading.dismiss();
+      });
     }
   }
 
-  doInfinite (infiniteScroll) {
-    this.skipValue = this.skipValue + this.limit
-    this.categoryService.getProductListByCategory(this.categoryId, this.skipValue, this.limit).subscribe((result) => {
-      if(result.body.length > 0) {
-        result.body.map( (value) => {
-          this.productList.push(value)
-        })
+  doInfinite(infiniteScroll) {
+    this.skipValue = this.skipValue + this.limit;
+    this.productService.getProductListByCategory(this.categoryId, this.skipValue, this.limit).subscribe((result) => {
+      if (result.body.length > 0) {
+        result.body.map((value) => {
+          this.productList.push(value);
+        });
       } else {
-        this.skipValue = this.limit
+        this.skipValue = this.limit;
       }
     }, (error) => {
       infiniteScroll.complete();
       if (error.statusText === 'Unknown Error') {
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else {
-        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
+        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
       }
-    })
+    });
   }
 
   async getCartItems () {
@@ -152,11 +155,10 @@ export class ProductPage implements OnInit {
     await this.storageService.setToStorage('orderTotal', this.orderTotal)
   }
 
-
-  searchProducts (searchQuery) {
+  searchProducts(searchQuery) {
     this.filteredProductList = this.productList.filter(item => {
       return item.name.toLowerCase().includes(searchQuery.toLowerCase());
-    })
+    });
   }
 
   reviewAndSubmitOrder () {
@@ -273,6 +275,5 @@ export class ProductPage implements OnInit {
   incrementQty (qty) {
     return (parseInt(qty) + 1)
   }
-
 
 }
