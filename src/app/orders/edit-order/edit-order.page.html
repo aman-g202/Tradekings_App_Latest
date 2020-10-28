@@ -32,15 +32,15 @@
         </ion-row>
       </ion-card-header>
     </ion-card>
-    <ion-item class="ion-margin-bottom" *ngFor="let product of cartItems" lines="none">
+    <ion-item class="ion-margin-bottom" *ngFor="let product of cartItems; let i = index;" lines="none">
       <ion-label class="ion-text-wrap">
-        <ion-row class="acc-label" (click)="expandItem()" [ngClass]="expanded ? 'expand' : ''">
+        <ion-row class="acc-label" (click)="expandItem(i)" [ngClass]="expanded && i === expandedItemIndex? 'expand' : ''">
           <ion-col size="12">
             {{product.name}} - 
             <span class="bold">{{product.quantity}} item</span>
           </ion-col>
         </ion-row>
-        <ion-row *ngIf="expanded">
+        <ion-row *ngIf="expanded && i === expandedItemIndex">
           <ion-col size="12">
             <ion-row>
               <ion-col class="ion-text-center">

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController, PopoverController } from '@ionic/angular';
-import { PopoverComponent } from '../../app/shared/popover/popover.component'
+import { PopoverComponent } from '../../app/shared/popover/popover.component';
 
 @Injectable({ providedIn: 'root' })
 export class WidgetUtilService {
-  popoverInstance: any = {}
+  popoverInstance: any = {};
 
   constructor(
     private loadingController: LoadingController,
@@ -29,7 +29,7 @@ export class WidgetUtilService {
     toast.present();
   }
 
-  dismissPopover (data = '') {
+  dismissPopover(data = '') {
     this.popoverController.dismiss();
   }
 

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { WidgetUtilService } from '../../../providers/utils/widget';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { ProfileModel } from 'src/providers/models/profile.model';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-popover',
@@ -10,27 +12,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PopoverComponent implements OnInit {
 
-  popoverOptions: any = []
-  type: string = '';
+  popoverOptions: any = [];
+  type = '';
 
-  constructor( 
-    private storageService: StorageServiceProvider, 
+  constructor(
+    private storageService: StorageServiceProvider,
     private widgetUtil: WidgetUtilService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private navCtrl: NavController
+  ) { }
 
   ngOnInit() {
     this.route.queryParams
-    .subscribe(params => {
-      this.type = params.popOverType
-      this.getData()
-    });
-    
+      .subscribe(params => {
+        this.type = params.popOverType;
+        this.getData();
+      });
   }
 
-  async getData () {
-    let profile = await this.storageService.getFromStorage('profile')
-    if (profile['userType'] === 'ADMIN' || profile['userType'] === 'ADMINHO') {
+  async getData() {
+    const profile = await this.storageService.getFromStorage('profile') as ProfileModel;
+    if (profile.userType === 'ADMIN' || profile.userType === 'ADMINHO') {
       if (this.type === 'filter') {
         this.popoverOptions = [
           {
@@ -45,7 +47,7 @@ export class PopoverComponent implements OnInit {
             name: 'Reset',
             icon: 'remove-circle'
           }
-        ]
+        ];
       } else {
         this.popoverOptions = [
           {
@@ -80,9 +82,9 @@ export class PopoverComponent implements OnInit {
             name: 'Logout',
             icon: 'log-out',
           }
-      ]
+        ];
       }
-    } else{
+    } else {
       if (this.type === 'filter') {
         this.popoverOptions = [
           {
@@ -97,9 +99,9 @@ export class PopoverComponent implements OnInit {
             name: 'Reset',
             icon: 'remove-circle'
           }
-        ]
+        ];
       } else {
-        if (profile['userType'] === 'PRICEEXECUTIVE' || profile['userType'] === 'CUSTOMER') {
+        if (profile.userType === 'PRICEEXECUTIVE' || profile.userType === 'CUSTOMER') {
           this.popoverOptions = [
             {
               name: 'Change Password',
@@ -109,7 +111,7 @@ export class PopoverComponent implements OnInit {
               name: 'Logout',
               icon: 'log-out'
             }
-          ]
+          ];
         } else {
           this.popoverOptions = [
             {
@@ -124,46 +126,46 @@ export class PopoverComponent implements OnInit {
               name: 'Logout',
               icon: 'log-out'
             }
-          ]
+          ];
         }
       }
     }
   }
 
-  action (name)  {
-    switch(name) {
+  action(name: string) {
+    switch (name) {
       case 'Logout':
-        this.logout()
-        break
+        this.logout();
+        break;
       case 'Reset':
-        this.resetFilter()
-        break
+        this.resetFilter();
+        break;
     }
   }
 
 
-  async logout () {
-    this.storageService.clearStorage()
-    localStorage.clear()
-    this.router.navigate(['/auth']); 
-    this.widgetUtil.dismissPopover()
+  async logout() {
+    this.storageService.clearStorage();
+    localStorage.clear();
+    this.navCtrl.navigateRoot('/auth');
+    this.widgetUtil.dismissPopover();
   }
 
 
-  filterByOrderDate () {
+  filterByOrderDate() {
     this.widgetUtil.dismissPopover('filterbyorderdate');
   }
 
-  filterByInvoiceDate () {
+  filterByInvoiceDate() {
     this.widgetUtil.dismissPopover('filterbyinvoicedate');
   }
 
-  resetFilter () {
+  resetFilter() {
     this.widgetUtil.dismissPopover('resetfilter');
   }
 
-  dismissPopover () {
-    this.widgetUtil.dismissPopover()
+  dismissPopover() {
+    this.widgetUtil.dismissPopover();
   }
 
 }

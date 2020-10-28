@@ -12,21 +12,22 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./edit-order.page.scss'],
 })
 export class EditOrderPage implements OnInit {
-  cartItems: any = []
-  orderTotal: any = 0
+  cartItems: any = [];
+  orderTotal: any = 0;
   totalTK = 0;
-  totalNetWeight: number = 0
-  showLoader: boolean = false
-  showClearCartLoader: boolean = false
-  salesmanProfile: any
+  totalNetWeight = 0;
+  showLoader = false;
+  showClearCartLoader = false;
+  salesmanProfile: any;
   expanded = false;
   orderType: any = 'self';
-  salesmanName: any ;
+  salesmanName: any;
   salesmanId: any = 0;
   salesmanCode: any = 0;
-  showSalesmanLabel: boolean = false;
+  showSalesmanLabel = false;
   customerName: any;
   salesmanData: any = {};
+  expandedItemIndex = -1;
 
   constructor(
     private orderService: OrderService,
@@ -35,19 +36,19 @@ export class EditOrderPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private alertController: AlertController
-  ) { 
+  ) {
     this.showLoader = false
   }
 
   ngOnInit() {
 
     this.route.queryParams
-    .subscribe(params => {
-      console.log(params);
-      this.orderTotal = (parseFloat((Math.round(params.orderTotal * 100) / 100).toString()).toFixed(2))
-      this.getCartItems()
-      this.showSalesman()
-    });
+      .subscribe(params => {
+        console.log(params);
+        this.orderTotal = (parseFloat((Math.round(params.orderTotal * 100) / 100).toString()).toFixed(2))
+        this.getCartItems()
+        this.showSalesman()
+      });
 
     this.storageService.getTkPointsFromStorage().then((res: any) => {
       this.totalTK = res
@@ -58,7 +59,7 @@ export class EditOrderPage implements OnInit {
   }
 
 
-  async showSalesman () {
+  async showSalesman() {
     let profile = await this.storageService.getFromStorage('profile')
     if ((profile['userType'] === 'SALESMAN') || (profile['userType'] === 'SALESMANAGER')) {
 
@@ -66,12 +67,12 @@ export class EditOrderPage implements OnInit {
       this.salesmanProfile = profile
       this.salesmanName = this.salesmanProfile['name']
       this.salesmanCode = this.salesmanProfile['externalId'],
-      this.showSalesmanLabel = true
+        this.showSalesmanLabel = true
       this.customerName = customerProfile['name']
     }
   }
 
-  async getCartItems () {
+  async getCartItems() {
     this.cartItems = await this.storageService.getCartFromStorage()
     this.cartItems.map((value) => {
       value.price = (parseFloat((Math.round(value.price * 100) / 100).toString()).toFixed(2))
@@ -79,26 +80,26 @@ export class EditOrderPage implements OnInit {
     })
   }
 
-  doRefresh (refresher): void {
+  doRefresh(refresher): void {
     this.getCartItems()
     setTimeout(() => {
       refresher.complete();
     }, 1000);
   }
 
-  async confirmSubmitOrder () {
+  async confirmSubmitOrder() {
     const alert = await this.alertController.create({
       header: 'Confirmation',
       subHeader: 'Are you sure to place order?',
       buttons: [
         {
-          text : 'Okay',
+          text: 'Okay',
           handler: () => {
             this.submitOrder()
           }
         },
         {
-          text : 'Close',
+          text: 'Close',
           handler: () => {
             // do nothing
           }
@@ -108,11 +109,11 @@ export class EditOrderPage implements OnInit {
     await alert.present();
   }
 
-  presentPopover (myEvent) {
+  presentPopover(myEvent) {
     this.widgetUtil.presentPopover(myEvent)
   }
 
-  async submitOrder () {
+  async submitOrder() {
     let profile = await this.storageService.getFromStorage('profile')
     let totalTkPoints = await this.storageService.getTkPointsFromStorage()
     let totalNetWeight = await this.storageService.getFromStorage('totalNetWeight')
@@ -153,12 +154,12 @@ export class EditOrderPage implements OnInit {
       this.storageService.setToStorage('cart', [])
       this.storageService.removeFromStorage('tkpoint')
       this.storageService.setToStorage('totalNetWeight', 0);
-      
+
       //Removing the key-value after the order has been placed
       this.storageService.removeFromStorage('selectedCustomer')
-      
+
       this.widgetUtil.presentToast(CONSTANTS.ORDER_PLACED)
-      this.router.navigate(['/dashboard/'+profile['userType']] );
+      this.router.navigate(['/dashboard/' + profile['userType']]);
     }, (error) => {
       this.showLoader = false
       if (error.statusText === 'Unknown Error') {
@@ -169,7 +170,7 @@ export class EditOrderPage implements OnInit {
     })
   }
 
-  async clearCart () {
+  async clearCart() {
     await this.storageService.clearCart();
     this.showClearCartLoader = true
     this.totalNetWeight = 0;
@@ -180,7 +181,7 @@ export class EditOrderPage implements OnInit {
     this.widgetUtil.presentToast('All items removed from cart')
   }
 
-  removeFromCart (product) {
+  removeFromCart(product) {
     this.widgetUtil.presentToast(`${product.name} removed from cart`)
     if (this.cartItems.length > 0) {
       this.cartItems.map((value, index) => {
@@ -199,7 +200,7 @@ export class EditOrderPage implements OnInit {
     }
   }
 
-  updateCart (product) {
+  updateCart(product) {
     this.cartItems.map((value) => {
       if (value['_id'] === product['_id']) {
         let qty = parseInt(product.quantity);
@@ -215,7 +216,7 @@ export class EditOrderPage implements OnInit {
   }
 
 
-  async calculateTotal () {
+  async calculateTotal() {
     const obj = this.orderService.calculateTotalNetWeightAndTotalTk(this.cartItems);
     this.totalNetWeight = obj.totalNetWeight;
     this.totalTK = obj.totalTKPoint
@@ -223,11 +224,16 @@ export class EditOrderPage implements OnInit {
 
     await this.storageService.setToStorage('orderTotal', this.orderTotal)
     await this.storageService.setToStorage('tkpoint', this.totalTK);
-    await this.storageService.setToStorage('totalNetWeight', this.totalNetWeight.toFixed(3)) 
+    await this.storageService.setToStorage('totalNetWeight', this.totalNetWeight.toFixed(3))
   }
 
-  expandItem () {
+  expandItem(index: number) {
     this.expanded = !this.expanded;
+    this.expandedItemIndex = index;
+  }
+
+  openCategoryTotalModal() {
+
   }
 
 }

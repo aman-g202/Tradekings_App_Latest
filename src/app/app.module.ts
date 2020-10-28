@@ -31,7 +31,7 @@ import { AddProductPage } from './admin/add-product/add-product.page';
 import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
-import { PopoverComponent } from '../app/shared/popover/popover.component';
+import { PopoverComponent } from './shared/popover/popover.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +56,7 @@ import { PopoverComponent } from '../app/shared/popover/popover.component';
     SideBarComponent,
     PopoverComponent
   ],
-  entryComponents: [CategoryTotalModalPage, SideBarComponent],
+  entryComponents: [CategoryTotalModalPage, SideBarComponent, PopoverComponent],
   imports: [BrowserModule, CommonModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, HttpClientModule,
     IonicStorageModule.forRoot(
       {

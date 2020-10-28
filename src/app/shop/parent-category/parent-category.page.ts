@@ -20,8 +20,8 @@ export class ParentCategoryPage implements OnInit {
   skipValue = 0;
   limit: number = CONSTANTS.PAGINATION_LIMIT;
   loaderDownloading: any;
-  cart: any = []
-  tkPoint: any = 0
+  cart: any = [];
+  tkPoint: any = 0;
   placeOrder: boolean;
 
   constructor(
@@ -29,29 +29,24 @@ export class ParentCategoryPage implements OnInit {
     private categoryService: CategoriesService,
     private router: Router,
     private storageService: StorageServiceProvider,
-    private activatedRoute: ActivatedRoute
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.getList();
     this.getCartItems();
-    this.route.queryParams
-    .subscribe(params => {
-      console.log(params);
-      this.placeOrder = params.placeOrder
-      this.skipValue = 0
-      this.limit = CONSTANTS.PAGINATION_LIMIT
-      this.getList()
+    this.route.queryParams.subscribe(params => {
+      this.placeOrder = params.placeOrder;
     });
   }
 
   getChildCategory(category: CategoryItemModel) {
     const categoryObj = {
       parentCategoryId: category._id,
-      categoryName: category.name
+      categoryName: category.name,
       placeOrder: this.placeOrder
-    }
-    this.router.navigate(['../', 'child-category'], { queryParams: categoryObj, relativeTo: this.activatedRoute });
+    };
+    this.router.navigate(['../', 'child-category'], { queryParams: categoryObj, relativeTo: this.route });
   }
 
   async getList() {
@@ -100,30 +95,28 @@ export class ParentCategoryPage implements OnInit {
     });
   }
 
-  presentPopover (myEvent) {
-    this.widgetUtil.presentPopover(myEvent)
+  presentPopover(myEvent) {
+    this.widgetUtil.presentPopover(myEvent);
   }
 
-  async reviewAndSubmitOrder () {
+  async reviewAndSubmitOrder() {
     if (this.cart.length <= 0) {
-      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY)
-    }else {
-      let orderTotal = await this.storageService.getFromStorage('orderTotal')
-      this.router.navigate(['/submit-order'] , {queryParams: {'orderTotal': orderTotal}}); 
+      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
+    } else {
+      const orderTotal = await this.storageService.getFromStorage('orderTotal');
+      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal } });
     }
   }
 
-  async getCartItems () {
-    const storedEditedOrder: any = await this.storageService.getFromStorage('order')
+  async getCartItems() {
+    const storedEditedOrder: any = await this.storageService.getFromStorage('order');
     // update cart count badge when edit order flow is in active state
     if (storedEditedOrder) {
-      this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : []
-      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0
+      this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : [];
+      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
     } else {
-      this.cart = await this.storageService.getCartFromStorage()
-      this.storageService.getTkPointsFromStorage().then(res => {
-        this.tkPoint = res
-      })
+      this.cart = await this.storageService.getCartFromStorage();
+      this.tkPoint = await this.storageService.getTkPointsFromStorage();
     }
-   }
+  }
 }

@@ -11,7 +11,7 @@ export interface ProductModel {
     productCode: string;
     productSysCode: string;
     tkPoint: number;
-    quantity?: number;
+    quantity?: number | string;
     _id: string;
 }
 

@@ -6,6 +6,7 @@ import { WidgetUtilService } from '../../../providers/utils/widget';
 import { CategoriesService } from '../../../providers/services/categories/categories.service';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { CategoryItemModel } from '../../../providers/models/category.model';
+import { ProfileModel } from 'src/providers/models/profile.model';
 
 @Component({
   selector: 'app-child-category',
@@ -13,10 +14,9 @@ import { CategoryItemModel } from '../../../providers/models/category.model';
   styleUrls: ['./child-category.page.scss'],
 })
 export class ChildCategoryPage implements OnInit {
- 
-  cart: any = []
+  cart: any = [];
   placeOrder: boolean;
-  tkPoint: any = 0
+  tkPoint: any = 0;
   parentCategoryId = '';
   categoryListAvailable = false;
   childCategoryList: Array<CategoryItemModel> = [];
@@ -34,17 +34,17 @@ export class ChildCategoryPage implements OnInit {
 
   ngOnInit() {
     this.route.queryParams
-    .subscribe(params => {
-      this.parentCategoryId = params.parentCategoryId
-      this.categoryName = params.categoryName
-      this.categoryListAvailable = false
-      this.placeOrder = params.placeOrder
-      this.childCategoryList = []
-      this.skipValue = 0
-      this.limit = CONSTANTS.PAGINATION_LIMIT
-      this.getList()
-      this.getCartItems();
-    }); 
+      .subscribe(params => {
+        this.parentCategoryId = params.parentCategoryId;
+        this.categoryName = params.categoryName;
+        this.categoryListAvailable = false;
+        this.placeOrder = params.placeOrder;
+        this.childCategoryList = [];
+        this.skipValue = 0;
+        this.limit = CONSTANTS.PAGINATION_LIMIT;
+        this.getList();
+        this.getCartItems();
+      });
   }
 
   async getList() {
@@ -93,19 +93,19 @@ export class ChildCategoryPage implements OnInit {
     });
   }
 
-  presentPopover (myEvent) {
-    this.widgetUtil.presentPopover(myEvent)
+  presentPopover(myEvent) {
+    this.widgetUtil.presentPopover(myEvent);
   }
 
-  async reviewAndSubmitOrder () {
+  async reviewAndSubmitOrder() {
     if (this.cart.length <= 0) {
-      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY)
-    }else {
-      const orderTotal = await this.storageService.getFromStorage('orderTotal')
-      this.router.navigate(['/submit-order'] , {queryParams: {orderTotal}}); 
+      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
+    } else {
+      const orderTotal = await this.storageService.getFromStorage('orderTotal');
+      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal } });
     }
   }
-  
+
   doRefresh(refresher): void {
     this.getList();
     setTimeout(() => {
@@ -120,9 +120,9 @@ export class ChildCategoryPage implements OnInit {
     }
   }
 
-   submitSearch (ev: any) {
-    if (this.searchQuery && this.searchQuery.trim() != '') {
-      const profile = await this.storageService.getFromStorage('profile')
+  async submitSearch(ev: any) {
+    if (this.searchQuery && this.searchQuery.trim() !== '') {
+      const profile = await this.storageService.getFromStorage('profile') as ProfileModel;
       const data = {
         keyword: this.searchQuery,
         parentCategoryId: this.parentCategoryId,
@@ -130,26 +130,24 @@ export class ChildCategoryPage implements OnInit {
         categoryName: this.categoryName,
         placeOrder: this.placeOrder
       };
-      this.searchQuery  = ''
-      if(profile['type'] === 'admin') {
+      this.searchQuery = '';
+      if (profile.userType === 'ADMIN') {
         this.router.navigate(['../', 'product'], { queryParams: data, relativeTo: this.route });
-      } else{
+      } else {
         this.router.navigate(['../', 'product'], { queryParams: data, relativeTo: this.route });
       }
     }
   }
 
-  async getCartItems () {
-    const storedEditedOrder: any = await this.storageService.getFromStorage('order')
+  async getCartItems() {
+    const storedEditedOrder: any = await this.storageService.getFromStorage('order');
     // update cart count badge when edit order flow is in active state
     if (storedEditedOrder) {
-      this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : []
-      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0
+      this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : [];
+      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
     } else {
-      this.cart = await this.storageService.getCartFromStorage()
-      this.storageService.getTkPointsFromStorage().then(res => {
-        this.tkPoint = res
-      })
+      this.cart = await this.storageService.getCartFromStorage();
+      this.tkPoint = await this.storageService.getTkPointsFromStorage();
     }
-   }
+  }
 }

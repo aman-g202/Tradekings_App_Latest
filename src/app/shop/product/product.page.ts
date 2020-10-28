@@ -4,14 +4,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANTS } from '../../../providers/utils/constants';
 import { WidgetUtilService } from '../../../providers/utils/widget';
 import { OrderService } from '../../../providers/services/orders/order.service';
-import { StorageServiceProvider } from '../../../providers/services/storage/storage.service'
+import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { ProductService } from '../../../providers/services/products/products.service';
 import { ProductModel } from '../../../providers/models/product.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.page.html',
   styleUrls: ['./product.page.scss'],
+  providers: [OrderService]
 })
 export class ProductPage implements OnInit {
   skipValue = 0;
@@ -25,16 +27,16 @@ export class ProductPage implements OnInit {
   isSearch = false;
   filteredProductList: Array<ProductModel> = [];
   isUserAuthorized = false;
-  loggedInUserStore = []
-  storeList = []
+  loggedInUserStore = [];
+  storeList = [];
   placeOrder: boolean;
   cartQuantity: any = 0;
   orderTotal: any = 0;
-  cartDetail:any = []
-  cart: any = []
-  tkPoint: any = 0
-  isEditOrderFlow: boolean = false;
-  totalNetWeight: number = 0
+  cartDetail: any = [];
+  cart: any = [];
+  tkPoint: any = 0;
+  isEditOrderFlow = false;
+  totalNetWeight = 0;
 
   constructor(
     private widgetUtil: WidgetUtilService,
@@ -45,75 +47,59 @@ export class ProductPage implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.skipValue = 0;
-    this.limit = CONSTANTS.PAGINATION_LIMIT;
-    this.route.queryParams
-    .subscribe(params => {
-      this.parentCategoryId = params.parentCategoryId
+    this.route.queryParams.subscribe(params => {
+      this.parentCategoryId = params.parentCategoryId;
       this.categoryId = params.categoryId;
-      this.categoryName = params.categoryName
-      this.keyword = params.keyword
-      this.isSearch = params.isSearch
-      this.placeOrder = params.placeOrder
-      this.skipValue = 0
-      this.limit = CONSTANTS.PAGINATION_LIMIT
-      this.getProductList()
+      this.categoryName = params.categoryName;
+      this.keyword = params.keyword;
+      this.isSearch = params.isSearch;
+      this.placeOrder = params.placeOrder;
+      this.getProductList();
       this.getCartItems();
     });
   }
 
-  presentPopover (myEvent) {
-    this.widgetUtil.presentPopover(myEvent)
+  presentPopover(myEvent) {
+    this.widgetUtil.presentPopover(myEvent);
   }
 
   async getProductList() {
     const loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
+    this.fetchProducts().subscribe((result) => {
+      this.productList = result.body;
+      this.productList.map((value) => {
+        value.quantity = 1;
+        value.price = (parseFloat((Math.round(+value.price * 100) / 100).toString()).toFixed(2));
+        value.currentCaseSize = Number(value.currentCaseSize).toFixed(2);
+      });
+      this.filteredProductList = this.productList;
+      this.productListAvailable = true;
+      loaderDownloading.dismiss();
+    }, (error) => {
+      if (error.statusText === 'Unknown Error') {
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+      } else {
+        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
+      }
+      this.productListAvailable = true;
+      loaderDownloading.dismiss();
+    });
+  }
+
+  fetchProducts(): Observable<any> {
+    let fetchProductObservable$: Observable<any>;
     if (!this.isSearch) {
-      this.productService.getProductListByCategory(this.categoryId, this.skipValue, this.limit).subscribe((result) => {
-        this.productList = result.body;
-        this.productList.map((value) => {
-          value.quantity = 1;
-          value.price = (parseFloat((Math.round(+value.price * 100) / 100).toString()).toFixed(2));
-          value.currentCaseSize = Number(value.currentCaseSize).toFixed(2);
-        });
-        this.filteredProductList = this.productList;
-        this.productListAvailable = true;
-        loaderDownloading.dismiss();
-      }, (error) => {
-        if (error.statusText === 'Unknown Error') {
-          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
-        } else {
-          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
-        }
-        this.productListAvailable = true;
-        loaderDownloading.dismiss();
-      });
+      fetchProductObservable$ = this.productService.getProductListByCategory(this.categoryId, this.skipValue, this.limit);
     } else {
-      // tslint:disable-next-line: max-line-length
-      this.productService.searchProductInParentCategory(this.skipValue, this.limit, this.parentCategoryId, this.keyword).subscribe((result) => {
-        this.productList = result.body;
-        this.productList.map((value) => {
-          value.quantity = 1;
-          value.price = (parseFloat((Math.round(+value.price * 100) / 100).toString()).toFixed(2));
-        });
-        this.filteredProductList = this.productList;
-        this.productListAvailable = true;
-        loaderDownloading.dismiss();
-      }, (error) => {
-        if (error.statusText === 'Unknown Error') {
-          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
-        } else {
-          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
-        }
-        this.productListAvailable = true;
-        loaderDownloading.dismiss();
-      });
+      fetchProductObservable$ = this.productService
+        .searchProductInParentCategory(this.skipValue, this.limit, this.parentCategoryId, this.keyword);
     }
+    return fetchProductObservable$;
   }
 
   doInfinite(infiniteScroll) {
     this.skipValue = this.skipValue + this.limit;
-    this.productService.getProductListByCategory(this.categoryId, this.skipValue, this.limit).subscribe((result) => {
+    this.fetchProducts().subscribe((result) => {
       if (result.body.length > 0) {
         result.body.map((value) => {
           this.productList.push(value);
@@ -131,28 +117,29 @@ export class ProductPage implements OnInit {
     });
   }
 
-  async getCartItems () {
-    this.cart = await this.storageService.getCartFromStorage()
+  async getCartItems() {
+    this.cart = await this.storageService.getCartFromStorage();
     if (this.isEditOrderFlow) {
-        const storedEditedOrder: any = await this.storageService.getFromStorage('order')
-        // update cart count badge when edit order flow is in active state
-        this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0
+      const storedEditedOrder: any = await this.storageService.getFromStorage('order');
+      // update cart count badge when edit order flow is in active state
+      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
     } else {
-        this.tkPoint = await this.storageService.getTkPointsFromStorage()
+      this.tkPoint = await this.storageService.getTkPointsFromStorage();
     }
-    if(this.cart.length > 0) {
-      let updatedTotal = 0, updatedQuantity = 0;
+    if (this.cart.length > 0) {
+      let updatedTotal = 0;
+      let updatedQuantity = 0;
       this.cart.map((value) => {
-        updatedTotal = updatedTotal + (value.price * parseInt(value.quantity))
-        updatedQuantity = updatedQuantity + parseInt(value.quantity)
-      })
-      this.orderTotal = updatedTotal
-      this.cartQuantity = updatedQuantity
+        updatedTotal = updatedTotal + (value.price * +value.quantity);
+        updatedQuantity = updatedQuantity + +value.quantity;
+      });
+      this.orderTotal = updatedTotal;
+      this.cartQuantity = updatedQuantity;
     } else {
-      this.cartQuantity = 0
-      this.orderTotal = 0
+      this.cartQuantity = 0;
+      this.orderTotal = 0;
     }
-    await this.storageService.setToStorage('orderTotal', this.orderTotal)
+    await this.storageService.setToStorage('orderTotal', this.orderTotal);
   }
 
   searchProducts(searchQuery) {
@@ -161,119 +148,125 @@ export class ProductPage implements OnInit {
     });
   }
 
-  reviewAndSubmitOrder () {
+  reviewAndSubmitOrder() {
     if (this.cart.length <= 0) {
-      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY)
-    }else {
-      this.router.navigate(['/submit-order'] , {queryParams: {'orderTotal': this.orderTotal}}); 
+      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
+    } else {
+      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal: this.orderTotal } });
     }
   }
 
-  async addToCart (product, qty) {
-   if (this.isEditOrderFlow) {
-    if(parseInt(qty) > 0) {
-      let prepareProduct = {
-        productId: product._id,
-        netWeight: product.netWeight,
-        price: product.price,
-        productDetail: {
-          _id: product._id,
-          name: product.name,
+  async addToCart(product: ProductModel, qty: number | string) {
+    qty = +qty;
+    if (this.isEditOrderFlow) {
+      if (qty > 0) {
+        const prepareProduct = {
+          productId: product._id,
+          netWeight: product.netWeight,
           price: product.price,
-          productCode: product.productCode
-        },
-        quantity: product.quantity,
-        tkPoint: product.tkPoint,
-        parentCategoryId: product.parentCategoryId,
-        productSysCode: product.productSysCode
-      }
-      let order: any = await this.storageService.getFromStorage('order')
+          productDetail: {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            productCode: product.productCode
+          },
+          quantity: product.quantity,
+          tkPoint: product.tkPoint,
+          parentCategoryId: product.parentCategoryId,
+          productSysCode: product.productSysCode
+        };
+        const order: any = await this.storageService.getFromStorage('order');
 
-      let presentInCart = false;
-      const productsInCart = order.productList.map((value)=> {
-        if (value['productSysCode'] === product['productSysCode']) {
-          presentInCart = true
-          value.quantity = value.quantity + parseInt(product.quantity)
+        let presentInCart = false;
+        const productsInCart = order.productList.map((value) => {
+          if (value.productSysCode === product.productSysCode) {
+            presentInCart = true;
+            value.quantity = value.quantity + +product.quantity;
+          }
+          return value;
+        });
+        if (!presentInCart) {
+          // tslint:disable-next-line: no-shadowed-variable
+          const obj = {};
+          Object.assign(obj, prepareProduct);
+          // tslint:disable-next-line: no-string-literal
+          obj['quantity'] = qty;
+          order.productList.push(obj);
+        } else {
+          order.productList = productsInCart;
         }
-        return value
-      })
-      if(!presentInCart) {
-        let obj ={}
-        Object.assign(obj, prepareProduct)
-        obj['quantity'] = parseInt(qty)
-        order.productList.push(obj)
-      } else {
-        order.productList = productsInCart
+
+        const obj = this.orderService.calculateTotalNetWeightAndTotalTk(order.productList);
+
+        order.totalTkPoints = obj.totalTKPoint;
+        this.tkPoint = obj.totalTKPoint;
+        order.totalNetWeight = obj.totalNetWeight;
+
+        order.orderTotal = obj.orderTotal;
+
+        await this.storageService.setToStorage('order', order);
+        this.widgetUtil.presentToast(`${product.name} added to cart!`);
       }
-
-      const obj = this.orderService.calculateTotalNetWeightAndTotalTk(order.productList);
-
-      order.totalTkPoints = obj.totalTKPoint
-      this.tkPoint = obj.totalTKPoint
-      order.totalNetWeight = obj.totalNetWeight
-      
-      order.orderTotal = obj.orderTotal
-
-      await this.storageService.setToStorage('order', order)
-      this.widgetUtil.presentToast(`${product.name} added to cart!`)
-    }
-   } else {
-      if(parseInt(qty) > 0) {
-        this.widgetUtil.presentToast(`${product.name} added to cart!`)
-        delete product['categoryId']
-        delete product['productCode']
+    } else {
+      if (qty > 0) {
+        this.widgetUtil.presentToast(`${product.name} added to cart!`);
+        delete product.categoryId;
+        delete product.productCode;
         /* product['quantity'] = parseInt(qty) */
         let presentInCart = false;
-        const productsInCart = this.cart.map((value)=> {
-          if (value['_id'] === product['_id']) {
-            presentInCart = true
-            value.quantity = value.quantity + parseInt(product.quantity)
+        const productsInCart = this.cart.map((value) => {
+          if (value._id === product._id) {
+            presentInCart = true;
+            value.quantity = value.quantity + +product.quantity;
           }
-          return value
-        })
-        if(!presentInCart) {
-          let obj ={}
-          Object.assign(obj, product)
-          obj['quantity'] = parseInt(qty)
-          this.cart.push(obj)
+          return value;
+        });
+        if (!presentInCart) {
+          // tslint:disable-next-line: no-shadowed-variable
+          const obj = {};
+          Object.assign(obj, product);
+          // tslint:disable-next-line: no-string-literal
+          obj['quantity'] = qty;
+          this.cart.push(obj);
         } else {
-          this.cart = productsInCart
+          this.cart = productsInCart;
         }
         const obj = this.orderService.calculateTotalNetWeightAndTotalTk(this.cart);
 
-        this.tkPoint = obj.totalTKPoint
-        this.totalNetWeight = obj.totalNetWeight
-        this.storageService.setToStorage('tkpoint', this.tkPoint)
-        this.storageService.setToStorage('totalNetWeight', this.totalNetWeight)
-  
-        this.cartDetail = await this.storageService.setToStorage('cart', this.cart)
-        this.orderTotal = obj.orderTotal
-        this.cartQuantity = obj.totalQuantity
-        
-        this.storageService.setToStorage('cart', this.cart)
+        this.tkPoint = obj.totalTKPoint;
+        this.totalNetWeight = obj.totalNetWeight;
+        this.storageService.setToStorage('tkpoint', this.tkPoint);
+        this.storageService.setToStorage('totalNetWeight', this.totalNetWeight);
+
+        this.cartDetail = await this.storageService.setToStorage('cart', this.cart);
+        this.orderTotal = obj.orderTotal;
+        this.cartQuantity = obj.totalQuantity;
+
+        this.storageService.setToStorage('cart', this.cart);
       } else {
-        this.widgetUtil.presentToast(`Atleast 1 quantity is required!`)
+        this.widgetUtil.presentToast(`Atleast 1 quantity is required!`);
       }
     }
   }
 
-  resetQty (product) {
+  resetQty(product: ProductModel) {
     product.quantity = '';
   }
 
-  setQty (product) {
+  setQty(product: ProductModel) {
     product.quantity = product.quantity && product.quantity !== '' ? product.quantity : 1;
   }
 
-  decrementQty (qty) {
-    if(parseInt(qty) > 1) {
-      return (parseInt(qty) - 1)
+  decrementQty(qty: string | number) {
+    qty = +qty;
+    if (qty > 1) {
+      return qty - 1;
     }
-    return parseInt(qty)
+    return qty;
   }
 
-  incrementQty (qty) {
-    return (parseInt(qty) + 1)
+  incrementQty(qty: string | number) {
+    return +qty + 1;
   }
 
 }

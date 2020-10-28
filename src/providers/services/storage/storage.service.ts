@@ -36,43 +36,43 @@ export class StorageServiceProvider {
     this.storage.clear();
   }
 
-  getCartFromStorage () {
+  getCartFromStorage() {
     return new Promise((resolve, reject) => {
       this.storage.get('cart')
         .then(result => {
-          if(result) {
-            resolve(result)
+          if (result) {
+            resolve(result);
           } else {
             this.storage.set('cart', []).then(res => {
-              resolve(res)
-            })
+              resolve([]);
+            });
           }
         }).catch(err => {
-          reject(err)
-      })
-    })
+          reject(err);
+        });
+    });
   }
 
-  getTkPointsFromStorage () {
+  getTkPointsFromStorage() {
     return new Promise((resolve, reject) => {
       this.storage.get('tkpoint')
         .then(result => {
-          if(result) {
-            resolve(result)
+          if (result) {
+            resolve(result);
           } else {
             this.storage.set('tkpoint', 0).then(res => {
-              resolve(res)
-            })
+              resolve(0);
+            });
           }
         }).catch(err => {
-        reject(err)
-      })
-    })
+          reject(err);
+        });
+    });
   }
 
-  async clearCart () {
-    await this.setToStorage('cart', [])
-    await this.removeFromStorage('tkpoint')
-    await this.setToStorage('totalNetWeight', 0)
+  async clearCart() {
+    await this.setToStorage('cart', []);
+    await this.removeFromStorage('tkpoint');
+    await this.setToStorage('totalNetWeight', 0);
   }
 }
