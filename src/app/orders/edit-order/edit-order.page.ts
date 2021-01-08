@@ -67,8 +67,7 @@ export class EditOrderPage implements OnInit {
       this.salesmanProfile = profile
       this.salesmanName = this.salesmanProfile['name']
       this.salesmanCode = this.salesmanProfile['externalId'],
-        this.showSalesmanLabel = true
-      this.customerName = customerProfile['name']
+      this.showSalesmanLabel = true
     }
   }
 
@@ -118,12 +117,6 @@ export class EditOrderPage implements OnInit {
     let totalTkPoints = await this.storageService.getTkPointsFromStorage()
     let totalNetWeight = await this.storageService.getFromStorage('totalNetWeight')
     this.showLoader = true
-
-    //Replacing the Profile with Selected Customer Profile if userType = SALESMAN
-    if ((profile['userType'] === 'SALESMAN') || (profile['userType'] === 'SALESMANAGER')) {
-      profile = await this.storageService.getFromStorage('selectedCustomer')
-    }
-
 
     let orderObj = {
       productList: this.cartItems.map((value) => {
