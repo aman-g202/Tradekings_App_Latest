@@ -51,4 +51,12 @@ export class OrderService {
   submitOrder(orderDetails: any): any {
     return this.httpClient.post(environment.baseUrl + environment.endPoints.submitOrder, orderDetails);
   }
+
+  getOrderDetail (orderId: string): any {
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getOrderDetail + orderId)
+  }
+
+  changeOrderStatus (orderId: string, statusObj: Object): any {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.changeOrderStatus + orderId, statusObj)
+  }
 }
