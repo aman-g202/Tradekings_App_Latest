@@ -15,8 +15,7 @@
   <div class="search-spinner">
     <ion-spinner name="crescent" *ngIf="!orderItemsAvailable"></ion-spinner>
   </div>
-
-  <ion-list>
+   <ion-list>
     <ion-card>
       <ion-button color="secondary" expand="full" [disabled]="orderDetail.status !== 'in-progress'" class="edit-btn"
         (click)="eidtOrder()">EDIT ORDER</ion-button>
@@ -41,7 +40,8 @@
             <span>Date: {{orderDetail.lastUpdatedAt}}</span>
           </ion-col>
           <ion-col size="12">
-            <ion-icon name="podium" color="grey"></ion-icon> <span class="{{orderDetail.status}} ion-text-uppercase">Status:
+            <ion-icon name="podium" color="grey"></ion-icon> <span
+              class="{{orderDetail.status}} ion-text-uppercase">Status:
               <strong>{{orderDetail.status}}</strong></span>
           </ion-col>
           <ion-col size="12">
@@ -49,7 +49,7 @@
           </ion-col>
           <!-- <ion-col size="12">
               <ion-icon name="trophy" color="grey"></ion-icon> <span>Total SB-Points: {{orderDetail.totalTkPoints}}</span>
-            </ion-col> -->
+            </ion-col>  -->
           <ion-col size="12">
             <ion-icon name="cog" color="grey"></ion-icon> <span>Total Net Weight:
               {{orderDetail.totalNetWeight | number: '.2-2'}} tonnage</span>
@@ -85,7 +85,7 @@
               <ion-icon name="trophy" color="grey"></ion-icon>
               <span>SB-Point: {{item.tkPoint}}</span>
             </ion-col>
-          </ion-row> -->
+          </ion-row>  -->
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
             <ion-icon name="trophy" color="grey"></ion-icon>
@@ -109,7 +109,7 @@
       </ion-button>
       <!-- <ion-col size="12">
           <button *ngIf="showCsvButton" ion-button primary color="secondary" (click)="exportToCsv()"><ion-icon name="arrow-dropdown-circle"></ion-icon> Export to csv<ion-spinner name="dots" *ngIf="showLoader"></ion-spinner></button>
-        </ion-col> -->
+        </ion-col>  -->
       <ion-button *ngIf="showCancelOrder" color="secondary" (click)="cancelOrder()">
         <ion-icon name="close-circle"></ion-icon> Cancel Order<ion-spinner name="dots" *ngIf="showLoader"></ion-spinner>
       </ion-button>
