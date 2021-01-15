@@ -13,7 +13,8 @@ export const environment = {
     getOrderList: 'api/order/list/user/',
     getProductList: 'api/product/list/category/',
     searchProductInParentCategory: 'api/product/search/parentCategory/',
-    submitOrder: 'api/order/'
+    submitOrder: 'api/order/',
+    createPayment: 'api/user/create/payment'
   },
   storageKeys: {}
 };

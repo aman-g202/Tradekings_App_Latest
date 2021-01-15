@@ -1,5 +1,6 @@
+import { AddPaymentPage } from './../add-payment/add-payment.page';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Chart } from 'chart.js';
@@ -33,6 +34,7 @@ export class DashboardPage implements OnInit {
   loader: any;
   loaderDownloading: any;
   externalId = '';
+  customerDashboard = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -41,7 +43,8 @@ export class DashboardPage implements OnInit {
     private storageService: StorageServiceProvider,
     private route: ActivatedRoute,
     private menuCtrl: MenuController,
-    private router: Router) { }
+    private router: Router,
+    private modal :ModalController) { }
 
   ngOnInit() {
     this.getData();
@@ -200,5 +203,9 @@ export class DashboardPage implements OnInit {
 
   toggleMenu() {
     this.menuCtrl.toggle('menu');
+  }
+  async openPaymentModal () {
+    const payModal = await this.modal.create({component: AddPaymentPage})
+    payModal.present();
   }
 }
