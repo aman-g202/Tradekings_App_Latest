@@ -14,7 +14,9 @@ export const environment = {
     getProductList: 'api/product/list/category/',
     searchProductInParentCategory: 'api/product/search/parentCategory/',
     submitOrder: 'api/order/',
-    createPayment: 'api/user/create/payment'
+    createPayment: 'api/user/create/payment',
+    getOrderDetail: 'api/order/detail/',
+    changeOrderStatus: 'api/order/status/'
   },
   storageKeys: {}
 };

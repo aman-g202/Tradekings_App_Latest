@@ -1,9 +1,118 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>order-detail</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Order Detail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="">
+      </ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="full-background">
+  <ion-refresher (ionRefresh)="doRefresh($event)" spinner="crescent" slot="fixed">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="search-spinner">
+    <ion-spinner name="crescent" *ngIf="!orderItemsAvailable"></ion-spinner>
+  </div>
+   <ion-list>
+    <ion-card>
+      <ion-button color="secondary" expand="full" [disabled]="orderDetail.status !== 'in-progress'" class="edit-btn"
+        (click)="eidtOrder()">EDIT ORDER</ion-button>
+      <ion-card-content>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12">
+            <ion-icon name="cart" color="grey"></ion-icon>Order Id: <span>{{orderDetail.orderId}}</span>
+          </ion-col>
+          <ion-col size="12">
+            <ion-icon name=help-buoy color="grey"></ion-icon> Customer Name:
+            <span>{{orderDetail.userDetail.name}}</span>
+          </ion-col>
+          <ion-col size="12" *ngIf="orderDetail.salesmanName">
+            <ion-icon name=help-buoy color="grey"></ion-icon> SM Name: <span>{{orderDetail.salesmanName}}</span>
+          </ion-col>
+          <ion-col size="12">
+            <ion-icon name="pin" color="grey"></ion-icon> Province: <span>{{orderDetail.userDetail.country}} [
+              {{orderDetail.userDetail.province}} ]</span>
+          </ion-col>
+          <ion-col size="12">
+            <ion-icon color="grey" name="calendar"></ion-icon>
+            <span>Date: {{orderDetail.lastUpdatedAt}}</span>
+          </ion-col>
+          <ion-col size="12">
+            <ion-icon name="podium" color="grey"></ion-icon> <span
+              class="{{orderDetail.status}} ion-text-uppercase">Status:
+              <strong>{{orderDetail.status}}</strong></span>
+          </ion-col>
+          <ion-col size="12">
+            <ion-icon name="cash" color="grey"></ion-icon> <span>Order Total: {{orderDetail.orderTotal}} ZMW</span>
+          </ion-col>
+          <!-- <ion-col size="12">
+              <ion-icon name="trophy" color="grey"></ion-icon> <span>Total SB-Points: {{orderDetail.totalTkPoints}}</span>
+            </ion-col>  -->
+          <ion-col size="12">
+            <ion-icon name="cog" color="grey"></ion-icon> <span>Total Net Weight:
+              {{orderDetail.totalNetWeight | number: '.2-2'}} tonnage</span>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngFor="let item of orderItems">
+      <ion-card-content>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12">
+            <ion-icon name="cube" color="grey"></ion-icon>
+            <span>{{item.productDetail.name}} [{{item.productDetail.productCode}}]</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="6">
+            Qty: {{item.quantity}}
+          </ion-col>
+          <ion-col size="6">
+            <ion-icon name="cash" color="grey"></ion-icon>
+            <span>Price: {{item.price}} ZMW</span>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12">
+            <ion-icon name="cash" color="grey"></ion-icon>
+            <span>SubTotal: {{item.subTotal}} ZMW</span>
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row>
+            <ion-col size="12">
+              <ion-icon name="trophy" color="grey"></ion-icon>
+              <span>SB-Point: {{item.tkPoint}}</span>
+            </ion-col>
+          </ion-row>  -->
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12">
+            <ion-icon name="trophy" color="grey"></ion-icon>
+            <span>Net Weight: {{item.netWeight}} Kg</span>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
+
+<ion-footer class="full-background" *ngIf="showImportOrder || showCancelOrder">
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-button *ngIf="showImportOrder" color="secondary" (click)="importOrder()">
+        <ion-icon name="arrow-dropdown-circle"></ion-icon> Import Order<ion-spinner name="dots" *ngIf="showLoader">
+        </ion-spinner>
+      </ion-button>
+      <!-- <ion-col size="12">
+          <button *ngIf="showCsvButton" ion-button primary color="secondary" (click)="exportToCsv()"><ion-icon name="arrow-dropdown-circle"></ion-icon> Export to csv<ion-spinner name="dots" *ngIf="showLoader"></ion-spinner></button>
+        </ion-col>  -->
+      <ion-button *ngIf="showCancelOrder" color="secondary" (click)="cancelOrder()">
+        <ion-icon name="close-circle"></ion-icon> Cancel Order<ion-spinner name="dots" *ngIf="showLoader"></ion-spinner>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

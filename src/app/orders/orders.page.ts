@@ -102,8 +102,8 @@ export class OrdersPage implements OnInit {
 
   getOrderDetial(order) {
     const orderObj = {
-      order
-    };
+      order: JSON.stringify(order)
+    }
     this.router.navigate(['order-detail'], { queryParams: orderObj, relativeTo: this.route });
   }
 }
