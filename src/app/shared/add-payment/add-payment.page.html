@@ -1,9 +1,59 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>add-payment</ion-title>
+  <ion-toolbar color='primary'>
+    <ion-title>Payment Details</ion-title>
+    <ion-buttons slot='end'>
+      <ion-button ion-button (click)="closePayModal()">
+        <ion-icon name="close-circle"></ion-icon>Close
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
+  <ion-card>
+    <form [formGroup]="createPaymentForm">
+      <ion-item>
+        <ion-label position="floating">Select Payment Mode</ion-label>
+        <ion-select formControlName="paymentMode" (ionChange)="paymentModeSelectionChanged()">
+          <ion-select-option value="cash">Cash</ion-select-option>
+          <ion-select-option value="cheque">Cheque</ion-select-option>
+          <ion-select-option value="bank transfer">Bank Transfer</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Enter Amount</ion-label>
+        <ion-input type="number" formControlName="paymentAmount" (keyup)="checkAmount($event)"></ion-input>
+      </ion-item>
+      <ion-item id="chequeID" [ngClass]=" chequeIsSelected ? 'item-visible': 'item-hidden'">
+        <ion-label position="floating">Enter Cheque ID</ion-label>
+        <ion-input type="text" formControlName="chequeId"></ion-input>
+      </ion-item>
+      <ion-item [ngClass]=" onlineIsSelected ? 'item-visible': 'item-hidden'">
+        <ion-label position="floating">Enter Online Transaction ID</ion-label>
+        <ion-input type="text" formControlName="transactionId"></ion-input>
+      </ion-item>
 
+      <!-- Hide Salesman when logged in as Customer
+    Instead, show the customer list in label -->
+      <ion-item [ngClass]=" cashIsSelected && !userTypeSalesman ? 'item-visible': 'item-hidden'">
+        <ion-label position="floating">SM Name</ion-label>
+        <ion-input type="text" formControlName="paidTo"></ion-input>
+        <!-- <ion-select>
+              <ion-select-option *ngFor="let salesman of salesmanList" [value] = "salesman" (ionSelect)="selectSalesman(salesman)">{{salesman.name}}</ion-select-option>
+          </ion-select> -->
+      </ion-item>
+      <ion-item  class = "id" [ngClass]=" userTypeSalesman ? 'item-visible': 'item-hidden'">
+        <ion-label class="salesmanName">SM:{{salesmanName}}</ion-label> 
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Comment</ion-label>
+        <ion-input type="text" formControlName="comment"></ion-input>
+      </ion-item>
+    </form>
+  </ion-card>
+  <div id="modalBtn">
+    <ion-button [disabled]="isEnabled && !amountIsZero ? false : true" (click)="submitPayment()">
+      <ion-icon name="checkmark-circle"></ion-icon>
+      Add Payment
+    </ion-button>
+  </div>
 </ion-content>
