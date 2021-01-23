@@ -8,7 +8,12 @@ export const environment = {
     getChildCategory: 'api/category/list/child/',
     getOrderList: 'api/order/list/user/',
     getProductList: 'api/product/list/category/',
-    searchProductInParentCategory: 'api/product/search/parentCategory/'
+    searchProductInParentCategory: 'api/product/search/parentCategory/',
+    submitOrder: 'api/order/',
+    createPayment: 'api/user/create/payment',
+    getPaymentHistory: 'api/user/payment/history',
+    getOrderDetail: 'api/order/detail/',
+    changeOrderStatus: 'api/order/status/'
   },
   storageKeys: {}
 };
