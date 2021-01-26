@@ -25,5 +25,5 @@ interface InventoryDetailModel {
 interface ProductDetailModel {
     name: string ;
     productCode: string;
-    surname: string;
+    price: number | string;
 }
