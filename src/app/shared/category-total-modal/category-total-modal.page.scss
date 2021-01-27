@@ -1,0 +1,20 @@
+ion-row{
+    border: 1px solid gray
+}
+ion-col{
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    padding: 20px
+}
+.thead{
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+ion-row:nth-of-type(even){
+    background-color: #EEEEEE;
+}
+
+.search-spinner{
+    padding-top: 50%;
+}

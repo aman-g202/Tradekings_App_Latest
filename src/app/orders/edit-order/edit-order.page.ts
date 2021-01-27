@@ -4,7 +4,8 @@ import { WidgetUtilService } from '../../../providers/utils/widget'
 import { CONSTANTS } from '../../../providers/utils/constants';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { CategoryTotalModalPage } from '../../shared/category-total-modal/category-total-modal.page';
 
 @Component({
   selector: 'app-edit-order',
@@ -35,7 +36,8 @@ export class EditOrderPage implements OnInit {
     private storageService: StorageServiceProvider,
     private route: ActivatedRoute,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {
     this.showLoader = false
   }
@@ -225,8 +227,11 @@ export class EditOrderPage implements OnInit {
     this.expandedItemIndex = index;
   }
 
-  openCategoryTotalModal() {
 
+  async openCategoryTotalModal() {
+    const openCategoryModal = await this.modalController.
+    create({ component: CategoryTotalModalPage, componentProps: { cartItems: this.cartItems } });
+    openCategoryModal.present();
   }
 
 }

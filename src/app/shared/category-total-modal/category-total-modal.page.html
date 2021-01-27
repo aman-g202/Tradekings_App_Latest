@@ -1,9 +1,27 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>category-total-modal</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Category Wise Total</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="full-background">
+  <ion-card *ngIf="categoryListAvailable">
+    <ion-row class="ion-text-center thead">
+      <ion-col size="6"> Category </ion-col>
+      <ion-col size="6">Sub Total</ion-col>
+    </ion-row>
+    <ion-row class="ion-text-center" *ngFor="let category of parentCategoryList">
+      <ion-col size="6">
+        {{category.name}}
+      </ion-col>
+      <ion-col size="6">
+        {{(category.subTotal)}} ZMW
+      </ion-col>
+    </ion-row>
+  </ion-card>
 </ion-content>
