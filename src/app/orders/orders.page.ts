@@ -74,9 +74,9 @@ export class OrdersPage implements OnInit {
         } else {
           this.skipValue = this.limit;
         }
-        infiniteScroll.complete();
+        infiniteScroll.target.complete();
       }, (error) => {
-        infiniteScroll.complete();
+        infiniteScroll.target.complete();
         if (error.statusText === 'Unknown Error') {
           this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {

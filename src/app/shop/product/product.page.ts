@@ -152,7 +152,7 @@ export class ProductPage implements OnInit {
     if (this.cart.length <= 0) {
       this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
     } else {
-      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal: this.orderTotal } });
+      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal: this.orderTotal, isEditorderFlow: this.isEditOrderFlow } });
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OrderService } from '../../../providers/services/orders/order.service';
 import { WidgetUtilService } from '../../../providers/utils/widget'
 import { CONSTANTS } from '../../../providers/utils/constants';
@@ -12,7 +12,7 @@ import { CategoryTotalModalPage } from '../../shared/category-total-modal/catego
   templateUrl: './edit-order.page.html',
   styleUrls: ['./edit-order.page.scss'],
 })
-export class EditOrderPage implements OnInit {
+export class EditOrderPage implements OnInit, OnDestroy {
   cartItems: any = [];
   orderTotal: any = 0;
   totalTK = 0;
@@ -29,6 +29,7 @@ export class EditOrderPage implements OnInit {
   customerName: any;
   salesmanData: any = {};
   expandedItemIndex = -1;
+  isEditOrderFlow: boolean;
 
   constructor(
     private orderService: OrderService,
@@ -43,21 +44,20 @@ export class EditOrderPage implements OnInit {
   }
 
   ngOnInit() {
-
     this.route.queryParams
       .subscribe(params => {
-        console.log(params);
-        this.orderTotal = (parseFloat((Math.round(params.orderTotal * 100) / 100).toString()).toFixed(2))
+        this.orderTotal = (parseFloat((Math.round(params.orderTotal * 100) / 100).toString()).toFixed(2));
+        this.isEditOrderFlow = params.isEditOrderFlow;
         this.getCartItems()
         this.showSalesman()
       });
 
     this.storageService.getTkPointsFromStorage().then((res: any) => {
-      this.totalTK = res
-    })
+      this.totalTK = res;
+    });
     this.storageService.getFromStorage('totalNetWeight').then((res: any) => {
-      this.totalNetWeight = res
-    })
+      this.totalNetWeight = res;
+    });
   }
 
 
@@ -69,12 +69,19 @@ export class EditOrderPage implements OnInit {
       this.salesmanProfile = profile
       this.salesmanName = this.salesmanProfile['name']
       this.salesmanCode = this.salesmanProfile['externalId'],
-      this.showSalesmanLabel = true
+        this.showSalesmanLabel = true
     }
   }
 
   async getCartItems() {
-    this.cartItems = await this.storageService.getCartFromStorage()
+    if (this.isEditOrderFlow){
+      this.cartItems = await this.storageService.getExistCartFromStorage();
+    }
+    else{
+      this.cartItems = await this.storageService.getCartFromStorage();
+    }
+   // this.cartItems = this.isEditOrderFlow ?
+     //await this.storageService.getExistCartFromStorage() : await this.storageService.getCartFromStorage();
     this.cartItems.map((value) => {
       value.price = (parseFloat((Math.round(value.price * 100) / 100).toString()).toFixed(2))
       value['subTotal'] = (parseFloat((Math.round((value.quantity * parseFloat(value.price) * 100) / 100)).toString()).toFixed(2))
@@ -150,7 +157,7 @@ export class EditOrderPage implements OnInit {
       this.storageService.removeFromStorage('tkpoint')
       this.storageService.setToStorage('totalNetWeight', 0);
 
-      //Removing the key-value after the order has been placed
+      // Removing the key-value after the order has been placed
       this.storageService.removeFromStorage('selectedCustomer')
 
       this.widgetUtil.presentToast(CONSTANTS.ORDER_PLACED)
@@ -176,7 +183,7 @@ export class EditOrderPage implements OnInit {
     this.widgetUtil.presentToast('All items removed from cart')
   }
 
-  removeFromCart(product) {
+  async removeFromCart(product) {
     this.widgetUtil.presentToast(`${product.name} removed from cart`)
     if (this.cartItems.length > 0) {
       this.cartItems.map((value, index) => {
@@ -189,7 +196,12 @@ export class EditOrderPage implements OnInit {
         this.totalTK = tkpoint;
         await this.storageService.setToStorage('tkpoint', tkpoint);
       });
-      this.storageService.setToStorage('cart', this.cartItems);
+      if (this.isEditOrderFlow){
+        this.cartItems = await this.storageService.getExistCartFromStorage();
+      }
+      else{
+        this.cartItems = await this.storageService.getCartFromStorage();
+      }
       this.getCartItems()
       this.calculateTotal();
     }
@@ -230,8 +242,11 @@ export class EditOrderPage implements OnInit {
 
   async openCategoryTotalModal() {
     const openCategoryModal = await this.modalController.
-    create({ component: CategoryTotalModalPage, componentProps: { cartItems: this.cartItems } });
+      create({ component: CategoryTotalModalPage, componentProps: { cartItems: this.cartItems } });
     openCategoryModal.present();
   }
 
+  ngOnDestroy() {
+    this.storageService.removeFromStorage('existCart');
+  }
 }
