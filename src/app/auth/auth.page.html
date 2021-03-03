@@ -17,7 +17,7 @@
       <ion-row>
         <ion-item size="12">
           <ion-label position="floating">Password</ion-label>
-          <ion-input type="{{passwordFieldType}}" formControlName="password"></ion-input>
+          <ion-input type="{{passwordFieldType}}" formControlName="password" clear-on-edit="false"></ion-input>
         </ion-item>
         <ion-icon name="eye" (click)="showPassword()" [ngClass]="isActive ? 'item-active': 'item-inactive'"></ion-icon>
       </ion-row>
