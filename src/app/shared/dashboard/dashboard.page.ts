@@ -11,6 +11,7 @@ import { WidgetUtilService } from '../../../providers/utils/widget';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { CategoryItemModel } from '../../../providers/models/category.model';
+import { PaymentHistoryPage } from '../payment-history/payment-history.page';
 
 @Component({
   selector: 'app-dashboard',
@@ -106,6 +107,7 @@ export class DashboardPage implements OnInit {
 
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0];
+        console.log(res.body[0])
         this.categoriesServices.getParentCategoryList(0, 20).subscribe((resp: any) => {
           this.categoryList = resp.body;
           this.prepareData('Total');
@@ -207,5 +209,9 @@ export class DashboardPage implements OnInit {
   async openPaymentModal () {
     const payModal = await this.modal.create({component: AddPaymentPage})
     payModal.present();
+  }
+
+ openCustomerPaymentHistory(){
+  this.router.navigate(['/payment-history']);
   }
 }

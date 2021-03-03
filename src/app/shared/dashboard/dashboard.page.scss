@@ -33,7 +33,7 @@ ion-title{
       display: none;
   }
   ion-select{
-    font-size: 0.7em;
+    font-size: 0.6em;
     padding-left: 0 !important;
     margin-top: 5px;
   }
@@ -85,7 +85,7 @@ ion-title{
 
   ion-footer{
     box-shadow: 0 0px 10px rgba(34, 95, 147, 0.5);
-    background: #225f93;
+    background: var(--ion-color-primary)
   }
 
   .customerdashboardBtn{
@@ -100,3 +100,18 @@ ion-title{
   ion-icon {
     margin-right: 5px;
   }
+
+  .customerhistorybtn{
+    text-align: center;
+    padding-left:5px;
+    padding-right:5px;
+  }
+ ion-col{
+  box-shadow: 5px 5px rgb(187, 181, 181);
+ }
+  
+
+  // ion-card{
+  //   width: 100% !important;
+  //   text-align: center;
+  // }
