@@ -80,8 +80,6 @@ export class EditOrderPage implements OnInit, OnDestroy {
     else{
       this.cartItems = await this.storageService.getCartFromStorage();
     }
-   // this.cartItems = this.isEditOrderFlow ?
-     //await this.storageService.getExistCartFromStorage() : await this.storageService.getCartFromStorage();
     this.cartItems.map((value) => {
       value.price = (parseFloat((Math.round(value.price * 100) / 100).toString()).toFixed(2))
       value['subTotal'] = (parseFloat((Math.round((value.quantity * parseFloat(value.price) * 100) / 100)).toString()).toFixed(2))
@@ -197,10 +195,10 @@ export class EditOrderPage implements OnInit, OnDestroy {
         await this.storageService.setToStorage('tkpoint', tkpoint);
       });
       if (this.isEditOrderFlow){
-        this.cartItems = await this.storageService.getExistCartFromStorage();
+         await this.storageService.setToStorage('existCart', this.cartItems);
       }
       else{
-        this.cartItems = await this.storageService.getCartFromStorage();
+        this.cartItems = await this.storageService.setToStorage('cart', this.cartItems);
       }
       this.getCartItems()
       this.calculateTotal();
@@ -244,6 +242,10 @@ export class EditOrderPage implements OnInit, OnDestroy {
     const openCategoryModal = await this.modalController.
       create({ component: CategoryTotalModalPage, componentProps: { cartItems: this.cartItems } });
     openCategoryModal.present();
+  }
+
+  addNewItem () {
+    this.router.navigate(['/shop'], {queryParams: {isEdit: true} })
   }
 
   ngOnDestroy() {

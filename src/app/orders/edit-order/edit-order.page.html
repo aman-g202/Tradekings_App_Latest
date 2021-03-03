@@ -29,6 +29,9 @@
           <ion-col size="12">
             <ion-button fill="outline" color="secondary" (click)="openCategoryTotalModal()">View Category Wise Total</ion-button>
           </ion-col>
+          <ion-col size="12">
+            <ion-button fill="outline" color="secondary" (click)="addNewItem()">Add product</ion-button>
+          </ion-col>
         </ion-row>
       </ion-card-header>
     </ion-card>
@@ -70,7 +73,7 @@
                     <input type='text' name='quantity' [(ngModel)]="product.quantity" value='0' class='qty' style="width: 40px;height: 25px;text-align: center;margin-top: 10px;" #qty/>
                   </ion-col>
                   <ion-col size="8" class="ion-text-right">
-                    <ion-button color="secondary" [disabled]="!(qty.value > 0)" (click)="updateCart(product)" style="color: white!important;">
+                    <ion-button color="secondary" [disabled]="!(qty.value > 0)" (click)="updateCart(product)" style="color: white !important;">
                       <strong>
                         <ion-icon name="cart"></ion-icon>Update
                       </strong>
