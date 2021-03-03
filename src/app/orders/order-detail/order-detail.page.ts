@@ -152,12 +152,9 @@ export class OrderDetailPage implements OnInit {
   }
 
   eidtOrder() {
-    const existCart = [];
-    this.orderItems.forEach((item) => {
-      existCart.push(
-        item.name = item.productDetail.name
-      );
-    });
+    this.orderItems.map((item) => {
+        item.name = item.productDetail.name;
+     });
     this.storageService.setToStorage('existCart' , this.orderItems);
     const orderObj = {
       orderTotal: this.orderDetail.orderTotal,
