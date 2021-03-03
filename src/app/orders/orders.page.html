@@ -12,7 +12,7 @@
 </ion-toolbar>
 
 <ion-content class="full-background">
-  <div *ngIf="orderListAvailable && (orderList.length > 0)">
+  <ion-list *ngIf="orderListAvailable && (orderList.length > 0)">
     <ion-card *ngFor="let order of orderList">
       <ion-card-content>
         <ion-row class="ion-align-items-center">
@@ -34,12 +34,12 @@
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
             <ion-icon color="grey" name="cog"></ion-icon>
-            Total Net Weight: <strong text-uppercase>{{order.totalNetWeight | number: '.2-2'}} tonnage</strong>
+            Total Net Weight: <strong class="ion-text-uppercase">{{order.totalNetWeight | number: '.2-2'}} tonnage</strong>
           </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center">
           <ion-col size="12" class="{{order.status}}"> 
-              <ion-icon color="grey" name="podium"></ion-icon>Status: <strong text-uppercase>{{order.status}}</strong>
+              <ion-icon color="grey" name="podium"></ion-icon>Status: <strong class="ion-text-uppercase">{{order.status}}</strong>
           </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center">
@@ -49,7 +49,7 @@
         </ion-row>
       </ion-card-content>
     </ion-card>
-  </div>
+  </ion-list>
     <ion-card *ngIf="orderListAvailable && (orderList.length < 1)">
       <ion-card-header text-center class="noDataView">
           <ion-icon name="alert"></ion-icon>
