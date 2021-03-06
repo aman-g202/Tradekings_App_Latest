@@ -28,6 +28,7 @@ export class DashboardPage implements OnInit {
   pieChart: any;
   selectedCustomerprofile: any;
   userTypeCustomer = false;
+  userTypeSalesman = false;
   targetCategory: any = 'Total';
   dashboardData: any;
   categoryList: CategoryItemModel[] = [];
@@ -66,7 +67,8 @@ export class DashboardPage implements OnInit {
         labels: [
           'MTD Achieved',
           'Balance To Do'
-        ]
+        ],
+        color: "red"
       },
       options: {
         legend: {
@@ -97,17 +99,21 @@ export class DashboardPage implements OnInit {
       const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
       this.partyName = profile.name;
       this.externalId = profile.externalId;
-
-      if ((profile.userType === 'SALESMAN') || (profile.userType === 'SALESMANAGER')) {
+       if((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO'){
         this.userTypeCustomer = false;
+        this.userTypeSalesman = false;
+       }
+      else if ((profile.userType === 'SALESMAN') || (profile.userType === 'SALESMANAGER')) {
+        this.userTypeCustomer = false;
+        this.userTypeSalesman = true;
       }
       else {
+        this.userTypeSalesman = false;
         this.userTypeCustomer = true;
       }
 
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0];
-        console.log(res.body[0])
         this.categoriesServices.getParentCategoryList(0, 20).subscribe((resp: any) => {
           this.categoryList = resp.body;
           this.prepareData('Total');
@@ -213,5 +219,10 @@ export class DashboardPage implements OnInit {
 
  openCustomerPaymentHistory(){
   this.router.navigate(['/payment-history']);
+  }
+
+  navigateCustomerList(){
+
+    this.router.navigate(['/select-customer'],{ queryParams:{externalId: this.externalId}})
   }
 }
