@@ -15,10 +15,14 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="full-background" id="main">
-
   <ion-card class="tabs-wrapper">
+    <ng-container *ngIf="selectedUserCustomer">
+      <div class="invoice-btn-wrapper">
+        <ion-button (click)="navigateToViewSatetement()">VIEW STATEMENTS</ion-button>
+        <ion-button (click)="createPendingInvoice()">PENDING INVOICE</ion-button>
+      </div>
+    </ng-container>
     <ion-card-header class="card-title">
       <!-- TARGET vs ACHIEVEMENT -->
       <!-- <ion-icon></ion-icon> -->
@@ -51,9 +55,7 @@
           {{data.balanceToDo | number: '.2'}}
         </p>
       </ion-col>
-
     </ion-row>
-
     <ion-row>
       <ion-col class="tabs">
         <p class="tab-label-sm">
@@ -163,22 +165,26 @@
         </p>
       </ion-col>
     </ion-row>
-    <ion-button *ngIf="userTypeCustomer" expand="full" class="customerHistoryBtn"
-      (click)="openCustomerPaymentHistory()">
-      View Customer Payments
-    </ion-button>
+    <ion-row>
+      <ion-col>
+        <ion-button *ngIf="userTypeCustomer" expand="full" class="customerHistoryBtn"
+          (click)="openCustomerPaymentHistory()">
+          View Customer Payments
+        </ion-button>
+      </ion-col>
+    </ion-row>
   </ion-card>
 
 </ion-content>
 <ion-footer>
-  <ion-button expand="full" *ngIf="userTypeSalesman" (click)=" navigateCustomerList()" class="selectCustomerBtn">
-    SELECT CUSTOMER</ion-button>
-    <ng-container *ngIf="userTypeCustomer">
-  <ion-button padding class="customerdashboardBtn btn-left" (click)="openPaymentModal()">
+  <ion-button expand="full" *ngIf="userTypeSalesman" (click)=" navigateCustomerList()" class="selectCustomerBtn">SELECT
+    CUSTOMER</ion-button>
+  <ion-button padding class="customerdashboardBtn btn-left" (click)="openPaymentModal()"
+    [ngClass]="!userTypeCustomer ? 'item-hidden': 'item-visible'">
     <ion-icon name="cash"></ion-icon>Add Payment
   </ion-button>
-  <ion-button  class="customerdashboardBtn" (click)="openShopPage()">
+  <ion-button padding class="customerdashboardBtn" (click)="openShopPage()"
+    [ngClass]=" !userTypeCustomer ? 'item-hidden': 'item-visible'">
     <ion-icon name="cart"></ion-icon>Place Order
   </ion-button>
-</ng-container>
 </ion-footer>

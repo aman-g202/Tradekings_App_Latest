@@ -11,7 +11,9 @@ import { WidgetUtilService } from '../../../providers/utils/widget';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { CategoryItemModel } from '../../../providers/models/category.model';
-import { PaymentHistoryPage } from '../payment-history/payment-history.page';
+
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +38,8 @@ export class DashboardPage implements OnInit {
   loader: any;
   loaderDownloading: any;
   externalId = '';
-  customerDashboard = false;
+  selectedUserCustomer = false;
+  selectedUser;
 
   constructor(
     private dashboardService: DashboardService,
@@ -46,7 +49,7 @@ export class DashboardPage implements OnInit {
     private route: ActivatedRoute,
     private menuCtrl: MenuController,
     private router: Router,
-    private modal :ModalController) { }
+    private modal: ModalController) { }
 
   ngOnInit() {
     this.getData();
@@ -88,30 +91,44 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  presentPopover (myEvent) {
+  presentPopover(myEvent) {
     this.widgetUtil.presentPopover(myEvent)
   }
-
 
   async getData() {
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     try {
       const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
+      this.selectedUser = await this.storageService.getFromStorage('selectedCustomer');
       this.partyName = profile.name;
       this.externalId = profile.externalId;
-       if((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO'){
-        this.userTypeCustomer = false;
-        this.userTypeSalesman = false;
-       }
-      else if ((profile.userType === 'SALESMAN') || (profile.userType === 'SALESMANAGER')) {
-        this.userTypeCustomer = false;
-        this.userTypeSalesman = true;
-      }
-      else {
-        this.userTypeSalesman = false;
-        this.userTypeCustomer = true;
-      }
+      if (this.selectedUser) {
+        if ((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO') {
+          if (this.selectedUser['profile'] === 'SALESMAN' || this.selectedUser['profile'] === 'SALESMANAGER' || this.selectedUser['PRICEEXECUTIVE']) {
+            this.partyName = this.selectedUser['profile'];
+            this.externalId = this.selectedUser['externalId'];
+            this.userTypeCustomer = false;
+          } else {
+            this.partyName = this.selectedUser['profile'];
+            this.externalId = this.selectedUser['externalId'];
+            this.selectedUserCustomer = true;
+          }
+        } else {
+          this.partyName = this.selectedUser['profile'];
+          this.externalId = this.selectedUser['externalId'];
+          this.selectedUserCustomer = true;
+        }
 
+      } else {
+        if (profile.userType === 'SALESMAN' || profile.userType === 'SALESMANAGER') {
+          this.userTypeSalesman = true;
+        } else if (profile.userType === 'CUSTOMER') {
+          this.userTypeCustomer = true;
+        } else {
+          this.userTypeCustomer = false;
+          this.userTypeSalesman = false;
+        }
+      }
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0];
         this.categoriesServices.getParentCategoryList(0, 20).subscribe((resp: any) => {
@@ -129,15 +146,14 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  openShopPage () {
-    this.router.navigate(['/shop'] , {queryParams: {placeOrder: true}});  
+  openShopPage() {
+    this.router.navigate(['/shop'], { queryParams: { placeOrder: true } });
   }
 
   async prepareData(selectedValue) {
     if (!this.dashboardData) {
       this.data.target = 0;
       this.data.achievement = 0;
-
       this.data.achievedPercentage = 0;
       this.data.balanceToDo = 0;
       this.data.creditLimit = 0;
@@ -155,19 +171,31 @@ export class DashboardPage implements OnInit {
       this.target = 1;
     } else {
       if (selectedValue !== 'Total') {
-        this.data.target = (this.dashboardData['target' + selectedValue.charAt(0)]).toFixed(2);
-        this.data.achievement = (this.dashboardData['achive' + selectedValue.charAt(0)]).toFixed(2);
-        this.data.lmtdAchieve = (this.dashboardData['lmtdAchive' + selectedValue.charAt(0)]).toFixed(2);
-        this.data.lymtdAchieve = (this.dashboardData['lymtdAchive' + selectedValue.charAt(0)]).toFixed(2);
+        if (this.userTypeCustomer) {
+          this.data.target = (this.dashboardData['target' + selectedValue.charAt(0)]).toFixed(2);
+          this.data.achievement = (this.dashboardData['achive' + selectedValue.charAt(0)]).toFixed(2);
+        } else {
+          this.data.target = (this.dashboardData['target' + selectedValue.charAt(0)]).toFixed(2);
+          this.data.achievement = (this.dashboardData['achive' + selectedValue.charAt(0)]).toFixed(2);
+          this.data.lmtdAchieve = (this.dashboardData['lmtdAchive' + selectedValue.charAt(0)]).toFixed(2);
+          this.data.lymtdAchieve = (this.dashboardData['lymtdAchive' + selectedValue.charAt(0)]).toFixed(2);
+        }
       } else {
-        this.data.target = (this.dashboardData['targetC'] + this.dashboardData['targetP'] + this.dashboardData['targetH']
-          + this.dashboardData['targetL']).toFixed(2);
-        this.data.achievement = (this.dashboardData['achiveC'] + this.dashboardData['achiveP'] + this.dashboardData['achiveH']
-          + this.dashboardData['achiveL']).toFixed(2);
-        this.data.lmtdAchieve = (this.dashboardData['lmtdAchiveC'] + this.dashboardData['lmtdAchiveP'] + this.dashboardData['lmtdAchiveH']
-          + this.dashboardData['lmtdAchiveL']).toFixed(2);
-        this.data.lymtdAchieve = (this.dashboardData['lymtdAchiveC'] + this.dashboardData['lymtdAchiveP'] + this.dashboardData['lymtdAchiveH']
-          + this.dashboardData['lymtdAchiveL']).toFixed(2);
+        if (this.userTypeCustomer) {
+          this.data.target = (this.dashboardData['targetC'] + this.dashboardData['targetP'] + this.dashboardData['targetH']
+            + this.dashboardData['targetL']).toFixed(2);
+          this.data.achievement = (this.dashboardData['achiveC'] + this.dashboardData['achiveP'] + this.dashboardData['achiveH']
+            + this.dashboardData['achiveL']).toFixed(2);
+        } else {
+          this.data.target = (this.dashboardData['targetC'] + this.dashboardData['targetP'] + this.dashboardData['targetH']
+            + this.dashboardData['targetL']).toFixed(2);
+          this.data.achievement = (this.dashboardData['achiveC'] + this.dashboardData['achiveP'] + this.dashboardData['achiveH']
+            + this.dashboardData['achiveL']).toFixed(2);
+          this.data.lmtdAchieve = (this.dashboardData['lmtdAchiveC'] + this.dashboardData['lmtdAchiveP'] + this.dashboardData['lmtdAchiveH']
+            + this.dashboardData['lmtdAchiveL']).toFixed(2);
+          this.data.lymtdAchieve = (this.dashboardData['lymtdAchiveC'] + this.dashboardData['lymtdAchiveP'] + this.dashboardData['lymtdAchiveH']
+            + this.dashboardData['lymtdAchiveL']).toFixed(2);
+        }
       }
 
       if (this.data.achievement) {
@@ -212,17 +240,24 @@ export class DashboardPage implements OnInit {
   toggleMenu() {
     this.menuCtrl.toggle('menu');
   }
-  async openPaymentModal () {
-    const payModal = await this.modal.create({component: AddPaymentPage})
+  async openPaymentModal() {
+    const payModal = await this.modal.create({ component: AddPaymentPage })
     payModal.present();
   }
 
- openCustomerPaymentHistory(){
-  this.router.navigate(['/payment-history']);
+  openCustomerPaymentHistory() {
+    this.router.navigate(['/payment-history']);
   }
 
-  navigateCustomerList(){
+  navigateCustomerList() {
+    this.router.navigate(['/select-customer'])
+  }
 
-    this.router.navigate(['/select-customer'],{ queryParams:{externalId: this.externalId}})
+  navigateToViewSatetement() {
+    this.router.navigate(['/view-statement'])
+  }
+
+  createPendingInvoice() {
+
   }
 }

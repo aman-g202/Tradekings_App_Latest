@@ -120,6 +120,21 @@ ion-title{
     font-weight: 900;
   }
 
+  .invoice-btn-wrapper{
+    text-align: center;
+    padding-top: 10px;
+    ion-button{
+      width: 47%;
+      font-weight: 900;
+      &:nth-child(1){
+        --background: var(--ion-color-primary) 
+      }
+      &:nth-child(2){
+        --background: var(--ion-color-primary-tint)
+      }
+    }
+  }
+
   ion-footer{
     box-shadow: 0 0px 10px var(--ion-color-primary);
     background: var(--ion-color-primary)
