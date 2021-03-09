@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'http://41.218.83.178:3002/',
+  baseUrl: 'http://41.218.83.178:6002/',
   endPoints: {
     login: 'api/user/authenticate',
     getDashboard: 'api/user/get/dashboard',
@@ -13,7 +13,13 @@ export const environment = {
     createPayment: 'api/user/create/payment',
     getPaymentHistory: 'api/user/payment/history',
     getOrderDetail: 'api/order/detail/',
-    changeOrderStatus: 'api/order/status/'
+    changeOrderStatus: 'api/order/status/',
+    getCustomerListBySalesman: 'api/user/list/associated/customer',
+    getAllCustomerList: 'api/user/list/all/customer',
+    getCustomerListByAdmin: 'api/user/list/customer',
+    getCustomerListByProvince: 'api/user/list/by/province/customer',
+    getAllSalesmanList: 'api/user/list/all/salesman'
+
   },
   storageKeys: {}
 };
