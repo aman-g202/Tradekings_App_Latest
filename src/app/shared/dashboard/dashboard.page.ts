@@ -1,5 +1,5 @@
 import { AddPaymentPage } from './../add-payment/add-payment.page';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
 import { MenuController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { WidgetUtilService } from '../../../providers/utils/widget';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { CategoryItemModel } from '../../../providers/models/category.model';
+import { Subscription } from 'rxjs';
 
 
 
@@ -21,7 +22,7 @@ import { CategoryItemModel } from '../../../providers/models/category.model';
   styleUrls: ['./dashboard.page.scss'],
   providers: [DashboardService, CategoriesService]
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage implements OnInit, OnDestroy {
   partyName = '';
   @ViewChild('pieCanvas') pieCanvas;
   userType: string;
@@ -37,9 +38,15 @@ export class DashboardPage implements OnInit {
   data: any = {};
   loader: any;
   loaderDownloading: any;
-  externalId = '';
+  externalId: string;
   selectedUserCustomer = false;
-  selectedUser;
+  slectedUserSalesman = false;
+  selectedUser: any = [];
+  isSalesmanFlow = false;
+  subParams: Subscription;
+  loggedInPartyName: string;
+  userTypeAdmin = false;
+
 
   constructor(
     private dashboardService: DashboardService,
@@ -52,8 +59,11 @@ export class DashboardPage implements OnInit {
     private modal: ModalController) { }
 
   ngOnInit() {
-    this.getData();
     this.userType = this.route.snapshot.params.userType;
+    this.subParams = this.route.queryParams.subscribe(params => {
+      this.isSalesmanFlow = params.isSalesmanFlow ? params.isSalesmanFlow : params.isAdminFlow;
+      this.getData();
+    });
   }
 
   displayChart() {
@@ -71,7 +81,6 @@ export class DashboardPage implements OnInit {
           'MTD Achieved',
           'Balance To Do'
         ],
-        color: "red"
       },
       options: {
         legend: {
@@ -87,12 +96,11 @@ export class DashboardPage implements OnInit {
         },
         events: []
       },
-
     });
   }
 
   presentPopover(myEvent) {
-    this.widgetUtil.presentPopover(myEvent)
+    this.widgetUtil.presentPopover(myEvent);
   }
 
   async getData() {
@@ -100,33 +108,42 @@ export class DashboardPage implements OnInit {
     try {
       const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
       this.selectedUser = await this.storageService.getFromStorage('selectedCustomer');
-      this.partyName = profile.name;
+      this.loggedInPartyName = profile.name;
+      this.partyName = this.isSalesmanFlow ? this.selectedUser.name : profile.name;
       this.externalId = profile.externalId;
-      if (this.selectedUser) {
-        if ((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO') {
-          if (this.selectedUser['profile'] === 'SALESMAN' || this.selectedUser['profile'] === 'SALESMANAGER' || this.selectedUser['PRICEEXECUTIVE']) {
-            this.partyName = this.selectedUser['profile'];
-            this.externalId = this.selectedUser['externalId'];
+      if (this.isSalesmanFlow) {
+        if ((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO' || profile.userType === 'PRICEEXECUTIVE') {
+          if ((this.selectedUser.userType === 'SALESMAN') || (this.selectedUser.userType === 'SALESMANAGER')) {
+            this.partyName = this.selectedUser.name;
+            this.externalId = this.selectedUser.externalId;
             this.userTypeCustomer = false;
+            this.selectedUserCustomer = false;
+            this.userTypeSalesman = false;
+            this.userTypeAdmin = true;
           } else {
-            this.partyName = this.selectedUser['profile'];
-            this.externalId = this.selectedUser['externalId'];
+            this.partyName = this.selectedUser.name;
+            this.externalId = this.selectedUser.externalId;
             this.selectedUserCustomer = true;
+            this.userTypeCustomer = false;
+            this.userTypeSalesman = false;
+            this.userTypeAdmin = false;
           }
         } else {
-          this.partyName = this.selectedUser['profile'];
-          this.externalId = this.selectedUser['externalId'];
+          this.partyName = this.selectedUser.name;
+          this.externalId = this.selectedUser.externalId;
           this.selectedUserCustomer = true;
+          this.userTypeSalesman = true;
         }
-
       } else {
         if (profile.userType === 'SALESMAN' || profile.userType === 'SALESMANAGER') {
           this.userTypeSalesman = true;
+          this.selectedUserCustomer = false;
         } else if (profile.userType === 'CUSTOMER') {
           this.userTypeCustomer = true;
+          this.selectedUserCustomer = false;
         } else {
-          this.userTypeCustomer = false;
-          this.userTypeSalesman = false;
+          this.selectedUserCustomer = false;
+          this.userTypeAdmin = true;
         }
       }
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
@@ -171,7 +188,7 @@ export class DashboardPage implements OnInit {
       this.target = 1;
     } else {
       if (selectedValue !== 'Total') {
-        if (this.userTypeCustomer) {
+        if (this.userTypeCustomer || this.selectedUserCustomer) {
           this.data.target = (this.dashboardData['target' + selectedValue.charAt(0)]).toFixed(2);
           this.data.achievement = (this.dashboardData['achive' + selectedValue.charAt(0)]).toFixed(2);
         } else {
@@ -181,27 +198,27 @@ export class DashboardPage implements OnInit {
           this.data.lymtdAchieve = (this.dashboardData['lymtdAchive' + selectedValue.charAt(0)]).toFixed(2);
         }
       } else {
-        if (this.userTypeCustomer) {
-          this.data.target = (this.dashboardData['targetC'] + this.dashboardData['targetP'] + this.dashboardData['targetH']
-            + this.dashboardData['targetL']).toFixed(2);
-          this.data.achievement = (this.dashboardData['achiveC'] + this.dashboardData['achiveP'] + this.dashboardData['achiveH']
-            + this.dashboardData['achiveL']).toFixed(2);
+        if (this.userTypeCustomer || this.selectedUserCustomer) {
+          this.data.target = (this.dashboardData.targetC + this.dashboardData.targetP + this.dashboardData.targetH
+            + this.dashboardData.targetL).toFixed(2);
+          this.data.achievement = (this.dashboardData.achiveC + this.dashboardData.achiveP + this.dashboardData.achiveH
+            + this.dashboardData.achiveL).toFixed(2);
         } else {
-          this.data.target = (this.dashboardData['targetC'] + this.dashboardData['targetP'] + this.dashboardData['targetH']
-            + this.dashboardData['targetL']).toFixed(2);
-          this.data.achievement = (this.dashboardData['achiveC'] + this.dashboardData['achiveP'] + this.dashboardData['achiveH']
-            + this.dashboardData['achiveL']).toFixed(2);
-          this.data.lmtdAchieve = (this.dashboardData['lmtdAchiveC'] + this.dashboardData['lmtdAchiveP'] + this.dashboardData['lmtdAchiveH']
-            + this.dashboardData['lmtdAchiveL']).toFixed(2);
-          this.data.lymtdAchieve = (this.dashboardData['lymtdAchiveC'] + this.dashboardData['lymtdAchiveP'] + this.dashboardData['lymtdAchiveH']
-            + this.dashboardData['lymtdAchiveL']).toFixed(2);
+          this.data.target = (this.dashboardData.targetC + this.dashboardData.targetP + this.dashboardData.targetH
+            + this.dashboardData.targetL).toFixed(2);
+          this.data.achievement = (this.dashboardData.achiveC + this.dashboardData.achiveP + this.dashboardData.achiveH
+            + this.dashboardData.achiveL).toFixed(2);
+          this.data.lmtdAchieve = (this.dashboardData.lmtdAchiveC + this.dashboardData.lmtdAchiveP + this.dashboardData.lmtdAchiveH
+            + this.dashboardData.lmtdAchiveL).toFixed(2);
+          this.data.lymtdAchieve = (this.dashboardData.lymtdAchiveC + this.dashboardData.lymtdAchiveP + this.dashboardData.lymtdAchiveH
+            + this.dashboardData.lymtdAchiveL).toFixed(2);
         }
       }
 
       if (this.data.achievement) {
-        const temp1 = this.data.lmtdAchieve ? ((this.data.achievement / this.data.lmtdAchieve) - 1) * 100 : 0;
+        const temp1 = (this.data.lmtdAchieve > 0) ? ((this.data.achievement / this.data.lmtdAchieve) - 1) * 100 : 0;
         this.data.lmtdGrowthPercentage = temp1 ? temp1.toFixed(2) : 0;
-        const temp2 = this.data.lymtdAchieve ? ((this.data.achievement / this.data.lymtdAchieve) - 1) * 100 : 0;
+        const temp2 = (this.data.lymtdAchieve > 0) ? ((this.data.achievement / this.data.lymtdAchieve) - 1) * 100 : 0;
         this.data.lymtdGrowthPercentage = temp2 ? temp2.toFixed(2) : 0;
       }
 
@@ -214,8 +231,9 @@ export class DashboardPage implements OnInit {
       this.data.creditLimit = this.dashboardData.creditLimit ? this.dashboardData.creditLimit : 'NA';
       this.data.currentOutStanding = this.dashboardData.currentOutStanding ? this.dashboardData.currentOutStanding : 0;
       this.data.thirtyDaysOutStanding = this.dashboardData.thirtyDaysOutStanding ? this.dashboardData.thirtyDaysOutStanding : 0;
-      // tslint:disable-next-line: max-line-length
-      this.data.availableCreditLimit = this.data.creditLimit !== 'NA' && this.data.currentOutStanding != 0 ? ((this.data.creditLimit - this.data.currentOutStanding).toFixed(2)) : 'NA';
+      this.data.availableCreditLimit = this.data.creditLimit !== 'NA' &&
+        // tslint:disable-next-line: triple-equals
+        this.data.currentOutStanding != 0 ? ((this.data.creditLimit - this.data.currentOutStanding).toFixed(2)) : 'NA';
 
       // Preparing Data for Graph
       if (!(this.data.achievement && this.data.balanceToDo)) {
@@ -240,8 +258,9 @@ export class DashboardPage implements OnInit {
   toggleMenu() {
     this.menuCtrl.toggle('menu');
   }
+
   async openPaymentModal() {
-    const payModal = await this.modal.create({ component: AddPaymentPage })
+    const payModal = await this.modal.create({ component: AddPaymentPage });
     payModal.present();
   }
 
@@ -250,14 +269,18 @@ export class DashboardPage implements OnInit {
   }
 
   navigateCustomerList() {
-    this.router.navigate(['/select-customer'])
+    this.router.navigate(['/select-customer']);
   }
 
   navigateToViewSatetement() {
-    this.router.navigate(['/view-statement'])
+    this.router.navigate(['/view-statement']);
   }
 
   createPendingInvoice() {
 
+  }
+
+  ngOnDestroy() {
+    this.subParams.unsubscribe();
   }
 }

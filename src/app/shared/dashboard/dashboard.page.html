@@ -1,4 +1,4 @@
-<app-side-bar [partyName]="partyName" [userType]="userType"></app-side-bar>
+<app-side-bar [partyName]="loggedInPartyName" [userType]="userType"></app-side-bar>
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
@@ -74,7 +74,7 @@
         </p>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="!userTypeCustomer">
+    <ion-row *ngIf="userTypeSalesman && !selectedUserCustomer || userTypeAdmin && !selectedUserCustomer">
       <ion-col class="tabs">
         <p class="tab-label-sm">
           LMTD Achieved
@@ -92,7 +92,7 @@
         </p>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="!userTypeCustomer">
+    <ion-row *ngIf="userTypeSalesman && !selectedUserCustomer || userTypeAdmin && !selectedUserCustomer">
       <ion-col class="tabs">
         <p class="tab-label-sm">
           LYMTD Achieved
@@ -167,8 +167,8 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button *ngIf="userTypeCustomer" expand="full" class="customerHistoryBtn"
-          (click)="openCustomerPaymentHistory()">
+        <ion-button *ngIf="userTypeCustomer || userTypeSalesman && selectedUserCustomer" expand="full"
+          class="customerHistoryBtn" (click)="openCustomerPaymentHistory()">
           View Customer Payments
         </ion-button>
       </ion-col>
@@ -177,14 +177,15 @@
 
 </ion-content>
 <ion-footer>
-  <ion-button expand="full" *ngIf="userTypeSalesman" (click)=" navigateCustomerList()" class="selectCustomerBtn">SELECT
+  <ion-button expand="full" *ngIf="userTypeSalesman && !selectedUserCustomer" (click)=" navigateCustomerList()"
+    class="selectCustomerBtn">SELECT
     CUSTOMER</ion-button>
   <ion-button padding class="customerdashboardBtn btn-left" (click)="openPaymentModal()"
-    [ngClass]="!userTypeCustomer ? 'item-hidden': 'item-visible'">
+    [ngClass]="userTypeCustomer || userTypeSalesman && selectedUserCustomer ? 'item-visible': 'item-hidden'">
     <ion-icon name="cash"></ion-icon>Add Payment
   </ion-button>
   <ion-button padding class="customerdashboardBtn" (click)="openShopPage()"
-    [ngClass]=" !userTypeCustomer ? 'item-hidden': 'item-visible'">
+    [ngClass]=" userTypeCustomer || userTypeSalesman && selectedUserCustomer ? 'item-visible': 'item-hidden'">
     <ion-icon name="cart"></ion-icon>Place Order
   </ion-button>
 </ion-footer>

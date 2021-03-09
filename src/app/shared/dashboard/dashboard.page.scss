@@ -60,7 +60,7 @@ ion-title{
       width: 46%;
       border-radius: 3px;
       height: 73px;
-      box-shadow: 1px 1px 3px var(--ion-color-medium-shade); 
+      box-shadow: 1px 1px 2px 1px var(--ion-color-medium-shade); 
   }
   .tab-label-sm{
       font-size: 1em;
@@ -139,8 +139,3 @@ ion-title{
     box-shadow: 0 0px 10px var(--ion-color-primary);
     background: var(--ion-color-primary)
   }
-
-  // ion-card{
-  //   width: 100% !important;
-  //   text-align: center;
-  // }
