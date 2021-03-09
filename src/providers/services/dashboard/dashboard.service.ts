@@ -13,4 +13,8 @@ export class DashboardService {
     const data = { externalId: customerCode };
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getDashboard, { params: data });
   }
+
+  changePassword(data: Object): any {
+    return this.httpClient.post(environment.baseUrl + 'api/user/changePassword', data)
+  }
 }

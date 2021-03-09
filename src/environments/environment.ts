@@ -17,7 +17,8 @@ export const environment = {
     createPayment: 'api/user/create/payment',
     getPaymentHistory: 'api/user/payment/history',
     getOrderDetail: 'api/order/detail/',
-    changeOrderStatus: 'api/order/status/'
+    changeOrderStatus: 'api/order/status/',
+    changePassword: 'api/user/changePassword'
   },
   storageKeys: {}
 };
