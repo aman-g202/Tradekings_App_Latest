@@ -25,8 +25,8 @@ export class SideBarComponent implements OnInit {
       this.pages = [
         {title: 'Dashboard', icon: 'dashboard-new', class: 'default', route: `/dashboard/${this.userType}`},
         {title: 'Orders', icon: 'cart', class: 'default', route: '/orders'},
-        {title: 'Customers', icon: 'shopping-bag-new', class: 'default', route: '/user-list'},
-        {title: 'Sales Executive', icon: 'briefcase', class: 'default', route: '/user-list'},
+        {title: 'Customers', icon: 'shopping-bag-new', class: 'default', route: `/user-list/${'customerList'}`},
+        {title: 'Sales Executive', icon: 'briefcase', class: 'default', route: `/user-list/${'salesmanList'}`},
         {title: 'Products', icon: 'products', class: 'default', route: '/shop'},
         {title: 'Capture Price', icon: 'information', class: 'default', route: '/capture-price'},
 
