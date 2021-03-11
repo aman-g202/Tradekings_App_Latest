@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { WidgetUtilService } from '../../../providers/utils/widget';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileModel } from 'src/providers/models/profile.model';
 import { NavController } from '@ionic/angular';
 
@@ -19,7 +19,8 @@ export class PopoverComponent implements OnInit {
     private storageService: StorageServiceProvider,
     private widgetUtil: WidgetUtilService,
     private route: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -140,6 +141,9 @@ export class PopoverComponent implements OnInit {
       case 'Reset':
         this.resetFilter();
         break;
+      case 'Change Password':
+        this.changePassword();
+        break;
     }
   }
 
@@ -166,6 +170,11 @@ export class PopoverComponent implements OnInit {
 
   dismissPopover() {
     this.widgetUtil.dismissPopover();
+  }
+
+  changePassword() {
+    this.dismissPopover();
+    this.router.navigateByUrl('/change-password')
   }
 
 }
