@@ -18,4 +18,8 @@ export class CategoriesService {
     const data = { skip: skip.toString(), limit: limit.toString() };
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getChildCategory + parentCategoryId, { params: data });
   }
+
+  addCategory(categoryDetails: object){
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.addCategories, categoryDetails)
+  }
 }
