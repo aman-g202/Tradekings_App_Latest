@@ -144,6 +144,9 @@ export class PopoverComponent implements OnInit {
       case 'Change Password':
         this.changePassword();
         break;
+      case 'Add Product':
+        this.addProduct();
+        break;
     }
   }
 
@@ -174,7 +177,12 @@ export class PopoverComponent implements OnInit {
 
   changePassword() {
     this.dismissPopover();
-    this.router.navigateByUrl('/change-password')
+    this.router.navigateByUrl('/change-password');
+  }
+
+  addProduct() {
+    this.widgetUtil.dismissPopover();
+    this.navCtrl.navigateRoot('admin/add-product');
   }
 
 }

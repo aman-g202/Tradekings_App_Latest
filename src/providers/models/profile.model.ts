@@ -11,4 +11,5 @@ export interface ProfileModel {
     userLoginId: string;
     userType: string;
     _id: string;
+    isAuthorized: boolean;
 }
