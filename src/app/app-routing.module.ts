@@ -58,7 +58,7 @@ const routes: Routes = [
     component: SelectCustomerPage
   },
   {
-    path: 'user-list',
+    path: 'user-list/:id',
     component: UserListPage
   },
   {

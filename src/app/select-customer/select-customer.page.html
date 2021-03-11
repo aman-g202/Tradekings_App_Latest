@@ -1,9 +1,38 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>select-customer</ion-title>
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="">
+    </ion-back-button>
+  </ion-buttons>
+  <ion-title>Select Customer</ion-title>
   </ion-toolbar>
+  <ion-searchbar  #q (ionChange)="searchCustomers(q.value)" placeholder="Search Customers"></ion-searchbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="full-background">
+  <div class="search-spinner" style="text-align: center;">
+    <ion-spinner name="crescent" *ngIf="!userListAvailable"></ion-spinner>
+  </div>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="userListAvailable && (userList.length > 0)">
+    <ion-card *ngFor="let user of filteredUserList" (click)="selectCustomer(user)">
+      <ion-item lines="none">
+        <span>{{user.externalId}}</span><span>{{user.name}}</span>
+      </ion-item>
+    </ion-card>
+    
+  </ion-list>
+  <ion-card class="noDataView" *ngIf="userListAvailable && (userList.length < 1)">
+    <ion-card-header>
+      <ion-icon name="alert" class="alert"></ion-icon>
+      <h4>No record found!</h4>
+    </ion-card-header>
+  </ion-card>
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="scrolling">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
 </ion-content>
