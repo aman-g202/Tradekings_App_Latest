@@ -18,7 +18,8 @@ export const environment = {
     getAllCustomerList: 'api/user/list/all/customer',
     getCustomerListByAdmin: 'api/user/list/customer',
     getCustomerListByProvince: 'api/user/list/by/province/customer',
-    getAllSalesmanList: 'api/user/list/all/salesman'
+    getAllSalesmanList: 'api/user/list/all/salesman',
+    appTkProduct: 'api/product/add/tk/product'
 
   },
   storageKeys: {}

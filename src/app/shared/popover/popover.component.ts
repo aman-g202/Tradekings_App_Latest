@@ -144,6 +144,10 @@ export class PopoverComponent implements OnInit {
       case 'Change Password':
         this.changePassword();
         break;
+      case 'Add TK Product':
+        this.addTkProduct();
+        break;
+
     }
   }
 
@@ -177,4 +181,8 @@ export class PopoverComponent implements OnInit {
     this.router.navigateByUrl('/change-password')
   }
 
+  addTkProduct() {
+    this.dismissPopover();
+    this.navCtrl.navigateRoot('admin/add-tk-product');
+  }
 }

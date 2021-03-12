@@ -1,13 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { ProfileModel } from '../../models/profile.model';
+import { StorageServiceProvider } from '../storage/storage.service';
 
 @Injectable()
 export class DashboardService {
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private storageService: StorageServiceProvider
   ) { }
+
+  async isAuthorized() {
+    const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
+    return loggedInUser.isAuthorized;
+}
 
   getDashboardData(customerCode: string) {
     const data = { externalId: customerCode };
