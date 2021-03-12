@@ -14,7 +14,12 @@ export const environment = {
     getPaymentHistory: 'api/user/payment/history',
     getOrderDetail: 'api/order/detail/',
     changeOrderStatus: 'api/order/status/',
-    addCategories: 'api/category'
+    addCategories: 'api/category',
+    getCustomerListBySalesman: 'api/user/list/associated/customer',
+    getAllCustomerList: 'api/user/list/all/customer',
+    getCustomerListByAdmin: 'api/user/list/customer',
+    getCustomerListByProvince: 'api/user/list/by/province/customer',
+    getAllSalesmanList: 'api/user/list/all/salesman'
   },
   storageKeys: {}
 };

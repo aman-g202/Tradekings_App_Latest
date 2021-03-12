@@ -1,178 +1,191 @@
-<app-side-bar [partyName]="partyName" [userType]="userType"></app-side-bar>
-<ion-toolbar color="primary">
-  <ion-buttons slot="start">
-    <ion-button (click)="toggleMenu()">
-      <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-  <ion-title>{{partyName}}</ion-title>
-  <ion-buttons slot="end">
-    <ion-button (click)="presentPopover($event)" fill="clear">
-      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
-    </ion-button>
-  </ion-buttons>
-</ion-toolbar>
-
+<app-side-bar [partyName]="loggedInPartyName" [userType]="userType"></app-side-bar>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="toggleMenu()">
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{partyName}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)" fill="clear">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content class="full-background" id="main">
-  
   <ion-card class="tabs-wrapper">
-      <ion-card-header class="card-title">
-        <!-- TARGET vs ACHIEVEMENT -->
-        <!-- <ion-icon></ion-icon> -->
-        <ion-card-title>
-          <ion-item lines="none">
-            <ion-label>TARGET vs ACHIEVEMENT</ion-label>
-            <ion-select placeholder="Total" interface="popover" (ionChange)="targetCategorySelectionChanged($event)">
-              <ion-select-option selected="true" value="total">Total</ion-select-option>
-              <ion-select-option *ngFor="let category of categoryList" [value]="category.name">{{category.name}}</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-card-title>
-      </ion-card-header>
+    <ng-container *ngIf="selectedUserCustomer">
+      <div class="invoice-btn-wrapper">
+        <ion-button (click)="navigateToViewSatetement()">VIEW STATEMENTS</ion-button>
+        <ion-button (click)="createPendingInvoice()">PENDING INVOICE</ion-button>
+      </div>
+    </ng-container>
+    <ion-card-header class="card-title">
+      <!-- TARGET vs ACHIEVEMENT -->
+      <!-- <ion-icon></ion-icon> -->
+      <ion-card-title>
+        <ion-item lines="none">
+          <ion-label class="boldText">TARGET vs ACHIEVEMENT</ion-label>
+          <ion-select placeholder="Total" interface="popover" (ionChange)="targetCategorySelectionChanged($event)">
+            <ion-select-option selected="true" value="total">Total</ion-select-option>
+            <ion-select-option *ngFor="let category of categoryList" [value]="category.name">{{category.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card-title>
+    </ion-card-header>
 
+    <ion-row>
+      <ion-col class="tabs" align-items-center>
+        <p class="tab-label-sm" align-items-center>
+          Target
+        </p>
+        <p class="tab-label-lg" align-items-center>
+          {{data.target | number: '.2'}}
+        </p>
+      </ion-col>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          Balance To Do
+        </p>
+        <p class="tab-label-lg">
+          {{data.balanceToDo | number: '.2'}}
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          MTD Achieved
+        </p>
+        <p class="tab-label-lg">
+          {{data.achievement | number: '.2'}}
+        </p>
+      </ion-col>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          % Achieved
+        </p>
+        <p class="tab-label-lg">
+          {{data.achievedPercentage}}%
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="userTypeSalesman && !selectedUserCustomer || userTypeAdmin && !selectedUserCustomer">
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          LMTD Achieved
+        </p>
+        <p class="tab-label-lg">
+          {{data.lmtdAchieve}}
+        </p>
+      </ion-col>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          % Growth over LMTD
+        </p>
+        <p class="tab-label-lg">
+          {{data.lmtdGrowthPercentage}}%
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="userTypeSalesman && !selectedUserCustomer || userTypeAdmin && !selectedUserCustomer">
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          LYMTD Achieved
+        </p>
+        <p class="tab-label-lg">
+          {{data.lymtdAchieve}}
+        </p>
+      </ion-col>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          % Growth over LYMTD
+        </p>
+        <p class="tab-label-lg">
+          {{data.lymtdGrowthPercentage}}%
+        </p>
+      </ion-col>
+    </ion-row>
+    <div>
       <ion-row>
-          <ion-col class="tabs" align-items-center>
-              <p class="tab-label-sm" align-items-center>
-                Target
-              </p>
-              <p class="tab-label-lg" align-items-center>
-                {{data.target | number: '.2'}}
-              </p>
-          </ion-col>
-          <ion-col class="tabs">
-              <p class="tab-label-sm">
-                  Balance To Do
-                </p>
-                <p class="tab-label-lg">
-                  {{data.balanceToDo | number: '.2'}}
-              </p>
-          </ion-col>
+        <div>
+          <canvas #pieCanvas style="width: 100%"> </canvas>
+        </div>
+      </ion-row>
+    </div>
 
-        </ion-row>
-
-        <ion-row>
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                    MTD Achieved
-                  </p>
-                  <p class="tab-label-lg">
-                    {{data.achievement | number: '.2'}}
-                </p>
-            </ion-col>
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                  % Achieved
-                </p>
-                <p class="tab-label-lg">
-                  {{data.achievedPercentage}}%
-                </p>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf = "!userTypeCustomer">
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                  LMTD Achieved
-                </p>
-                <p class="tab-label-lg">
-                  {{data.lmtdAchieve}}
-                </p>
-            </ion-col>
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                    % Growth over LMTD
-                  </p>
-                  <p class="tab-label-lg">
-                    {{data.lmtdGrowthPercentage}}%
-                </p>
-            </ion-col>
-          </ion-row>
-          <ion-row  *ngIf = "!userTypeCustomer">
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                  LYMTD Achieved
-                </p>
-                <p class="tab-label-lg">
-                  {{data.lymtdAchieve}}
-                </p>
-            </ion-col>
-            <ion-col class="tabs">
-                <p class="tab-label-sm">
-                    % Growth over LYMTD
-                  </p>
-                  <p class="tab-label-lg">
-                    {{data.lymtdGrowthPercentage}}%
-                </p>
-            </ion-col>
-          </ion-row>
-          <div>
-              <ion-row>
-                <div>
-                    <canvas #pieCanvas style="width: 100%"> </canvas>
-                </div>
-              </ion-row>
-            </div>
-
-          <ion-row class="targetBottom">
-            <p class="targetFootnote">*MTD: Month Till Date</p>
-          </ion-row>
+    <ion-row class="targetBottom">
+      <p class="targetFootnote">*MTD: Month Till Date</p>
+    </ion-row>
   </ion-card>
 
   <ion-card class="tabs-wrapper" *ngIf="data.creditLimit !== undefined">
-      <ion-card-header class="card-title outstanding">
-        OUTSTANDING
-      </ion-card-header>
-      
-      <ion-row>
-        <ion-col class="tabs">
-            <p class="tab-label-sm">
-                Total Credit Limit
-            </p>
-            <p class="tab-label-lg">
-              {{data.creditLimit !== 'NA' ? (data.creditLimit | number: '.2') : data.creditLimit}}
-            </p>
-        </ion-col>
-        <ion-col class="tabs">
-            <p class="tab-label-sm">
-                Total Outstanding
-              </p>
-              <p class="tab-label-lg">
-                {{data.currentOutStanding !== 'NA' ? (data.currentOutStanding | number: '.2') : data.currentOutStanding}}
-            </p>
-        </ion-col>
-      </ion-row>
+    <ion-card-header class="card-title outstanding boldText">
+      OUTSTANDING
+    </ion-card-header>
 
-      <ion-row *ngIf="data.thirtyDaysOutStanding !== undefined">
-        <ion-col class="tabs">
-            <p class="tab-label-sm">
-                > 30- Days Outstanding
-            </p>
-            <p class="tab-label-lg">
-              {{data.thirtyDaysOutStanding !== 'NA' ? (data.thirtyDaysOutStanding | number: '.2') : data.thirtyDaysOutStanding }}
-            </p>
-        </ion-col>
-        <ion-col class="tabs">
-            <p class="tab-label-sm">
-                Available Credit Limit
-              </p>
-              <p class="tab-label-lg">
-                {{data.availableCreditLimit !== 'NA' ? (data.availableCreditLimit | number: '.2') : data.availableCreditLimit}}
-            </p>
-        </ion-col>
-      </ion-row>
-          <ion-button  *ngIf="userTypeCustomer" expand="full" class="customerhistorybtn" (click)="openCustomerPaymentHistory()">
+    <ion-row>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          Total Credit Limit
+        </p>
+        <p class="tab-label-lg">
+          {{data.creditLimit !== 'NA' ? (data.creditLimit | number: '.2') : data.creditLimit}}
+        </p>
+      </ion-col>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          Total Outstanding
+        </p>
+        <p class="tab-label-lg">
+          {{data.currentOutStanding !== 'NA' ? (data.currentOutStanding | number: '.2') : data.currentOutStanding}}
+        </p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="data.thirtyDaysOutStanding !== undefined">
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          > 30- Days Outstanding
+        </p>
+        <p class="tab-label-lg">
+          {{data.thirtyDaysOutStanding !== 'NA' ? (data.thirtyDaysOutStanding | number: '.2') : data.thirtyDaysOutStanding }}
+        </p>
+      </ion-col>
+      <ion-col class="tabs">
+        <p class="tab-label-sm">
+          Available Credit Limit
+        </p>
+        <p class="tab-label-lg">
+          {{data.availableCreditLimit !== 'NA' ? (data.availableCreditLimit | number: '.2') : data.availableCreditLimit}}
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button *ngIf="userTypeCustomer || userTypeSalesman && selectedUserCustomer" expand="full"
+          class="customerHistoryBtn" (click)="openCustomerPaymentHistory()">
           View Customer Payments
         </ion-button>
+      </ion-col>
+    </ion-row>
   </ion-card>
 
 </ion-content>
 <ion-footer>
+  <ion-button expand="full" *ngIf="userTypeSalesman && !selectedUserCustomer" (click)=" navigateCustomerList()"
+    class="selectCustomerBtn">SELECT
+    CUSTOMER</ion-button>
   <ion-button padding class="customerdashboardBtn btn-left" (click)="openPaymentModal()"
-      [ngClass]=" customerDashboard ? 'item-hidden': 'item-visible'">
+    [ngClass]="userTypeCustomer || userTypeSalesman && selectedUserCustomer ? 'item-visible': 'item-hidden'">
     <ion-icon name="cash"></ion-icon>Add Payment
   </ion-button>
   <ion-button padding class="customerdashboardBtn" (click)="openShopPage()"
-    [ngClass]=" customerDashboard ? 'item-hidden': 'item-visible'">
+    [ngClass]=" userTypeCustomer || userTypeSalesman && selectedUserCustomer ? 'item-visible': 'item-hidden'">
     <ion-icon name="cart"></ion-icon>Place Order
   </ion-button>
 </ion-footer>

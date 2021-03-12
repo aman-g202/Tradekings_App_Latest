@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, ToastController, PopoverController } from '@ionic/angular';
+import { LoadingController, ToastController, PopoverController, AlertController } from '@ionic/angular';
 import { PopoverComponent } from '../../app/shared/popover/popover.component';
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +9,8 @@ export class WidgetUtilService {
   constructor(
     private loadingController: LoadingController,
     public toastController: ToastController,
-    private popoverController: PopoverController) {
+    private popoverController: PopoverController,
+    private alertController: AlertController) {
   }
 
   async showLoader(message: string, duration: number) {
@@ -41,6 +42,34 @@ export class WidgetUtilService {
       translucent: true
     });
     return await popover.present();
+  }
+
+  showConfirm(header: string, message: string) {
+    return new Promise(async (resolve, reject) => {
+      const confirm = this.alertController.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: 'No',
+            handler: () => {
+              resolve('No');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              resolve('Yes');
+            }
+          }
+        ]
+      });
+      try {
+        (await confirm).present();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }
 

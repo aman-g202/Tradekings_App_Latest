@@ -144,6 +144,9 @@ export class PopoverComponent implements OnInit {
       case 'Add Category':
         this.addCategory();
         break;  
+      case 'Change Password':
+        this.changePassword();
+        break;
     }
   }
 
@@ -173,8 +176,13 @@ export class PopoverComponent implements OnInit {
   }
 
   addCategory () {
- this.widgetUtil.dismissPopover();
- this.router.navigateByUrl('admin/add-category')
+    this.widgetUtil.dismissPopover();
+    this.router.navigateByUrl('admin/add-category')
+  } 
+  
+  changePassword() {
+    this.dismissPopover();
+    this.router.navigateByUrl('/change-password')
   }
 
 }

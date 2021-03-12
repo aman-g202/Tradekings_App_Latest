@@ -2,6 +2,11 @@ ion-title {
     font-weight: 800;
 }
 
+ion-toolbar {
+  --background: var(--ion-color-primary);
+   color: var(--ion-color-primary-contrast)
+}
+
 ion-title{
     text-transform: capitalize;
   }
@@ -43,29 +48,30 @@ ion-title{
             ion-label{
                 font-weight: bold;
                 font-size: 0.9em;
-                color: #333;
+                color: var(--ion-color-primary);
             }
         }
       }
   }
   .tabs{
-      border: 1px solid #D5D5D5;
+      border: 1px solid var(--ion-color-light-shade);
       text-align: center;
       margin: 2%;
       width: 46%;
       border-radius: 3px;
       height: 73px;
+      box-shadow: 1px 1px 2px 1px var(--ion-color-medium-shade); 
   }
   .tab-label-sm{
       font-size: 1em;
-      color: #7D7D7D;
+      color: var(--ion-color-medium-shade);
       margin: 0 auto;
   }
   .tab-label-lg{
     font-size: 1.6em;
     margin-top: 10px;
     margin-bottom: 10px;
-    color: black;
+    color: var(--ion-color-dark);
   }
 
   .targetBottom{
@@ -76,24 +82,19 @@ ion-title{
     }
     .toggleView{
         font-size: 0.9em;
-        color: #225F93;
+        color: var(--ion-color-primary);
         margin-left: 10%;
         position: fixed;
         right: 8%;
     }
   }
 
-  ion-footer{
-    box-shadow: 0 0px 10px rgba(34, 95, 147, 0.5);
-    background: var(--ion-color-primary)
-  }
-
   .customerdashboardBtn{
-    background-color: #229BD0;
+    --background: var(--ion-color-primary);
     border-radius: 0;
     font-size: 14px;
     font-weight: 900;
-    width: 48%;
+    width: 49%;
     box-shadow: none;
   }
 
@@ -107,7 +108,34 @@ ion-title{
     padding-right:5px;
   }
 
-  // ion-card{
-  //   width: 100% !important;
-  //   text-align: center;
-  // }
+  .boldText, .card-title-outstanding{
+    font-weight: 550;
+    color: black;
+    font-size: 17px;
+  }
+
+  .customerHistoryBtn, .selectCustomerBtn{
+    --background: var(--ion-color-primary);
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .invoice-btn-wrapper{
+    text-align: center;
+    padding-top: 10px;
+    ion-button{
+      width: 47%;
+      font-weight: 900;
+      &:nth-child(1){
+        --background: var(--ion-color-primary) 
+      }
+      &:nth-child(2){
+        --background: var(--ion-color-primary-tint)
+      }
+    }
+  }
+
+  ion-footer{
+    box-shadow: 0 0px 10px var(--ion-color-primary);
+    background: var(--ion-color-primary)
+  }

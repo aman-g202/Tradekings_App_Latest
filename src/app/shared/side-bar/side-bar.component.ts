@@ -21,11 +21,15 @@ export class SideBarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.userType === 'CUSTOMER') {
+    if (this.userType === 'ADMIN' || this.userType === 'ADMINHO') {
       this.pages = [
         {title: 'Dashboard', icon: 'dashboard-new', class: 'default', route: `/dashboard/${this.userType}`},
-        {title: 'Your Orders', icon: 'cart', class: 'default', route: '/orders'},
-        {title: 'Payment History', icon: 'payment', class: 'default', route: '/payment-history'},
+        {title: 'Orders', icon: 'cart', class: 'default', route: '/orders'},
+        {title: 'Customers', icon: 'shopping-bag-new', class: 'default', route: `/user-list/${'customerList'}`},
+        {title: 'Sales Executive', icon: 'briefcase', class: 'default', route: `/user-list/${'salesmanList'}`},
+        {title: 'Products', icon: 'products', class: 'default', route: '/shop'},
+        {title: 'Capture Price', icon: 'information', class: 'default', route: '/capture-price'},
+
       ];
     } else if (this.userType === 'SALESMAN' || this.userType === 'SALESMANAGER') {
       this.pages = [
@@ -34,6 +38,12 @@ export class SideBarComponent implements OnInit {
         {title: 'Products', icon: 'products', class: 'default', route: '/shop'},
         {title: 'Payments', icon: 'payment', class: 'default', route: '/payment-history'},
         {title: 'Capture Price', icon: 'information', class: 'default', route: '/capture-price'},
+      ];
+    } else {
+      this.pages = [
+        {title: 'Dashboard', icon: 'dashboard-new', class: 'default', route: `/dashboard/${this.userType}`},
+        {title: 'Your Orders', icon: 'cart', class: 'default', route: '/orders'},
+        {title: 'Payment History', icon: 'payment', class: 'default', route: '/payment-history'},
       ];
     }
   }
