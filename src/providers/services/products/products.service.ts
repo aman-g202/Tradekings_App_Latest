@@ -19,4 +19,23 @@ export class ProductService {
         // tslint:disable-next-line: max-line-length
         return this.httpClient.get(environment.baseUrl + environment.endPoints.searchProductInParentCategory + parentCategoryId, { params: data });
     }
+
+    addTkProduct(tkProduct: {
+        categoryName: string,
+        product: {
+          brand: string,
+          masterName: string,
+          caseSize: string,
+          masterCode: string,
+          productCategory: string,
+          productCode: string,
+          productName: string,
+          subCategory: string,
+          unitSize: string,
+          isTkProduct: string,
+          competitiveProduct: any[]
+        }
+      }): any {
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.appTkProduct, tkProduct);
+      }
 }

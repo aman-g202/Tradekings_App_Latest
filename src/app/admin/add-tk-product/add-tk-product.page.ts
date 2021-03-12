@@ -7,13 +7,14 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { DashboardService } from '../../../providers/services/dashboard/dashboard.service';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { ProfileModel } from '../../../providers/models/profile.model';
+import { ProductService } from '../../../providers/services/products/products.service';
 
 
 @Component({
   selector: 'app-add-tk-product',
   templateUrl: './add-tk-product.page.html',
   styleUrls: ['./add-tk-product.page.scss'],
-  providers: [DashboardService, CategoriesService]
+  providers: [DashboardService, CategoriesService, ProductService]
 })
 export class AddTKProductPage implements OnInit {
   hrefTag = '';
@@ -34,7 +35,8 @@ export class AddTKProductPage implements OnInit {
     private categoryService: CategoriesService,
     private widgetUtil: WidgetUtilService,
     private storageService: StorageServiceProvider,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private productService: ProductService
   ) {}
 
  async ngOnInit() {
@@ -117,7 +119,7 @@ export class AddTKProductPage implements OnInit {
         competitiveProduct: []
       }
     };
-    this.categoryService.addTkProduct(tkProduct).subscribe((result) => {
+    this.productService.addTkProduct(tkProduct).subscribe((result) => {
       this.showLoader = false;
       this.widgetUtil.presentToast(CONSTANTS.TK_PRODUCT_CREATED);
       this.addTkProductForm.reset();
