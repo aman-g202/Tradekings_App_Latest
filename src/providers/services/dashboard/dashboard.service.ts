@@ -2,21 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { StorageServiceProvider } from '../storage/storage.service';
+import { ProfileModel } from '../../models/profile.model';
 
 @Injectable()
 export class DashboardService {
 
   constructor(
     private httpClient: HttpClient,
-    private strogeService: StorageServiceProvider
+    private storgeService: StorageServiceProvider
   ) { }
 
-  async isAuthorized () {
-    const loggedInUser: any = await this.strogeService.getFromStorage('profile')
+  async isAuthorized() {
+    const loggedInUser: ProfileModel = await this.storgeService.getFromStorage('profile') as ProfileModel;
     if (loggedInUser.isAuthorized) {
-      return true
+      return true;
     } else {
-        return false
+        return false;
     }
 }
 

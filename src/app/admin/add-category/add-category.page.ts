@@ -6,6 +6,7 @@ import { WidgetUtilService } from '../../../providers/utils/widget';
 import { DashboardService } from '../../../providers/services/dashboard/dashboard.service';
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
+import { CategoryItemModel } from '../../../providers/models/category.model';
 
 
 @Component({
@@ -14,21 +15,22 @@ import { StorageServiceProvider } from '../../../providers/services/storage/stor
   styleUrls: ['./add-category.page.scss'],
   providers: [CategoriesService, DashboardService]
 })
+
 export class AddCategoryPage implements OnInit {
   skipValue = 0;
   limitValue = CONSTANTS.PAGINATION_LIMIT;
-  selectedCategoryType: string = 'parent';
-  categoryTypeList = ['parent', 'child']
-  categoryList: Array<any>;
+  selectedCategoryType = 'parent';
+  categoryTypeList = ['parent', 'child'];
+  categoryList: CategoryItemModel[];
   showParentList = false;
   allowAddingCategory = false;
   isUserAuthorized = false;
-  selectedCategory: any = {}
+  selectedCategory: CategoryItemModel;
   showLoader = false;
   addCategoryForm: FormGroup;
   hrefTag = '';
-  categoryExit = false;
   profile: ProfileModel;
+  categoryExisting =  false;
 
 
 
@@ -37,7 +39,7 @@ export class AddCategoryPage implements OnInit {
     private widgeService: WidgetUtilService,
     private dashboardService: DashboardService,
     private storageService: StorageServiceProvider) {
-    this.getCategoryList()
+    this.getCategoryList();
   }
 
   async ngOnInit() {
@@ -45,38 +47,39 @@ export class AddCategoryPage implements OnInit {
     this.profile = await this.storageService.getFromStorage('profile') as ProfileModel;
     this.hrefTag = '/dashboard/' + this.profile.userType;
     this.isUserAuthorized = await this.dashboardService.isAuthorized();
+    console.log(this.categoryList);
   }
 
 
   async getCategoryList() {
-    const loader = await this.widgeService.showLoader('Please wait', 2000)
+    const loader = await this.widgeService.showLoader('Please wait', 1000);
     this.categoriesService.getParentCategoryList(this.skipValue, this.limitValue).subscribe((res: any) => {
       this.categoryList = res.body;
       loader.dismiss();
     }, (error) => {
-      loader.dismiss()
+      loader.dismiss();
       if (error.statusText === 'Unknown Error') {
-        this.widgeService.presentToast(CONSTANTS.INTERNET_ISSUE)
+        this.widgeService.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else {
-        this.widgeService.presentToast(CONSTANTS.SERVER_ERROR)
+        this.widgeService.presentToast(CONSTANTS.SERVER_ERROR);
       }
-    })
+    });
   }
 
   onCategoryTypeSelect() {
     if (this.selectedCategoryType != 'parent') {
       if (this.categoryList.length > 0) {
-        this.showParentList = true
-        this.allowAddingCategory = true
+        this.showParentList = true;
+        this.allowAddingCategory = true;
       } else {
         this.widgeService.presentToast(CONSTANTS.PARENT_CATEGORY_NOT_FOUND);
-        this.selectedCategoryType = 'parent'
-        this.showParentList = false
-        this.allowAddingCategory = false
+        this.selectedCategoryType = 'parent';
+        this.showParentList = false;
+        this.allowAddingCategory = false;
       }
     } else {
-      this.allowAddingCategory = true
-      this.showParentList = false
+      this.allowAddingCategory = true;
+      this.showParentList = false;
     }
   }
 
@@ -89,28 +92,22 @@ export class AddCategoryPage implements OnInit {
 
   async addCategory() {
     this.showLoader = true;
-    let existCategory: any = [];
     if (this.selectedCategoryType === 'parent') {
-      this.categoryList.forEach(element => {
-        if (element.name === this.addCategoryForm.value.name.trim()) {
-          existCategory.push(element);
-        }
-      })
+      this.categoryExisting = this.categoryList.some(item => item.name === this.addCategoryForm.value.name.trim());
+
     }
-    if (existCategory.length > 0) {
-      this.showLoader = false;
-      this.widgeService.presentToast('Category Name is already Exist')
-    } else {
-      let categoryDetail = {}
-      categoryDetail['name'] = this.addCategoryForm.value.name.trim()
-      categoryDetail['lastUpdatedAt'] = Date.now()
-      if (this.selectedCategoryType === this.categoryTypeList[1]) {
-        categoryDetail['parentCategoryId'] = this.selectedCategory['_id']
-        categoryDetail['type'] = this.categoryTypeList[1]
-      } else {
-        categoryDetail['parentCategoryId'] = ''
-        categoryDetail['type'] = this.categoryTypeList[0]
+    if (this.categoryExisting) {
+        this.showLoader = false;
+        this.categoryExisting = false;
+        this.widgeService.presentToast('Category Name is already Exist');
       }
+     else {
+      const categoryDetail = {
+        name: this.addCategoryForm.value.name.trim(),
+        lastUpdatedAt: Date.now(),
+        parentCategoryId: this.selectedCategoryType === this.categoryTypeList[1] ? this.selectedCategory._id : '',
+        type: this.selectedCategoryType === this.categoryTypeList[1] ? this.categoryTypeList[1] : this.categoryTypeList[0]
+      };
       this.categoriesService.addCategory(categoryDetail).subscribe((result) => {
         this.showLoader = false;
         this.widgeService.presentToast(CONSTANTS.CATEGORY_CREATED);
@@ -119,9 +116,9 @@ export class AddCategoryPage implements OnInit {
       }, (error) => {
         this.showLoader = false;
         if (error.statusText === 'Unknown Error') {
-          this.widgeService.presentToast(CONSTANTS.INTERNET_ISSUE)
+          this.widgeService.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {
-          this.widgeService.presentToast(CONSTANTS.SERVER_ERROR)
+          this.widgeService.presentToast(CONSTANTS.SERVER_ERROR);
         }
       });
     }

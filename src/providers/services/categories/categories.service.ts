@@ -19,7 +19,7 @@ export class CategoriesService {
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getChildCategory + parentCategoryId, { params: data });
   }
 
-  addCategory(categoryDetails: object){
-    return this.httpClient.post(environment.baseUrl + environment.endPoints.addCategories, categoryDetails)
+  addCategory(categoryDetails: {name: string, lastUpdatedAt: number, parentCategoryId: string, type: string}){
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.addCategories, categoryDetails);
   }
 }
