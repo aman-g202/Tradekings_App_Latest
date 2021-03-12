@@ -18,6 +18,7 @@ export const environment = {
     getPaymentHistory: 'api/user/payment/history',
     getOrderDetail: 'api/order/detail/',
     changeOrderStatus: 'api/order/status/',
+    addCategories: 'api/category',
     getCustomerListBySalesman: 'api/user/list/associated/customer',
     getAllCustomerList: 'api/user/list/all/customer',
     getCustomerListByAdmin: 'api/user/list/customer',
