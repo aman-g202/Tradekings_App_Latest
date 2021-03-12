@@ -90,6 +90,7 @@ export class AddProductPage implements OnInit {
     };
     this.categoryService.addProduct(productDetail).subscribe((result) => {
       this.showLoader = false;
+      this.addProductForm.reset();
       this.widgetUtil.presentToast(CONSTANTS.PRODUCT_CREATED);
     }, (error) => {
       this.showLoader = false;
@@ -103,9 +104,4 @@ export class AddProductPage implements OnInit {
       }
     });
   }
-
-  compareFn(option1: any, option2: any) {
-    return option1.name === option2.name;
-  }
-
 }

@@ -15,7 +15,7 @@
         <ion-icon name="cube" class="ion-padding-end" color="grey"></ion-icon>
         Category
       </ion-label>
-      <ion-select [(ngModel)]="selectedCategory" interface="popover" [compareWith]="compareFn">
+      <ion-select [(ngModel)]="selectedCategory" interface="popover">
         <ion-select-option *ngFor="let category of childCategoriesList" [value]="category">{{category.name}}
         </ion-select-option>
       </ion-select>

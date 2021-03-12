@@ -14,11 +14,7 @@ export class DashboardService {
 
   async isAuthorized() {
     const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
-    if (loggedInUser.isAuthorized) {
-      return true;
-    } else {
-        return false;
-    }
+    return  loggedInUser.isAuthorized;
 }
 
   getDashboardData(customerCode: string) {
