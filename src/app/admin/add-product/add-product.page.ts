@@ -8,12 +8,13 @@ import { DashboardPage } from '../../shared/dashboard/dashboard.page';
 import { DashboardService } from '../../../providers/services/dashboard/dashboard.service';
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
+import { ProductService } from '../../../providers/services/products/products.service';
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.page.html',
   styleUrls: ['./add-product.page.scss'],
-  providers: [CategoriesService, DashboardService]
+  providers: [CategoriesService, DashboardService, ProductService]
 })
 
 export class AddProductPage implements OnInit {
@@ -31,7 +32,8 @@ export class AddProductPage implements OnInit {
     private categoryService: CategoriesService,
     private widgetUtil: WidgetUtilService,
     private dashboardService: DashboardService,
-    private storageService: StorageServiceProvider
+    private storageService: StorageServiceProvider,
+    private productService: ProductService
   ) { this.getChildCategoryList(); }
 
   async ngOnInit() {
@@ -88,7 +90,7 @@ export class AddProductPage implements OnInit {
       parentCategoryId: this.selectedCategory.parentCategoryId,
       lastUpdatedAt: Date.now()
     };
-    this.categoryService.addProduct(productDetail).subscribe((result) => {
+    this.productService.addProduct(productDetail).subscribe((result) => {
       this.showLoader = false;
       this.addProductForm.reset();
       this.widgetUtil.presentToast(CONSTANTS.PRODUCT_CREATED);

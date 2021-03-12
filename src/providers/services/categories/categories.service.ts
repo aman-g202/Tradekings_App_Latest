@@ -22,19 +22,4 @@ export class CategoriesService {
   getChildCategoryForAddProduct() {
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getChildCategory);
   }
-
-  addProduct(productDetail: {
-    name: string,
-    price: number,
-    productCode: string,
-    priceType: string,
-    packType: string,
-    productSysCode: string,
-    currentCaseSize: string,
-    categoryId: string,
-    parentCategoryId: string,
-    lastUpdatedAt: number
-  }){
-    return this.httpClient.post(environment.baseUrl + environment.endPoints.appProduct, productDetail);
-  }
 }
