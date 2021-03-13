@@ -143,9 +143,12 @@ export class PopoverComponent implements OnInit {
         break;
       case 'Add Category':
         this.addCategory();
-        break;  
+        break;
       case 'Change Password':
         this.changePassword();
+        break;
+      case 'Add Competitive Product':
+        this.addCompProduct();
         break;
     }
   }
@@ -175,14 +178,19 @@ export class PopoverComponent implements OnInit {
     this.widgetUtil.dismissPopover();
   }
 
-  addCategory () {
+  addCategory() {
     this.widgetUtil.dismissPopover();
-    this.router.navigateByUrl('admin/add-category')
-  } 
-  
+    this.router.navigateByUrl('admin/add-category');
+  }
+
   changePassword() {
     this.dismissPopover();
-    this.router.navigateByUrl('/change-password')
+    this.router.navigateByUrl('/change-password');
+  }
+
+  addCompProduct() {
+    this.dismissPopover();
+    this.navCtrl.navigateRoot('admin/add-comp-product');
   }
 
 }

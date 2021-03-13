@@ -1,6 +1,6 @@
 export const CONSTANTS = {
-    INTERNET_ISSUE : 'oops! You are not connected to the internet!',
-    AUTH_FAIL : 'LoginId or password incorrect',
+    INTERNET_ISSUE: 'oops! You are not connected to the internet!',
+    AUTH_FAIL: 'LoginId or password incorrect',
     SERVER_ERROR: 'Something went wrong',
     CART_EMPTY: 'Cart is empty',
     ORDER_STATUS_PROGRESS: 'in-progress',
@@ -27,7 +27,8 @@ export const CONSTANTS = {
     CSV_DOWNLOAD_FAIL: 'Failed to download CSV',
     USER_LOGIN_ID_ALREADY_EXIST: 'Oops! Entered UserLoginId already exist! Please enter a different one',
     UNIQUE_PRODUCT_CODE: 'Oops! Entered Product code or ProductSys code already exist!  Please enter a different one',
-    TOKEN_EXPIRED: 400
+    TOKEN_EXPIRED: 400,
+    COMP_PRODUCT_CREATED: 'Competitive Product added successfully'
 };
 
 
