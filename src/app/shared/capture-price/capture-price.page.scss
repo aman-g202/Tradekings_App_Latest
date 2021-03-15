@@ -1,0 +1,20 @@
+ion-toolbar {
+  --background: var(--ion-color-primary);
+  color: var(--ion-color-danger-contrast);
+}
+
+ion-content {
+  ion-list {
+    ion-item {
+      ion-label {
+        color: var(--ion-color-medium-shade);
+      }
+    }
+  }
+  .error {
+    color: var(--ion-color-danger-shade);
+  }
+  ion-button {
+    --background: var(--ion-color-secondary);
+  }
+}

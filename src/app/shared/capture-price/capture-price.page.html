@@ -1,9 +1,103 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>capture-price</ion-title>
+    <ion-buttons slot="start" >
+      <ion-back-button [defaultHref]="hrefTag"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Capture Price for Customer</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <form [formGroup]="addCustomerForm">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Select Report Type</ion-label>
+          <ion-select formControlName="reportType">
+            <ion-select-option value="price_capturing">Price Capturing</ion-select-option>
+            <ion-select-option value="stocking">Stocking</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Select Price Type</ion-label>
+          <ion-select formControlName="priceType">
+            <ion-select-option value="CASE">Case</ion-select-option>
+            <ion-select-option value="UNIT">Unit</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Select Channel</ion-label>
+          <ion-select formControlName="channel">
+          <ion-select-option value="formal_trade">Formal Trade</ion-select-option>
+          <ion-select-option value="general_trade">General Trade</ion-select-option>
+          <ion-select-option value="super_market">Super Market</ion-select-option>
+          <ion-select-option value="wholesale">Wholesale</ion-select-option>
+          <ion-select-option value="semiwholesale">Semiwholesale</ion-select-option>
+        </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Shop Name</ion-label>
+          <ion-input formControlName="shopName" type="text"></ion-input>
+        </ion-item>
+        <p class="error" *ngIf="addCustomerForm.get('shopName').hasError('required') && addCustomerForm.get('shopName').touched">*Shop Name is required</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Mobile Number</ion-label>
+          <ion-input formControlName="mobileNumber" type="number"></ion-input>
+        </ion-item>
+        <p class="error" *ngIf="addCustomerForm.get('mobileNumber').hasError('required') && addCustomerForm.get('mobileNumber').touched">*Mobile Number is required</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Province</ion-label>
+          <ion-input formControlName="province" type="text"></ion-input>
+        </ion-item>
+        <p class="error" *ngIf="addCustomerForm.get('province').hasError('required') && addCustomerForm.get('province').touched">*Province is required</p>
+      </ion-col>
+    </ion-row> 
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Town/City</ion-label>
+          <ion-input formControlName="city" type="text"></ion-input>
+        </ion-item>
+        <p class="error" *ngIf="addCustomerForm.get('city').hasError('required') && addCustomerForm.get('city').touched">*Town/City Name is required</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating" >Compound/Area</ion-label>
+          <ion-input formControlName="area" type="text"></ion-input>
+        </ion-item>
+        <p class="error" *ngIf="addCustomerForm.get('area').hasError('required') && addCustomerForm.get('area').touched">*Compound/Area is required</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-button expand="full" (click)="addCustomer()">ADD CUSTOMER</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 </ion-content>
