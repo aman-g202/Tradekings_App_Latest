@@ -1,0 +1,36 @@
+ 
+ion-toolbar{
+  --background: var(--ion-color-primary);
+  ion-title{
+      color: var(--ion-color-danger-contrast);
+      font-weight: 900;
+  }
+  ion-buttons{
+      color:var(--ion-color-danger-contrast);
+  }
+}
+
+ion-grid{
+   margin-top: 20px;
+}
+
+.error{
+    color: var(--ion-color-danger-shade)
+}
+
+ion-item{
+    //box-shadow: 1px 1px 5px ;
+    padding-top: 9px;
+    margin-bottom: 10px;
+    ion-icon{
+    margin-bottom: -3px;
+    }
+    ion-label{
+        color: var(--ion-color-medium-shade);
+        font-size: 18px;
+    }
+}
+
+ion-button{
+    --background : var(--ion-color-secondary)
+}

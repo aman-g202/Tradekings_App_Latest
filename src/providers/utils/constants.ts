@@ -26,7 +26,7 @@ export const CONSTANTS = {
     CSV_DOWNLOADED: 'CSV Downloaded Successfully',
     CSV_DOWNLOAD_FAIL: 'Failed to download CSV',
     USER_LOGIN_ID_ALREADY_EXIST: 'Oops! Entered UserLoginId already exist! Please enter a different one',
-    UNIQUE_PRODUCT_CODE: 'Oops! Entered Product code or ProductSys code already exist!  Please enter a different one',
+    UNIQUE_PRODUCT_CODE: 'Oops! Entered Product Code or ProductSys Code already exist!  Please enter a different one',
     TOKEN_EXPIRED: 400
 };
 
