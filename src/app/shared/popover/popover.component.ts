@@ -141,6 +141,9 @@ export class PopoverComponent implements OnInit {
       case 'Reset':
         this.resetFilter();
         break;
+      case 'Add Category':
+        this.addCategory();
+        break;  
       case 'Change Password':
         this.changePassword();
         break;
@@ -175,6 +178,11 @@ export class PopoverComponent implements OnInit {
     this.widgetUtil.dismissPopover();
   }
 
+  addCategory () {
+    this.widgetUtil.dismissPopover();
+    this.router.navigateByUrl('admin/add-category')
+  } 
+  
   changePassword() {
     this.dismissPopover();
     this.router.navigateByUrl('/change-password');
