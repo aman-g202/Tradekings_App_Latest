@@ -71,5 +71,16 @@ export class WidgetUtilService {
       }
     });
   }
+
+
+  showAlert(message: string) {
+    this.alertController.create({
+      message,
+      buttons: ['OK']
+    }).then(res => {
+      res.present();
+    });
+
+  }
 }
 

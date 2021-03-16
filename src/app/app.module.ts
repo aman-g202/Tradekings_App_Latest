@@ -32,6 +32,9 @@ import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { PopoverComponent } from './shared/popover/popover.component';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @NgModule({
   declarations: [
@@ -68,6 +71,9 @@ import { PopoverComponent } from './shared/popover/popover.component';
   providers: [
     StatusBar,
     SplashScreen,
+    File,
+    FileOpener,
+    SocialSharing,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,
