@@ -60,7 +60,7 @@
         <ion-col>
           <ion-item>
             <ion-label position="floating">Product Category</ion-label>
-            <ion-select formControlName="productCat" (ionChange)="getChildCategoryListById($event)">
+            <ion-select formControlName="productCategory" (ionChange)="getChildCategoryListById($event)">
               <ion-select-option *ngFor="let category of parentCategoryList" [value]="category">
                 {{category.name}}
               </ion-select-option>
@@ -94,8 +94,8 @@
         <ion-col>
           <ion-item>
             <ion-label position="floating">Sub Category</ion-label>
-            <ion-select formControlName="subCat">
-              <ion-select-option *ngFor="let childCat of childCategoryList" [value]="childCat">{{childCat.name}}
+            <ion-select formControlName="subCategory">
+              <ion-select-option *ngFor="let childCat of childCategoryList" [value]="childCat.name">{{childCat.name}}
               </ion-select-option>
             </ion-select>
           </ion-item>

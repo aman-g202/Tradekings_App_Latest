@@ -28,7 +28,7 @@ export class AddTKProductPage implements OnInit {
   skip = 0;
   limit: number = CONSTANTS.PAGINATION_LIMIT;
   showLoader = false;
-  isAuthorized  = false;
+  isAuthorized = false;
 
 
   constructor(
@@ -37,17 +37,15 @@ export class AddTKProductPage implements OnInit {
     private storageService: StorageServiceProvider,
     private dashboardService: DashboardService,
     private productService: ProductService
-  ) {}
+  ) { }
 
- async ngOnInit() {
+  async ngOnInit() {
     this.getParentCatetoryList();
     this.createTkProductForm();
     this.profile = await this.storageService.getFromStorage('profile') as ProfileModel;
     this.hrefTag = '/dashboard/' + this.profile.userType;
     this.isAuthorized = await this.dashboardService.isAuthorized();
-      }
-
-
+  }
 
   async getParentCatetoryList() {
     const showLoader = await this.widgetUtil.showLoader('Product Category Fetching..', 2000);
@@ -68,21 +66,21 @@ export class AddTKProductPage implements OnInit {
 
   async getChildCategoryListById(parentCatId) {
     if (parentCatId.detail.value._id !== undefined) {
-    const showLoader = await this.widgetUtil.showLoader('Child Category Fetching..', 2000);
-    this.parentExternalId = parentCatId.detail.value._id;
-    this.categoryService.getChildCategoryList(this.parentExternalId, this.skip, this.limit).subscribe((res: any) => {
-      showLoader.dismiss();
-      this.childCategoryList = res.body;
-    }, (error: any) => {
-      showLoader.dismiss();
-      console.log('error', error);
-      if (error.statusText === 'Unknown Error') {
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
-     } else {
-        this.widgetUtil.presentPopover(CONSTANTS.SERVER_ERROR);
-      }
-    });
-  }
+      const showLoader = await this.widgetUtil.showLoader('Child Category Fetching..', 2000);
+      this.parentExternalId = parentCatId.detail.value._id;
+      this.categoryService.getChildCategoryList(this.parentExternalId, this.skip, this.limit).subscribe((res: any) => {
+        showLoader.dismiss();
+        this.childCategoryList = res.body;
+      }, (error: any) => {
+        showLoader.dismiss();
+        console.log('error', error);
+        if (error.statusText === 'Unknown Error') {
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+        } else {
+          this.widgetUtil.presentPopover(CONSTANTS.SERVER_ERROR);
+        }
+      });
+    }
   }
 
   createTkProductForm() {
@@ -91,10 +89,10 @@ export class AddTKProductPage implements OnInit {
       masterName: new FormControl('', [Validators.required]),
       caseSize: new FormControl('', [Validators.required]),
       masterCode: new FormControl('', [Validators.required]),
-      productCat: new FormControl('', [Validators.required]),
+      productCategory: new FormControl('', [Validators.required]),
       productCode: new FormControl('', [Validators.required]),
       productName: new FormControl('', [Validators.required]),
-      subCat: new FormControl('', [Validators.required]),
+      subCategory: new FormControl('', [Validators.required]),
       unitSize: new FormControl('', [Validators.required])
     });
   }
@@ -103,22 +101,16 @@ export class AddTKProductPage implements OnInit {
   addTkProduct() {
     this.showLoader = true;
     const formValue: any = this.addTkProductForm.value;
+    formValue['isTkProduct'] = 'Y';
+    formValue['competitiveProduct'] = [];
+    formValue['productCategory'] = formValue.productCategory.name;
+    formValue['caseSize'] = formValue.caseSize.toString();
+
     const tkProduct = {
-      categoryName: formValue.productCat.name.trim(),
-      product: {
-        brand: formValue.brand.trim(),
-        masterName: formValue.masterName.trim(),
-        caseSize: formValue.caseSize.toString().trim(),
-        masterCode: formValue.masterCode.trim(),
-        productCategory: formValue.productCat.name.trim(),
-        productCode: formValue.productCode.trim(),
-        productName: formValue.productName.trim(),
-        subCategory: formValue.subCat.name.trim(),
-        unitSize: formValue.unitSize.trim(),
-        isTkProduct: 'Y',
-        competitiveProduct: []
-      }
+      categoryName: formValue.productCategory,
+      product: formValue
     };
+    this.showLoader = false;
     this.productService.addTkProduct(tkProduct).subscribe((result) => {
       this.showLoader = false;
       this.widgetUtil.presentToast(CONSTANTS.TK_PRODUCT_CREATED);
@@ -129,7 +121,7 @@ export class AddTKProductPage implements OnInit {
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else if (error.error.message === CONSTANTS.UNIQUE_PRODUCT_CODE) {
-        this.widgetUtil.presentToast(CONSTANTS.UNIQUE_PRODUCT_CODE);
+        this.widgetUtil.presentToast(CONSTANTS.TK_RPDUCT_EXIST);
       } else {
         this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
       }
