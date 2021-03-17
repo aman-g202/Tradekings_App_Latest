@@ -37,5 +37,20 @@ export class ProductService {
         }
       }): any {
         return this.httpClient.post(environment.baseUrl + environment.endPoints.appTkProduct, tkProduct);
-      }
+    }
+  
+    addProduct(productDetail: {
+        name: string,
+        price: number,
+        productCode: string,
+        priceType: string,
+        packType: string,
+        productSysCode: string,
+        currentCaseSize: string,
+        categoryId: string,
+        parentCategoryId: string,
+        lastUpdatedAt: number
+      }){
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.appProduct, productDetail);
+    }
 }

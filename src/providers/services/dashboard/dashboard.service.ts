@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { environment } from '../../../environments/environment';
-import { ProfileModel } from '../../models/profile.model';
 import { StorageServiceProvider } from '../storage/storage.service';
+import { ProfileModel } from '../../models/profile.model';
 
 @Injectable()
 export class DashboardService {
@@ -11,6 +12,11 @@ export class DashboardService {
     private httpClient: HttpClient,
     private storageService: StorageServiceProvider
   ) { }
+  
+  async isAuthorized() {
+    const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
+    return  loggedInUser.isAuthorized;
+  }
 
   async isAuthorized() {
     const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
@@ -23,6 +29,6 @@ export class DashboardService {
   }
 
   changePassword(data: { currentPassword: string, newPassword: string, userId: string }): any {
-    return this.httpClient.post(environment.baseUrl + 'api/user/changePassword', data)
+    return this.httpClient.post(environment.baseUrl + 'api/user/changePassword', data);
   }
 }
