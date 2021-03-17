@@ -178,7 +178,7 @@ export class PopoverComponent implements OnInit {
 
   changePassword() {
     this.dismissPopover();
-    this.navCtrl.navigateRoot('/change-password');
+    this.router.navigateByUrl('/change-password');
   }
 
   addTkProduct() {
