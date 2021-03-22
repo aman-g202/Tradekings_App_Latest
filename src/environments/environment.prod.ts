@@ -23,6 +23,8 @@ export const environment = {
     changePassword: 'api/user/changePassword',
     getTkProduct: 'api/product/list/tk/products',
     addCompProduct: 'api/product/add/comp/product',
+    appTkProduct: 'api/product/add/tk/product',
+    appProduct: 'api/product'
   },
   storageKeys: {}
 };

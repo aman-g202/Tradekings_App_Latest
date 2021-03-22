@@ -42,4 +42,40 @@ export class ProductService {
     }) {
         return this.httpClient.post(environment.baseUrl + environment.endPoints.addCompProduct, compProduct);
     }
+
+
+    addTkProduct(tkProduct: {
+        categoryName: string,
+        product: {
+            brand: string,
+            masterName: string,
+            caseSize: string,
+            masterCode: string,
+            productCategory: string,
+            productCode: string,
+            productName: string,
+            subCategory: string,
+            unitSize: string,
+            isTkProduct: string,
+            competitiveProduct: any[]
+        }
+    }): any {
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.appTkProduct, tkProduct);
+    }
+    
+
+    addProduct(productDetail: {
+        name: string,
+        price: number,
+        productCode: string,
+        priceType: string,
+        packType: string,
+        productSysCode: string,
+        currentCaseSize: string,
+        categoryId: string,
+        parentCategoryId: string,
+        lastUpdatedAt: number
+    }) {
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.appProduct, productDetail);
+    }
 }

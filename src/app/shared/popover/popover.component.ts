@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
-import { WidgetUtilService } from '../../../providers/utils/widget';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileModel } from 'src/providers/models/profile.model';
-import { NavController } from '@ionic/angular';
+import { NavController, PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-popover',
@@ -17,10 +16,10 @@ export class PopoverComponent implements OnInit {
 
   constructor(
     private storageService: StorageServiceProvider,
-    private widgetUtil: WidgetUtilService,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private router: Router
+    private router: Router,
+    private popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -150,6 +149,12 @@ export class PopoverComponent implements OnInit {
       case 'Add Competitive Product':
         this.addCompProduct();
         break;
+      case 'Add TK Product':
+        this.addTkProduct();
+        break;
+      case 'Add Product':
+        this.addProduct();
+        break;
     }
   }
 
@@ -158,29 +163,19 @@ export class PopoverComponent implements OnInit {
     this.storageService.clearStorage();
     localStorage.clear();
     this.navCtrl.navigateRoot('/auth');
-    this.widgetUtil.dismissPopover();
+    this.dismissPopover();
   }
 
-
   filterByOrderDate() {
-    this.widgetUtil.dismissPopover('filterbyorderdate');
+    this.dismissPopover('filterbyorderdate');
   }
 
   filterByInvoiceDate() {
-    this.widgetUtil.dismissPopover('filterbyinvoicedate');
+    this.dismissPopover('filterbyinvoicedate');
   }
 
   resetFilter() {
-    this.widgetUtil.dismissPopover('resetfilter');
-  }
-
-  dismissPopover() {
-    this.widgetUtil.dismissPopover();
-  }
-
-  addCategory() {
-    this.widgetUtil.dismissPopover();
-    this.router.navigateByUrl('admin/add-category');
+    this.dismissPopover('resetfilter');
   }
 
   changePassword() {
@@ -188,9 +183,27 @@ export class PopoverComponent implements OnInit {
     this.router.navigateByUrl('/change-password');
   }
 
+  addTkProduct() {
+    this.dismissPopover();
+    this.router.navigateByUrl('admin/add-tk-product');
+  }
+
+  addCategory() {
+    this.dismissPopover();
+    this.router.navigateByUrl('admin/add-category');
+  }
+
   addCompProduct() {
     this.dismissPopover();
     this.navCtrl.navigateRoot('admin/add-comp-product');
   }
 
+  addProduct() {
+    this.dismissPopover();
+    this.navCtrl.navigateRoot('admin/add-product');
+  }
+
+  dismissPopover(data = '') {
+    this.popoverController.dismiss();
+  }
 }
