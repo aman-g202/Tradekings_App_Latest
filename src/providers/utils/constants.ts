@@ -26,8 +26,9 @@ export const CONSTANTS = {
     CSV_DOWNLOADED: 'CSV Downloaded Successfully',
     CSV_DOWNLOAD_FAIL: 'Failed to download CSV',
     USER_LOGIN_ID_ALREADY_EXIST: 'Oops! Entered UserLoginId already exist! Please enter a different one',
-    UNIQUE_PRODUCT_CODE: 'Oops! Entered Product Code or ProductSys Code already exist!  Please enter a different one',
     TOKEN_EXPIRED: 400,
+    COMP_PRODUCT_CREATED: 'Competitive Product added successfully',
+    UNIQUE_PRODUCT_CODE: 'Oops! Entered Product Code or ProductSys Code already exist!  Please enter a different one',
     TK_PRODUCT_CREATED: 'TK Product Added Successfully!',
     TK_RPDUCT_EXIST: 'TK Product Already Exist!'
 };
