@@ -4,6 +4,7 @@ export interface ProductModel {
     inventoryDetails?: InventoryDetailModel[];
     lastUpdatedAt: number;
     name: string;
+    productName: string;
     netWeight: number;
     parentCategoryId: string;
     price: number | string;
@@ -13,7 +14,7 @@ export interface ProductModel {
     productSysCode: string;
     tkPoint: number;
     quantity?: number | string;
-    subTotal : number | string;
+    subTotal: number | string;
     _id: string;
 }
 
@@ -23,7 +24,7 @@ interface InventoryDetailModel {
     storeName: string;
 }
 interface ProductDetailModel {
-    name: string ;
+    name: string;
     productCode: string;
     price: number | string;
 }

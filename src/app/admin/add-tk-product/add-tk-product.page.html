@@ -1,9 +1,127 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-TK-product</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]=hrefTag>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Add TK Product</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <form [formGroup]="addTkProductForm">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Brand</ion-label>
+            <ion-input type="text" formControlName="brand"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('brand').hasError('required') && addTkProductForm.get('brand').touched">
+            *Brand is required
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Master Name</ion-label>
+            <ion-input type="text" formControlName="masterName"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('masterName').hasError('required') && addTkProductForm.get('masterName').touched">
+            *Master Name is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Case Size</ion-label>
+            <ion-input type="number" formControlName="caseSize"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('caseSize').hasError('required') && addTkProductForm.get('caseSize').touched">
+            *Case Size is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Master Code </ion-label>
+            <ion-input type="text" formControlName="masterCode"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('masterCode').hasError('required') && addTkProductForm.get('masterCode').touched">
+            *Master Code is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Product Category</ion-label>
+            <ion-select formControlName="productCategory" (ionChange)="getChildCategoryListById($event)">
+              <ion-select-option *ngFor="let category of parentCategoryList" [value]="category">
+                {{category.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Product Name</ion-label>
+            <ion-input type="text" formControlName="productName"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('productName').hasError('required') && addTkProductForm.get('productName').touched">
+            *Product Name is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position='floating'>Product Code</ion-label>
+            <ion-input type="text" formControlName="productCode"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('productCode').hasError('required') && addTkProductForm.get('productCode').touched">
+            *Product Code is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Sub Category</ion-label>
+            <ion-select formControlName="subCategory">
+              <ion-select-option *ngFor="let childCat of childCategoryList" [value]="childCat.name">{{childCat.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Unit Size</ion-label>
+            <ion-input type="text" formControlName="unitSize"></ion-input>
+          </ion-item>
+          <p class="error"
+            *ngIf="addTkProductForm.get('unitSize').hasError('required') && addTkProductForm.get('unitSize').touched">
+            *Unit Size is required</p>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col size='12'>
+        <ion-button expand="full" (click)="addTkProduct()" [disabled]="!(addTkProductForm.valid && isAuthorized)">
+          SAVE <ion-spinner name="dots" *ngIf="showLoader"></ion-spinner>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
