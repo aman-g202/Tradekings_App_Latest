@@ -21,7 +21,8 @@ export const environment = {
     getCustomerListByProvince: 'api/user/list/by/province/customer',
     getAllSalesmanList: 'api/user/list/all/salesman',
     changePassword: 'api/user/changePassword',
-    getTkProduct: 'api/product/list/tk/products',
+    getCustomerStatement: 'api/user/customer/statements',
+    getTkProduct: 'a pi/product/list/tk/products',
     addCompProduct: 'api/product/add/comp/product',
     appTkProduct: 'api/product/add/tk/product',
     appProduct: 'api/product'
