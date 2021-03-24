@@ -2,7 +2,6 @@ ion-toolbar{
   --background: var(--ion-color-primary);
   ion-title{
       color: var(--ion-color-danger-contrast);
-      font-weight: 900;
   }
   ion-buttons{
       color:var(--ion-color-danger-contrast);
@@ -10,10 +9,10 @@ ion-toolbar{
 }
 
 ion-grid{
-   margin-top: 20px;
+   margin-top: 8px;
      ion-item {
-            margin-bottom: 14px;
-            
+        padding-top: 4px;
+        margin-bottom: 2px;
         }
 }
 
