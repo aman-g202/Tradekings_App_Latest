@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { environment } from '../../../environments/environment';
 import { StorageServiceProvider } from '../storage/storage.service';
 import { ProfileModel } from '../../models/profile.model';
@@ -11,7 +12,7 @@ export class DashboardService {
     private httpClient: HttpClient,
     private storageService: StorageServiceProvider
   ) { }
-  
+
   async isAuthorized() {
     const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
     return  loggedInUser.isAuthorized;

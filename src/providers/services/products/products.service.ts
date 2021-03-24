@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 export class ProductService {
     constructor(
         private httpClient: HttpClient
-    ) {}
+    ) { }
 
     getProductListByCategory(categoryId: string, skip: number, limit: number): any {
         const data = { skip: skip.toString(), limit: limit.toString() };
@@ -20,6 +20,50 @@ export class ProductService {
         return this.httpClient.get(environment.baseUrl + environment.endPoints.searchProductInParentCategory + parentCategoryId, { params: data });
     }
 
+    getTkProduct() {
+        return this.httpClient.get(environment.baseUrl + environment.endPoints.getTkPruoduct);
+    }
+
+    addCompProduct(compProduct: {
+        categoryName: string,
+        masterCode: string,
+        product: {
+            brand: string,
+            masterName: string,
+            caseSize: string,
+            masterCode: string,
+            productCategory: string,
+            productCode: string,
+            productName: string,
+            subCategory: string,
+            unitSize: string,
+            isTkProduct: string
+        }
+    }) {
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.addCompProduct, compProduct);
+    }
+
+
+    addTkProduct(tkProduct: {
+        categoryName: string,
+        product: {
+            brand: string,
+            masterName: string,
+            caseSize: string,
+            masterCode: string,
+            productCategory: string,
+            productCode: string,
+            productName: string,
+            subCategory: string,
+            unitSize: string,
+            isTkProduct: string,
+            competitiveProduct: any[]
+        }
+    }): any {
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.appTkProduct, tkProduct);
+    }
+    
+
     addProduct(productDetail: {
         name: string,
         price: number,
@@ -31,7 +75,7 @@ export class ProductService {
         categoryId: string,
         parentCategoryId: string,
         lastUpdatedAt: number
-      }){
+    }) {
         return this.httpClient.post(environment.baseUrl + environment.endPoints.appProduct, productDetail);
-      }
+    }
 }

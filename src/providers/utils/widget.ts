@@ -30,10 +30,6 @@ export class WidgetUtilService {
     toast.present();
   }
 
-  dismissPopover(data = '') {
-    this.popoverController.dismiss();
-  }
-
   async presentPopover(ev: any) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
@@ -70,6 +66,17 @@ export class WidgetUtilService {
         reject(error);
       }
     });
+  }
+
+
+  showAlert(message: string) {
+    this.alertController.create({
+      message,
+      buttons: ['OK']
+    }).then(res => {
+      res.present();
+    });
+
   }
 }
 
