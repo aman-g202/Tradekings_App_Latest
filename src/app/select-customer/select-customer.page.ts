@@ -36,7 +36,7 @@ export class SelectCustomerPage implements OnInit {
 
 
   async clearCart() {
-    const agree = await this.widgetUtil.showConfirm('Cart Exists!', 'Do you want to clear existing cart?');
+    const agree = await this.widgetUtil.showConfirm('Cart Exists!', 'Do you want to clear existing cart?', 'Yes', 'No');
     if (agree === 'Yes') {
       this.storageService.clearCart().then(() => {
         this.widgetUtil.presentToast('Existing cart has been cleared successfully...');

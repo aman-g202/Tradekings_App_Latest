@@ -29,7 +29,9 @@ export const environment = {
     getTkPruoduct: 'api/product/list/tk/products',
     addCompProduct: 'api/product/add/comp/product',
     appTkProduct: 'api/product/add/tk/product',
-    appProduct: 'api/product'
+    appProduct: 'api/product',
+    updateUser: 'api/user/update/user',
+    resetPassword: 'api/user/resetPassword/'
   },
   storageKeys: {}
 };

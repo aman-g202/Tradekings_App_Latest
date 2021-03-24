@@ -6,9 +6,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,9 +35,7 @@ import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { PopoverComponent } from './shared/popover/popover.component';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list.page';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
     ChangePasswordPage,
     EditUserPage,
     UserListPage,
+    EditUserSmListPage,
     SelectCustomerPage,
     CartPage,
     CategoryTotalModalPage,

@@ -15,7 +15,6 @@ export class UserListPage implements OnInit {
   title: string;
   profile: ProfileModel;
   userList: any[];
-  listType: string;
   allCustomerList: any[];
   skipValue = 0;
   limitValue = CONSTANTS.PAGINATION_LIMIT;
@@ -36,22 +35,23 @@ export class UserListPage implements OnInit {
     private widgetUtil: WidgetUtilService) { }
 
   async ngOnInit() {
-    this.listType = this.route.snapshot.params.id;
     this.profile = await this.strogeService.getFromStorage('profile') as ProfileModel;
     this.userType = this.profile.userType;
-    if (this.listType === 'customerList') {
-      this.placeHolderValue = 'Search Customer...';
-      this.title = 'Customer';
-      this.isCustomerList = true;
-      this.scrolling = true;
-      this.getCustomerList();
-
-    } else {
-      this.placeHolderValue = 'Search Salesman...';
-      this.title = 'Salesman';
-      this.getAllSalemanList();
-      this.scrolling = false;
-    }
+    this.hrefTag = '/dashboard/' + this.userType;
+    this.route.params.subscribe((params) => {
+      if (params.id === 'customerList') {
+        this.placeHolderValue = 'Search Customer...';
+        this.title = 'Customer';
+        this.isCustomerList = true;
+        this.scrolling = true;
+        this.getCustomerList();
+     } else {
+        this.placeHolderValue = 'Search Salesman...';
+        this.title = 'Salesman';
+        this.getAllSalemanList();
+        this.scrolling = false;
+      }
+    });
   }
 
 

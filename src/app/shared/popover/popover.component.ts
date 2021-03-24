@@ -195,12 +195,12 @@ export class PopoverComponent implements OnInit {
 
   addCompProduct() {
     this.dismissPopover();
-    this.navCtrl.navigateRoot('admin/add-comp-product');
+    this.router.navigateByUrl('admin/add-comp-product');
   }
 
   addProduct() {
     this.dismissPopover();
-    this.navCtrl.navigateRoot('admin/add-product');
+    this.router.navigateByUrl('admin/add-product');
   }
 
   dismissPopover(data = '') {
