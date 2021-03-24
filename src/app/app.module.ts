@@ -32,6 +32,7 @@ import { AddTKProductPage } from './admin/add-tk-product/add-tk-product.page';
 import { TokenInterceptor } from '../../src/providers/interceptors/http.interceptor';
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { PopoverComponent } from './shared/popover/popover.component';
+import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list.page';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { PopoverComponent } from './shared/popover/popover.component';
     ChangePasswordPage,
     EditUserPage,
     UserListPage,
+    EditUserSmListPage,
     SelectCustomerPage,
     CartPage,
     CategoryTotalModalPage,

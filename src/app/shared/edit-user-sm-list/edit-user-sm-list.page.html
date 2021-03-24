@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Salesman</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close-circle"></ion-icon>
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar (ionChange)="searchSalesman(q.value)" placeholder="Add SM" #q></ion-searchbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="salesmanListAvailable">
+    <ion-item *ngFor="let salesman of filteredSalesmanList" (click)="addSalesman(salesman)">
+      <span>{{salesman.externalId}}</span><span>{{salesman.name}}</span>
+      <ion-icon name="add" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
+  <ion-list class="noDataView" *ngIf="!salesmanListAvailable">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="alert" class="alert"></ion-icon>
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+</ion-content>

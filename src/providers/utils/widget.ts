@@ -40,22 +40,22 @@ export class WidgetUtilService {
     return await popover.present();
   }
 
-  showConfirm(header: string, message: string) {
+  showConfirm(header: string, message: string, buttonOneText: string, buttonTowText: string ) {
     return new Promise(async (resolve, reject) => {
       const confirm = this.alertController.create({
         header,
         message,
         buttons: [
           {
-            text: 'No',
+            text: buttonOneText,
             handler: () => {
-              resolve('No');
+              resolve(buttonOneText);
             }
           },
           {
-            text: 'Yes',
+            text: buttonTowText,
             handler: () => {
-              resolve('Yes');
+              resolve(buttonTowText);
             }
           }
         ]

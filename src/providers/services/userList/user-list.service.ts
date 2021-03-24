@@ -31,4 +31,19 @@ export class UserListService {
   getAllSalesmanList(){
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getAllSalesmanList);
   }
+
+  updateUser(userDetails: {
+     name: string,
+     externalId: string,
+     province: string,
+     associatedSalesmanList: [],
+     tkPoints: number,
+     tkCurrency: number
+  }): any {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.updateUser, userDetails);
+  }
+
+  resetPassword(externalId: string){
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.resetPassword + externalId, {});
+  }
 }

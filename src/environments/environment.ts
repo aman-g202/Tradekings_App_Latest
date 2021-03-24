@@ -26,7 +26,9 @@ export const environment = {
     getAllSalesmanList: 'api/user/list/all/salesman',
     changePassword: 'api/user/changePassword',
     appTkProduct: 'api/product/add/tk/product',
-    appProduct: 'api/product'
+    appProduct: 'api/product',
+    updateUser: 'api/user/update/user',
+    resetPassword: 'api/user/resetPassword/'
   },
   storageKeys: {}
 };

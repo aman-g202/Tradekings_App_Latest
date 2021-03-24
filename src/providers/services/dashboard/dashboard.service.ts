@@ -12,16 +12,11 @@ export class DashboardService {
     private httpClient: HttpClient,
     private storageService: StorageServiceProvider
   ) { }
-  
+
   async isAuthorized() {
     const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
     return  loggedInUser.isAuthorized;
   }
-
-  async isAuthorized() {
-    const loggedInUser: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
-    return loggedInUser.isAuthorized;
-}
 
   getDashboardData(customerCode: string) {
     const data = { externalId: customerCode };
