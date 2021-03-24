@@ -1,0 +1,71 @@
+<!--
+  Generated template for the ReportInvoiceAgainstOrderPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Invoice Against Order</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="onOpenPopOver($event)">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="onCreatePdf('download')" [disabled]="!this.list.length">
+        <ion-icon name="cloud-download"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="table-container">
+    <table *ngIf="list.length; else nocontent">
+      <thead>
+      <tr>
+          <th>Order Number</th>
+          <th class="number">Order Cases</th>
+          <th class="number">Tonnage</th>
+          <th class="number">Billed Cases</th>
+          <th class="number">Gap</th>    
+          <th>Product Name</th>
+          <th>Order Date</th>
+          <th>Invoice Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of list" [ngClass]=" item.productName === 'Total' ? 'total': ''">
+        <td class="large-space">{{item.orderNumber}}</td>
+        <td class="less-space number">{{item.orderCases}}</td>
+        <td class="number">{{item.tonnage.toFixed(2)}}</td>
+        <td class="less-space number">{{item.billedCases}}</td>
+        <td class="less-space number">{{item.gap}}</td>
+        <td class="large-space">{{item.productName}}</td>
+        <td class="less-space">{{item.orderDateString}}</td>
+        <td class="large-space">{{item.invoiceDateString}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <ion-fab right bottom>
+    <button ion-fab (click)="onSharePdf()">
+      <ion-icon name="share"></ion-icon>
+    </button>
+  </ion-fab>
+  <ng-template #nocontent>
+    <ion-card class="noDataView">
+      <ion-card-header text-center>
+        <ion-icon name="alert"></ion-icon>
+          <h4>No record found!</h4>
+        </ion-card-header>
+    </ion-card>
+  </ng-template>
+</ion-content>
+
+<!-- <ion-list #popover>
+  <ion-item>
+    <ion-icon name="calendar"></ion-icon>
+    <span>Filter by date</span>
+  </ion-item>
+</ion-list> -->

@@ -1,0 +1,81 @@
+page-report-invoice-against-order {
+    .table-container {
+        overflow-x: scroll;
+        height: 115vh;
+    }
+
+    th,td {
+        text-align: left;
+    }
+    th {
+        height: auto;
+    }
+
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .button-inner {
+        font-size: 12px;
+    }
+
+    .button {
+        width: inherit;
+    }
+
+    ion-toolbar.toolbar > div.toolbar-content {
+        border-bottom: none;
+    }
+
+    table thead tr {
+        background: #5d91bd;
+        color: white;
+    }
+
+    .filters {
+        background-color: #225F93;
+    }
+    .scroll-content {
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+    }
+
+    .toolbar {
+        padding-bottom: 0px;
+    }
+
+
+    ion-toolbar.toolbar > div.toolbar-content {
+        padding-bottom: 0px!important;
+    }
+
+    .positive {
+        background-color: #9df59d;
+    }
+
+    .negative {
+        background-color: #ef5050d1;;
+    }
+
+    .number {
+        text-align: right!important;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+        background: #5d91bd;
+        color: white;
+    }
+
+    .total {
+        background-color: #91a5b5;
+        color: white;
+    }
+}

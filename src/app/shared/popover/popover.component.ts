@@ -140,6 +140,9 @@ export class PopoverComponent implements OnInit {
       case 'Reset':
         this.resetFilter();
         break;
+      case 'Reports': 
+        this.navigateToReports();
+        break;
     }
   }
 
@@ -149,6 +152,11 @@ export class PopoverComponent implements OnInit {
     localStorage.clear();
     this.navCtrl.navigateRoot('/auth');
     this.widgetUtil.dismissPopover();
+  }
+
+  navigateToReports() {
+    this.widgetUtil.dismissPopover();
+    this.navCtrl.navigateForward('/reports')
   }
 
 
