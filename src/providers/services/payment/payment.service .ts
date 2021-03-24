@@ -16,4 +16,9 @@ export class PaymentService {
       const data = {externalId};
       return this.httpClient.get(environment.baseUrl + environment.endPoints.getPaymentHistory, {params: data} );
     }
+
+    getCustomerStatement(externalId: string) {
+       const data = {customerCode: externalId };
+       return this.httpClient.get(environment.baseUrl + environment.endPoints.getCustomerStatement, {params: data});
+    }
 }

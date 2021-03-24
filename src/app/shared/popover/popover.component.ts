@@ -146,6 +146,9 @@ export class PopoverComponent implements OnInit {
       case 'Change Password':
         this.changePassword();
         break;
+      case 'Add Competitive Product':
+        this.addCompProduct();
+        break;
       case 'Add TK Product':
         this.addTkProduct();
         break;
@@ -187,12 +190,17 @@ export class PopoverComponent implements OnInit {
 
   addCategory() {
     this.dismissPopover();
-    this.router.navigateByUrl('admin/add-category')
+    this.router.navigateByUrl('admin/add-category');
+  }
+
+  addCompProduct() {
+    this.dismissPopover();
+    this.router.navigateByUrl('admin/add-comp-product');
   }
 
   addProduct() {
     this.dismissPopover();
-    this.navCtrl.navigateRoot('admin/add-product');
+    this.router.navigateByUrl('admin/add-product');
   }
 
   dismissPopover(data = '') {

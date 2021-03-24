@@ -6,9 +6,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -17,7 +21,6 @@ import { DashboardPage } from './shared/dashboard/dashboard.page';
 import { NavigationDrawerPage } from './shared/navigation-drawer/navigation-drawer.page';
 import { PaymentHistoryPage } from './shared/payment-history/payment-history.page';
 import { AddPaymentPage } from './shared/add-payment/add-payment.page';
-import { CapturePricePage } from './shared/capture-price/capture-price.page';
 import { ChangePasswordPage } from './shared/change-password/change-password.page';
 import { EditUserPage } from './shared/edit-user/edit-user.page';
 import { UserListPage } from './shared/user-list/user-list.page';
@@ -42,7 +45,6 @@ import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list
     NavigationDrawerPage,
     PaymentHistoryPage,
     AddPaymentPage,
-    CapturePricePage,
     ChangePasswordPage,
     EditUserPage,
     UserListPage,
@@ -70,6 +72,9 @@ import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list
   providers: [
     StatusBar,
     SplashScreen,
+    File,
+    FileOpener,
+    SocialSharing,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,

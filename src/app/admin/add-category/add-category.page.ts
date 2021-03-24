@@ -47,7 +47,6 @@ export class AddCategoryPage implements OnInit {
     this.profile = await this.storageService.getFromStorage('profile') as ProfileModel;
     this.hrefTag = '/dashboard/' + this.profile.userType;
     this.isUserAuthorized = await this.dashboardService.isAuthorized();
-    console.log(this.categoryList);
   }
 
 
