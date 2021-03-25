@@ -51,7 +51,7 @@ export class ReportsService {
                   writer.onwrite = async () => {
                     this.showLoder.dismiss();
                     if (type === 'download') {
-                      const confirm = await this.widgetUtil.showConfirm('Conformation', `Your Pdf is downloaded with named as ${pdfName} in your storage ${storageLocation}, Do you want to open now!`);
+                      const confirm = await this.widgetUtil.showConfirm('Conformation', `Your Pdf is downloaded with named as ${pdfName} in your storage ${storageLocation}, Do you want to open now!`, 'No', 'Yes');
                       if (confirm === 'Yes') {
                         this.fileOpener.open(`${storageLocation}${pdfName}`, 'application/pdf')
                           .then(res => { })
