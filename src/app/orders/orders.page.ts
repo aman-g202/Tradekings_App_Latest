@@ -99,7 +99,6 @@ export class OrdersPage implements OnInit {
       this.loaderDownloading.dismiss();
     }, (error) => {
       console.log('Order List page could not load', error);
-      this.orderListAvailable = true;
       this.loaderDownloading.dismiss();
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
