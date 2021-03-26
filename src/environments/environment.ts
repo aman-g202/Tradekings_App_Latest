@@ -19,6 +19,7 @@ export const environment = {
     submitOrder: 'api/order/',
     createPayment: 'api/user/create/payment',
     getPaymentHistory: 'api/user/payment/history',
+    getPaymentHistoryForSm: 'api/user/list/payments/SM',
     getOrderDetail: 'api/order/detail/',
     changeOrderStatus: 'api/order/status/',
     addCategories: 'api/category',
