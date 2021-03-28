@@ -74,6 +74,14 @@ export class ParentCategoryPage implements OnInit {
         this.skip = this.limit;
       }
       infiniteScroll.target.complete();
+    }, (error: any) => {
+      console.error('Price Capturing Parent Category Page Could not load', error);
+      if (error.statusText === 'Unknown Error') {
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+      } else {
+        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
+      }
     });
   }
+
 }

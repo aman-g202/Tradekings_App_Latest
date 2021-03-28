@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="hrefTag"></ion-back-button>
     </ion-buttons>
@@ -15,6 +15,14 @@
         <ion-button clear color="secondary" item-end><ion-icon name="arrow-forward"></ion-icon></ion-button>
       </ion-buttons>
     </ion-item>
+  </ion-list>
+  <ion-list class="noDataView" *ngIf="categoryListAvailable && (parentCategoryList.length < 1)">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="alert" class="alert"></ion-icon>
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
   </ion-list>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
