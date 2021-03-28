@@ -13,7 +13,7 @@ import { CategoryItemModel } from '../../../providers/models/category.model';
   selector: 'app-add-category',
   templateUrl: './add-category.page.html',
   styleUrls: ['./add-category.page.scss'],
-  providers: [CategoriesService, DashboardService]
+  providers: [DashboardService]
 })
 
 export class AddCategoryPage implements OnInit {
@@ -54,6 +54,7 @@ export class AddCategoryPage implements OnInit {
     const loader = await this.widgeService.showLoader('Please wait', 1000);
     this.categoriesService.getParentCategoryList(this.skipValue, this.limitValue).subscribe((res: any) => {
       this.categoryList = res.body;
+      this.categoriesService.setParentCat(res.body);
       loader.dismiss();
     }, (error) => {
       loader.dismiss();

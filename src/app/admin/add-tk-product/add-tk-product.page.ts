@@ -14,7 +14,7 @@ import { ProductService } from '../../../providers/services/products/products.se
   selector: 'app-add-tk-product',
   templateUrl: './add-tk-product.page.html',
   styleUrls: ['./add-tk-product.page.scss'],
-  providers: [DashboardService, CategoriesService, ProductService]
+  providers: [DashboardService, ProductService]
 })
 export class AddTKProductPage implements OnInit {
   hrefTag = '';
@@ -49,18 +49,25 @@ export class AddTKProductPage implements OnInit {
 
   async getParentCatetoryList() {
     const showLoader = await this.widgetUtil.showLoader('Product Category Fetching..', 2000);
-    this.categoryService.getParentCategoryList(this.skip, this.limit).subscribe((res: any) => {
+    const categoriesList = this.categoryService.getParentCat();
+    if (categoriesList.length > 0) {
+      this.parentCategoryList = categoriesList;
       showLoader.dismiss();
-      this.parentCategoryList = res.body;
-    }, (error: any) => {
-      showLoader.dismiss();
-      console.log('error', error);
-      if (error.statusText === 'Unknown Error') {
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
-      } else {
-        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
-      }
-    });
+    } else {
+      this.categoryService.getParentCategoryList(this.skip, this.limit).subscribe((res: any) => {
+        showLoader.dismiss();
+        this.parentCategoryList = res.body;
+      }, (error: any) => {
+        showLoader.dismiss();
+        console.log('error', error);
+        if (error.statusText === 'Unknown Error') {
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+        } else {
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
+        }
+      });
+    }
+
   }
 
 

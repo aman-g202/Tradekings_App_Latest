@@ -16,11 +16,12 @@ import { Subscription } from 'rxjs';
 
 
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
-  providers: [DashboardService, CategoriesService]
+  providers: [DashboardService]
 })
 export class DashboardPage implements OnInit, OnDestroy {
   partyName = '';
@@ -148,11 +149,19 @@ export class DashboardPage implements OnInit, OnDestroy {
       }
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0];
-        this.categoriesServices.getParentCategoryList(0, 20).subscribe((resp: any) => {
-          this.categoryList = resp.body;
+        const categoryList = this.categoriesServices.getParentCat();
+        if (categoryList.length > 0) {
+          this.categoryList = categoryList;
           this.prepareData('Total');
           this.loaderDownloading.dismiss();
-        });
+        } else {
+          this.categoriesServices.getParentCategoryList(0, 30).subscribe((resp: any) => {
+            this.categoryList = resp.body;
+            this.categoriesServices.setParentCat(resp.body);
+            this.prepareData('Total');
+            this.loaderDownloading.dismiss();
+          });
+        }
       }, error => {
         this.loaderDownloading.dismiss();
       });

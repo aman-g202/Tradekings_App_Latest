@@ -13,11 +13,11 @@ import { CONSTANTS } from '../../../../providers/utils/constants';
   selector: 'app-comp-product',
   templateUrl: './comp-product.page.html',
   styleUrls: ['./comp-product.page.scss'],
-  providers: [ProductService, DashboardService, CategoriesService]
+  providers: [ProductService, DashboardService]
 
 })
 export class CompProductPage implements OnInit {
-  hrefTag = '';
+  hrefTag = `admin/add-comp-product/tklist`;
   parentCategoryList: CategoryItemModel[];
   childCategoryList: CategoryItemModel[];
   profile: ProfileModel;
@@ -49,18 +49,25 @@ export class CompProductPage implements OnInit {
 
   async getParentCatetoryList() {
     const showLoader = await this.widgetUtil.showLoader('Product Category Fetching..', 2000);
-    this.categoryService.getParentCategoryList(this.skip, this.limit).subscribe((res: any) => {
+    const categoriesList = this.categoryService.getParentCat();
+    if (categoriesList.length > 0) {
+      this.parentCategoryList = categoriesList;
       showLoader.dismiss();
-      this.parentCategoryList = res.body;
-    }, (error: any) => {
-      showLoader.dismiss();
-      console.error(' Add Comp product page could not load', error);
-      if (error.statusText === 'Unknown Error') {
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
-      } else {
-        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
-      }
-    });
+    } else {
+      this.categoryService.getParentCategoryList(this.skip, this.limit).subscribe((res: any) => {
+        showLoader.dismiss();
+        this.parentCategoryList = res.body;
+      }, (error: any) => {
+        showLoader.dismiss();
+        console.error(' Add Comp product page could not load', error);
+        if (error.statusText === 'Unknown Error') {
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+        } else {
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
+        }
+      });
+    }
+
   }
 
 
