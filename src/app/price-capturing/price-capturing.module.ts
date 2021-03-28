@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PriceCapturingRoutingModule } from './price-capturing-routing.module';
 import { CaptureDetailsPage } from './capture-details/capture-details.page';
-import { ParentCategoryPage } from '../shop/parent-category/parent-category.page';
-import { ChildCategoryPage } from '../shop/child-category/child-category.page';
+import { ParentCategoryPage } from '../price-capturing/parent-category/parent-category.page';
+import { ChildCategoryPage } from '../price-capturing/child-category/child-category.page';
 import { PriceCapturingProductListPage } from './price-capturing-product-list/price-capturing-product-list.page';
 import { PriceCapturingReviewPage } from './price-capturing-review/price-capturing-review.page';
 import { UnitSizeListPage } from './unit-size-list/unit-size-list.page';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { CategoriesService } from '../../providers/services/categories/categories.service';
 
 
 
@@ -27,6 +28,8 @@ import { IonicModule } from '@ionic/angular';
     PriceCapturingProductListPage,
     PriceCapturingReviewPage,
     UnitSizeListPage
-  ]
+
+  ],
+  providers: []
 })
 export class PriceCapturingPageModule { }

@@ -29,7 +29,7 @@ export class CaptureDetailsPage implements OnInit {
     this.hrefTag = '/dashboard/' + profile.userType;
     const customerInfo: any = await this.storageService.getFromStorage('customerInfo');
     if (!!customerInfo) {
-      const agree = await this.widgetUtil.showConfirm('Capturing Exists!', `Continue with the last captured shop name : ${customerInfo.shopName}`);
+      const agree = await this.widgetUtil.showConfirm('Capturing Exists!', `Continue with the last captured shop name : ${customerInfo.shopName}`, 'No', 'Yes');
       if (agree === 'Yes') {
         this.router.navigateByUrl('/capture-price/parent-category');
       } else {
