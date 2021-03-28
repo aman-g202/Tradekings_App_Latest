@@ -31,7 +31,8 @@ export const environment = {
     appTkProduct: 'api/product/add/tk/product',
     appProduct: 'api/product',
     updateUser: 'api/user/update/user',
-    resetPassword: 'api/user/resetPassword/'
+    resetPassword: 'api/user/resetPassword/',
+    getProductByUnitSize: 'api/product/list/unitsize'
   },
   storageKeys: {}
 };

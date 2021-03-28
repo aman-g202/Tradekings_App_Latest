@@ -27,7 +27,8 @@ export const environment = {
     getTkProduct: 'a pi/product/list/tk/products',
     addCompProduct: 'api/product/add/comp/product',
     appTkProduct: 'api/product/add/tk/product',
-    appProduct: 'api/product'
+    appProduct: 'api/product',
+    getProductByUnitSize: 'api/product/list/unitsize'
   },
   storageKeys: {}
 };

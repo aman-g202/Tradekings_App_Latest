@@ -12,8 +12,8 @@ import { CategoryItemModel } from '../../../providers/models/category.model';
 })
 export class ChildCategoryPage implements OnInit {
   parentCatId: string;
-  parentCatName  = '';
-  childCatList: CategoryItemModel [] = [];
+  parentCatName = '';
+  childCatList: CategoryItemModel[] = [];
   hrefTag = 'capture-price/parent-category';
   skip = 0;
   limit = CONSTANTS.PAGINATION_LIMIT;
@@ -27,16 +27,16 @@ export class ChildCategoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-  const parentCatObj: any = this.route.snapshot.queryParams;
-  this.parentCatId = parentCatObj.parentCategoryId;
-  this.parentCatName = parentCatObj.categoryName;
-  this.getChildCat();
+    const parentCatObj: any = this.route.snapshot.queryParams;
+    this.parentCatId = parentCatObj.parentCategoryId;
+    this.parentCatName = parentCatObj.categoryName;
+    this.getChildCat();
   }
 
 
- async getChildCat() {
+  async getChildCat() {
     const showLoder = await this.widgetUtil.showLoader('Please wait..', 2000);
-    this.categoryService.getChildCategoryList(this.parentCatId, this.skip, this.limit).subscribe( (res: any) => {
+    this.categoryService.getChildCategoryList(this.parentCatId, this.skip, this.limit).subscribe((res: any) => {
       showLoder.dismiss();
       this.childCatList = res.body;
       this.categoryListAvailable = true;
@@ -54,11 +54,10 @@ export class ChildCategoryPage implements OnInit {
 
   navigateUnitSizeProductPage(category) {
     const productObj = {
-      categoryId : category._id,
       childCategoryName: category.name,
       parentCategoryName: this.parentCatName
     };
-    this.router.navigate(['../', 'unit-size'], {queryParams: productObj, relativeTo: this.route});
+    this.router.navigate(['../', 'unit-size'], { queryParams: productObj, relativeTo: this.route });
   }
 
 

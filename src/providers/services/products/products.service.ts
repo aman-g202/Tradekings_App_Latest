@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class ProductService {
+
     constructor(
         private httpClient: HttpClient
     ) { }
@@ -23,6 +24,13 @@ export class ProductService {
     getTkProduct() {
         return this.httpClient.get(environment.baseUrl + environment.endPoints.getTkPruoduct);
     }
+
+
+    getProductByUnitSize( parentCatName: string, childCatName: string ):any {
+        const data = {parent: parentCatName, child: childCatName };
+        return this.httpClient.get(environment.baseUrl + environment.endPoints.getProductByUnitSize, {params: data})
+    }
+
 
     addCompProduct(compProduct: {
         categoryName: string,
@@ -62,7 +70,6 @@ export class ProductService {
     }): any {
         return this.httpClient.post(environment.baseUrl + environment.endPoints.appTkProduct, tkProduct);
     }
-    
 
     addProduct(productDetail: {
         name: string,
