@@ -1,0 +1,23 @@
+ion-grid {
+  padding: 0px !important;
+  &:nth-of-type(even) {
+    background-color: #eeeeee;
+  }
+}
+
+ion-row {
+  border-bottom: 1px solid var(--ion-color-medium);
+ // border-left: 1px solid var(--ion-color-medium);
+  border-right: 1px solid var(--ion-color-medium);
+}
+
+ion-col {
+  border-left: 1px solid var(--ion-color-medium);
+  padding: 20px;
+}
+
+.thead {
+  background-color: var(--ion-color-dark-tint);
+  color: var(--ion-color-light);
+  font-weight: bold;
+}

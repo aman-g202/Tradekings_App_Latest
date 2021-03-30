@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="full-background">
   <form #form="ngForm">
     <ion-grid *ngIf="productListAvailable && (priceCaptureProduct.length > 0)">
       <ion-row *ngFor="let product of priceCaptureProduct; let i = index">

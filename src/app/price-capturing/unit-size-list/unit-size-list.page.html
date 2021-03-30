@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="full-background">
   <ion-list *ngIf="unitSizeListAvailable && (unitSizeList.length > 0)">
     <ion-item *ngFor="let unitSize of unitSizeList" (click)="getProduct(unitSize)">
       <img src="assets/icon/box.svg">{{unitSize}}

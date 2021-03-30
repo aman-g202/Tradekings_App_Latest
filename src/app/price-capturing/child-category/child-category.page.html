@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="full-background">
   <ion-list *ngIf="categoryListAvailable && (childCatList.length > 0)">
     <ion-item *ngFor="let category of childCatList" (click)="navigateUnitSizeProductPage(category)">
       <img src="./assets/imgs/productcategory.svg">{{category.name}}

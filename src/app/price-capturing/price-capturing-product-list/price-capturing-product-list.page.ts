@@ -96,7 +96,6 @@ export class PriceCapturingProductListPage implements OnInit {
   async uploadData() {
     this.loader = true;
     const captureData = await this.prepareData();
-    console.log(captureData);
     this.productService.captureProduct(captureData).subscribe((resutl: any) => {
       this.loader = false;
       this.widgetUtil.presentToast('Data uploaded successfully');
@@ -116,6 +115,6 @@ export class PriceCapturingProductListPage implements OnInit {
       component: PriceCapturingReviewPage,
       componentProps: catureData
     });
-    openModal.present();
+    return  await openModal.present();
   }
 }

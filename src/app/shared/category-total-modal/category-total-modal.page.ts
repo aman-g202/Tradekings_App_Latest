@@ -19,7 +19,8 @@ export class CategoryTotalModalPage implements OnInit {
   parentCategoryList: Array<any> = [];
   downloadingLoader: any;
 
-  constructor(private navParms: NavParams,
+  constructor(
+    private navParms: NavParams,
     private categoriesService: CategoriesService,
     private widgetUtil: WidgetUtilService,
     private modalController: ModalController
