@@ -15,7 +15,6 @@ import { CONSTANTS } from '../../../providers/utils/constants';
 export class UnitSizeListPage implements OnInit {
   hrefTag = 'capture-price/child-category';
   childCatName = '';
-  childCatId = '';
   parentCatName = '';
   unitSizeList: ProductModel[] = [];
   unitSizeListAvailable = false;
@@ -37,7 +36,7 @@ export class UnitSizeListPage implements OnInit {
 
   async getUnitSize() {
     const showLoader = await this.widgetUnit.showLoader('Please wait..', 2000);
-    this.productService.getProductByUnitSize(this.parentCatName, this.childCatName).subscribe((res: any) => {
+    this.productService.getUnitSizeList(this.parentCatName, this.childCatName).subscribe((res: any) => {
       showLoader.dismiss();
       this.unitSizeList = res.body;
       this.unitSizeListAvailable = true;
@@ -57,7 +56,7 @@ export class UnitSizeListPage implements OnInit {
     const productObj = {
       unitSize,
       parentCategoryName: this.parentCatName,
-      childCategoryName: this.childCatId
+      childCategoryName: this.childCatName
     };
     this.router.navigate(['../', 'product-list'], { queryParams: productObj, relativeTo: this.route });
   }

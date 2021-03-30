@@ -32,7 +32,9 @@ export const environment = {
     appProduct: 'api/product',
     updateUser: 'api/user/update/user',
     resetPassword: 'api/user/resetPassword/',
-    getProductByUnitSize: 'api/product/list/unitsize'
+    getUnitSizeList: 'api/product/list/unitsize',
+    getCaptureProductList: 'api/product/list/unitsize/products',
+    captureProduct: 'api/order/capture/price'
   },
   storageKeys: {}
 };
