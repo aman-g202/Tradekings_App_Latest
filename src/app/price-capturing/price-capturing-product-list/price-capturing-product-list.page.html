@@ -8,12 +8,12 @@
 </ion-header>
 
 <ion-content class="full-background">
-  <form #form="ngForm">
-    <ion-grid *ngIf="productListAvailable && (priceCaptureProduct.length > 0)">
+  <ion-grid *ngIf="productListAvailable && (priceCaptureProduct.length > 0)">
+    <form #form="ngForm">
       <ion-row *ngFor="let product of priceCaptureProduct; let i = index">
         <ion-col size="6">
           <ion-item lines="none">
-            <ion-label>{{product.productName}}</ion-label>
+            <ion-label class="ion-text-wrap">{{product.productName}}</ion-label>
           </ion-item>
         </ion-col>
         <ion-col size="3">
@@ -27,8 +27,8 @@
           </ion-item>
         </ion-col>
       </ion-row>
-    </ion-grid>
-  </form>
+    </form>
+  </ion-grid>
   <ion-list class="noDataView" *ngIf="productListAvailable && (priceCaptureProduct.length < 1)">
     <ion-card>
       <ion-card-header>
