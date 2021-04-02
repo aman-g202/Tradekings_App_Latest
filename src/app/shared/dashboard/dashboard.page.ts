@@ -272,7 +272,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   openCustomerPaymentHistory() {
-    this.router.navigate(['/payment-history']);
+    this.router.navigate(['/payment-history'], {queryParams: {isSelectedCust: true}});
   }
 
   navigateCustomerList() {
