@@ -11,6 +11,9 @@ export const environment = {
     getParentCategory: 'api/category/list/parent',
     getChildCategory: 'api/category/list/child/',
     getOrderList: 'api/order/list/user/',
+    getOrderListByProvince: 'api/order/list/province/',
+    getOrderListForSalesman: 'api/order/list/associated/user/',
+    getAllOrderList: 'api/order/list/',
     getProductList: 'api/product/list/category/',
     searchProductInParentCategory: 'api/product/search/parentCategory/',
     submitOrder: 'api/order/',
@@ -31,7 +34,8 @@ export const environment = {
     appTkProduct: 'api/product/add/tk/product',
     appProduct: 'api/product',
     updateUser: 'api/user/update/user',
-    resetPassword: 'api/user/resetPassword/'
+    resetPassword: 'api/user/resetPassword/',
+    createOrderToErp: 'api/erp/createOrderToERP'
   },
   storageKeys: {}
 };
