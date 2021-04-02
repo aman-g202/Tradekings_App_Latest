@@ -34,7 +34,11 @@ export class AuthPage implements OnInit {
     });
   }
 
-  async login() {
+  ionViewDidEnter() {
+    this.loginForm.reset();
+  }
+
+  login() {
     this.showLoginLoader = true;
     this.authService.login(this.loginForm.value).subscribe((responseData: any) => {
       this.showLoginLoader = false;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavParams, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-price-capturing-review',
@@ -6,10 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./price-capturing-review.page.scss'],
 })
 export class PriceCapturingReviewPage implements OnInit {
+  captureData: any = [];
+  rrpLable = '';
 
-  constructor() { }
+  constructor(
+    private navParam: NavParams,
+    private modalCtrl: ModalController) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const captureDataDetails = await this.navParam.data;
+    this.captureData = captureDataDetails.capturedProducts;
+    this.rrpLable = captureDataDetails.reportType === 'price_capturing' ? 'RRP' : 'STOCK';
   }
 
+ async closeModal() {
+    await this.modalCtrl.dismiss();
+  }
 }

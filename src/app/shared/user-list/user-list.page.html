@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="hrefTag">
       </ion-back-button>
@@ -20,14 +20,14 @@
   <ion-list *ngIf="userListAvailable">
     <ion-card *ngFor="let user of userList">
       <ion-row>
-        <ion-col size="4" class="col-5" >
+        <ion-col size="4" class="col-5">
           <ion-col class="user-id-col" col="12">
             <span class="user-id">{{user.externalId}}</span>
           </ion-col>
-          <div  class="user-type-col" *ngIf="!isCustomerList">
-          <ion-col col="12" >
-            <span >{{user.userType}}</span>
-          </ion-col>
+          <div class="user-type-col" *ngIf="!isCustomerList">
+            <ion-col col="12">
+              <span>{{user.userType}}</span>
+            </ion-col>
           </div>
         </ion-col>
         <ion-col size="7" class="col-7">
@@ -35,14 +35,12 @@
             <span class="user-name">{{user.name}}</span>
           </ion-col>
           <ion-col class="text-center" size="12">
-            <ion-button ion-button outline class="edit-user-btn" (click)="onEditUser(user)">
+            <ion-button color="secondary-tint" fill="outline" class="edit-user-btn" (click)="onEditUser(user)">
               <ion-icon name="create"></ion-icon>EDIT USER
             </ion-button>
           </ion-col>
           <ion-col class="text-center" size="12">
-            <ion-button class="rest-pass-btn" (click)="onNavigateDashboard(user)" size="12" style="text-align: center;">
-              View
-              Dashboard</ion-button>
+            <ion-button class="rest-pass-btn" (click)="onNavigateDashboard(user)">View Dashboard</ion-button>
           </ion-col>
         </ion-col>
       </ion-row>

@@ -32,6 +32,9 @@ export const environment = {
     addCompProduct: 'api/product/add/comp/product',
     appTkProduct: 'api/product/add/tk/product',
     appProduct: 'api/product',
+    getUnitSizeList: 'api/product/list/unitsize',
+    getCaptureProductList: 'api/product/list/unitsize/products',
+    captureProduct: 'api/order/capture/price',
     createOrderToErp: 'api/erp/createOrderToERP'
   },
   storageKeys: {}

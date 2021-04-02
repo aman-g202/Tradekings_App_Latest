@@ -1,9 +1,54 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>price-capturing-product-list</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="hrefTag"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{unitSize}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="full-background">
+  <ion-grid *ngIf="productListAvailable && (priceCaptureProduct.length > 0)">
+    <form #form="ngForm">
+      <ion-row *ngFor="let product of priceCaptureProduct; let i = index">
+        <ion-col size="6">
+          <ion-item lines="none">
+            <ion-label class="ion-text-wrap">{{product.productName}}</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-item>
+            <ion-input type="number" placeholder="MSQ" [name]="i + 'A'" ngModel required></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-item>
+            <ion-input type="number" [placeholder]="reportTypeLable" [name]="i + 'B'" ngModel required></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+  <ion-list class="noDataView" *ngIf="productListAvailable && (priceCaptureProduct.length < 1)">
+    <ion-card>
+      <ion-card-header>
+        <img src="../../assets/icon/empty-box.svg" alt="">
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
 </ion-content>
+<ion-footer *ngIf="productListAvailable && (priceCaptureProduct.length > 0)">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button color="light" expand="full" (click)="openReviewModal()">review</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="secondary" expand="full" (click)="uploadData()">upload <ion-spinner name="dots"
+            *ngIf="loader"></ion-spinner>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

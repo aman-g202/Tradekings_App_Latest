@@ -180,7 +180,8 @@ export class UserListPage implements OnInit {
   onNavigateDashboard(user) {
     this.strogeService.setToStorage('selectedCustomer', user);
     const data = {
-      isAdminFlow: true
+      isAdminFlow: true,
+      timeStamp: new Date().getTime()
     };
     this.router.navigate(['/dashboard/' + this.profile.userType], { queryParams: data });
   }

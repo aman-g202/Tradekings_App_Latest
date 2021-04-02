@@ -53,19 +53,27 @@ export class ParentCategoryPage implements OnInit {
     const profile = await this.storageService.getFromStorage('profile') as ProfileModel;
     this.hrefTag = '/dashboard/' + profile.userType;
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
-    this.categoryService.getParentCategoryList(this.skipValue, this.limit).subscribe((result) => {
-      this.parentCategoryList = result.body;
+    const parentCatList = this.categoryService.getParentCat();
+    if (parentCatList.length > 0) {
+      this.parentCategoryList = parentCatList;
       this.categoryListAvailable = true;
       this.loaderDownloading.dismiss();
-    }, (error) => {
-      if (error.statusText === 'Unknown Error') {
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
-      } else {
-        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
-      }
-      this.categoryListAvailable = true;
-      this.loaderDownloading.dismiss();
-    });
+    } else {
+      this.categoryService.getParentCategoryList(this.skipValue, this.limit).subscribe((result) => {
+        this.parentCategoryList = result.body;
+        this.categoryListAvailable = true;
+        this.loaderDownloading.dismiss();
+      }, (error) => {
+        if (error.statusText === 'Unknown Error') {
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+        } else {
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
+        }
+        this.categoryListAvailable = true;
+        this.loaderDownloading.dismiss();
+      });
+    }
+
   }
 
   doRefresh(refresher): void {
@@ -79,14 +87,17 @@ export class ParentCategoryPage implements OnInit {
     this.categoryService.getParentCategoryList(this.skipValue, this.limit).subscribe((result) => {
       if (result.body.length > 0) {
         result.body.map((value) => {
-          this.parentCategoryList.push(value);
+          const checkExistingCat = this.parentCategoryList.some(item => item._id === value._id)
+          if (!checkExistingCat) {
+            this.parentCategoryList.push(value);
+          }
         });
       } else {
         this.skipValue = this.limit;
       }
-      infiniteScroll.complete();
+      infiniteScroll.target.complete();
     }, (error) => {
-      infiniteScroll.complete();
+      infiniteScroll.target.complete();
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else {

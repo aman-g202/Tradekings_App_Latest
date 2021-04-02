@@ -7,8 +7,9 @@ import { ChildCategoryPage } from '../price-capturing/child-category/child-categ
 import { PriceCapturingProductListPage } from './price-capturing-product-list/price-capturing-product-list.page';
 import { PriceCapturingReviewPage } from './price-capturing-review/price-capturing-review.page';
 import { UnitSizeListPage } from './unit-size-list/unit-size-list.page';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+
 
 
 
@@ -18,6 +19,7 @@ import { IonicModule } from '@ionic/angular';
     CommonModule,
     PriceCapturingRoutingModule,
     IonicModule,
+    FormsModule,
     ReactiveFormsModule
   ],
   declarations: [
@@ -27,6 +29,8 @@ import { IonicModule } from '@ionic/angular';
     PriceCapturingProductListPage,
     PriceCapturingReviewPage,
     UnitSizeListPage
-  ]
+
+  ],
+  providers: []
 })
 export class PriceCapturingPageModule { }

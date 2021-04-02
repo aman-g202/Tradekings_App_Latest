@@ -17,11 +17,12 @@ import { CONSTANTS } from '../../../providers/utils/constants';
 
 
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
-  providers: [DashboardService, CategoriesService]
+  providers: [DashboardService]
 })
 export class DashboardPage implements OnInit, OnDestroy {
   partyName = '';
@@ -47,6 +48,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   subParams: Subscription;
   loggedInPartyName: string;
   userTypeAdmin = false;
+  timeStamp: any;
 
 
   constructor(
@@ -62,9 +64,16 @@ export class DashboardPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.userType = this.route.snapshot.params.userType;
     this.subParams = this.route.queryParams.subscribe(params => {
-      this.isSalesmanFlow = params.isSalesmanFlow ? params.isSalesmanFlow : params.isAdminFlow;
-      this.getData();
+      if (params.timeStamp && this.timeStamp !== params.timeStamp) {
+        this.timeStamp = params.timeStamp;
+        this.isSalesmanFlow = params.isSalesmanFlow ? params.isSalesmanFlow : params.isAdminFlow;
+        this.resetData();
+        this.getData();
+      }
     });
+    if (this.timeStamp === undefined) {
+      this.getData();
+    }
   }
 
   displayChart() {
@@ -150,11 +159,19 @@ export class DashboardPage implements OnInit, OnDestroy {
       }
       this.dashboardService.getDashboardData(this.externalId).subscribe((res: any) => {
         this.dashboardData = res.body[0];
-        this.categoriesServices.getParentCategoryList(0, 20).subscribe((resp: any) => {
-          this.categoryList = resp.body;
+        const categoryList = this.categoriesServices.getParentCat();
+        if (categoryList.length > 0) {
+          this.categoryList = categoryList;
           this.prepareData('Total');
           this.loaderDownloading.dismiss();
-        });
+        } else {
+          this.categoriesServices.getParentCategoryList(0, 30).subscribe((resp: any) => {
+            this.categoryList = resp.body;
+            this.categoriesServices.setParentCat(resp.body);
+            this.prepareData('Total');
+            this.loaderDownloading.dismiss();
+          });
+        }
       }, error => {
         if (error.statusText === 'Unknown Error') {
           this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
@@ -175,7 +192,8 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   async prepareData(selectedValue) {
-    if (!this.dashboardData) {
+    if (!this.dashboardData || (selectedValue !== 'Confectionery'
+      && selectedValue !== 'Laundry' && selectedValue !== 'Personal Care' && selectedValue !== 'Household' && selectedValue !== 'Total')) {
       this.data.target = 0;
       this.data.achievement = 0;
       this.data.achievedPercentage = 0;
@@ -287,7 +305,30 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   }
 
+  resetData() {
+    this.data.target = 0;
+    this.data.achievement = 0;
+    this.data.achievedPercentage = 0;
+    this.data.balanceToDo = 0;
+    this.data.creditLimit = 0;
+    this.data.currentOutStanding = 0;
+    this.data.thirtyDaysOutStanding = 0;
+    this.data.availableCreditLimit = 0;
+    this.data.tkPoints = 0;
+    this.data.tkCurrency = 0;
+    this.data.lmtdAchieve = 0;
+    this.data.lymtdAchieve = 0;
+    this.data.lmtdGrowthPercentage = 0;
+    this.data.lymtdGrowthPercentage = 0;
+    // Preparing Data for Graph
+    this.mtdAchieved = this.data.achievement;
+    this.target = 1;
+  }
+
+
   ngOnDestroy() {
     this.subParams.unsubscribe();
   }
+
+
 }

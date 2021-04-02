@@ -1,17 +1,17 @@
 <ion-header>
-<ion-toolbar>
-  <ion-buttons slot="start">
-    <ion-back-button defaultHref="">
-    </ion-back-button>
-  </ion-buttons>
-  <ion-title>Select Customer</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="hrefTag">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Select Customer</ion-title>
   </ion-toolbar>
-  <ion-searchbar  #q (ionChange)="searchCustomers(q.value)" placeholder="Search Customers"></ion-searchbar>
+  <ion-searchbar #q (ionChange)="searchCustomers(q.value)" placeholder="Search Customers"></ion-searchbar>
 </ion-header>
 
 <ion-content class="full-background">
-  <div class="search-spinner" style="text-align: center;">
-    <ion-spinner name="crescent" *ngIf="!userListAvailable"></ion-spinner>
+  <div class="ion-text-center" *ngIf="!userListAvailable">
+    <ion-spinner name="crescent"></ion-spinner>
   </div>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
@@ -20,11 +20,11 @@
   </ion-refresher>
   <ion-list *ngIf="userListAvailable && (userList.length > 0)">
     <ion-card *ngFor="let user of filteredUserList" (click)="selectCustomer(user)">
-      <ion-item lines="none">
-        <span>{{user.externalId}}</span><span>{{user.name}}</span>
-      </ion-item>
+      <ion-row>
+        <ion-col size="3" class="ion-text-align-center"><span class="idCol">{{user.externalId}}</span></ion-col>
+        <ion-col size="9"><span>{{user.name}}</span></ion-col>
+      </ion-row>
     </ion-card>
-    
   </ion-list>
   <ion-card class="noDataView" *ngIf="userListAvailable && (userList.length < 1)">
     <ion-card-header>

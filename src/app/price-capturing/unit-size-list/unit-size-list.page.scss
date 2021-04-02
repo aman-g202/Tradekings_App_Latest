@@ -1,0 +1,32 @@
+ion-content {
+  ion-item {
+    padding-bottom: 5px;
+    img {
+      height: 37px;
+      margin-right: 18px;
+      margin-bottom: 11px;
+      margin-top: 11px;
+    }
+  }
+
+  .noDataView {
+    ion-card {
+      box-shadow: none;
+      ion-card-header {
+        text-align: center;
+        margin-top: 20%;
+      }
+      ion-icon {
+        border-radius: 20px;
+        width: 30px;
+        height: 30px;
+        background-color: var(--ion-color-primary);
+        color: var(--ion-color-primary-contrast);
+      }
+      h4 {
+        color: var(--ion-color-dark);
+        font-size: 1.3rem;
+      }
+    }
+  }
+}

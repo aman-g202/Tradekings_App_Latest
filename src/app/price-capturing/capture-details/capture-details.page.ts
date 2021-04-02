@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { WidgetUtilService } from '../../../providers/utils/widget';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router} from '@angular/router';
 import { ProfileModel } from '../../../providers/models/profile.model';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-capture-details',
@@ -55,7 +55,6 @@ export class CaptureDetailsPage implements OnInit {
   async addCustomer() {
     const prepareCustDetail: any = this.addCustomerForm.value;
     prepareCustDetail.mobile = this.addCustomerForm.value.mobile.toString();
-    console.log(prepareCustDetail);
     await this.storageService.setToStorage('customerInfo', prepareCustDetail);
     this.router.navigateByUrl('/capture-price/parent-category');
   }

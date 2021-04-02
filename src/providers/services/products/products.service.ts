@@ -2,9 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
+import { ProfileModel } from '../../models/profile.model';
+import { ProductModel } from '../../models/product.model';
 
 @Injectable()
 export class ProductService {
+
     constructor(
         private httpClient: HttpClient
     ) { }
@@ -23,6 +26,33 @@ export class ProductService {
     getTkProduct() {
         return this.httpClient.get(environment.baseUrl + environment.endPoints.getTkPruoduct);
     }
+
+
+    getUnitSizeList(parentCatName: string, childCatName: string): any {
+        const data = { parent: parentCatName, child: childCatName };
+        return this.httpClient.get(environment.baseUrl + environment.endPoints.getUnitSizeList, { params: data });
+    }
+
+    getCaptureProductList(unitSize: string, parentCatName: string, childCatName: string): any {
+        const data = { unitSize, parent: parentCatName, child: childCatName };
+        return this.httpClient.get(environment.baseUrl + environment.endPoints.getCaptureProductList, { params: data });
+    }
+
+    captureProduct(captureData: {
+        date: string,
+        customerInfo: any,
+        reportType: string,
+        channel: string,
+        capturedBy: ProfileModel,
+        capturedProducts: any,
+        parentCategoryName: string,
+        childCategoryName: string,
+        unitSize: string,
+        priceType: string
+    }) {
+        return this.httpClient.post(environment.baseUrl + environment.endPoints.captureProduct, captureData);
+    }
+
 
     addCompProduct(compProduct: {
         categoryName: string,
@@ -62,7 +92,6 @@ export class ProductService {
     }): any {
         return this.httpClient.post(environment.baseUrl + environment.endPoints.appTkProduct, tkProduct);
     }
-    
 
     addProduct(productDetail: {
         name: string,
