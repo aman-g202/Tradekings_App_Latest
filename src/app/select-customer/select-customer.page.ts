@@ -12,6 +12,7 @@ import { CONSTANTS } from 'src/providers/utils/constants';
   styleUrls: ['./select-customer.page.scss'],
 })
 export class SelectCustomerPage implements OnInit {
+  hrefTag = '';
   profile: ProfileModel;
   userList;
   allCustomerList;
@@ -30,13 +31,14 @@ export class SelectCustomerPage implements OnInit {
 
   async ngOnInit() {
     this.profile = await this.storageService.getFromStorage('profile') as ProfileModel;
+    this.hrefTag = '/dashboard/' + this.profile.userType;
     this.clearCart();
     this.getCustomerList();
   }
 
 
   async clearCart() {
-    const agree = await this.widgetUtil.showConfirm('Cart Exists!', 'Do you want to clear existing cart?', 'Yes', 'No');
+    const agree = await this.widgetUtil.showConfirm('Cart Exists!', 'Do you want to clear existing cart?', 'No', 'Yes');
     if (agree === 'Yes') {
       this.storageService.clearCart().then(() => {
         this.widgetUtil.presentToast('Existing cart has been cleared successfully...');
@@ -118,7 +120,8 @@ export class SelectCustomerPage implements OnInit {
   selectedCustomer(user) {
     this.storageService.setToStorage('selectedCustomer', user);
     const data = {
-      isSalesmanFlow: true
+      isSalesmanFlow: true,
+      timeStamp: new Date().getTime()
     };
     this.router.navigate(['/dashboard/' + this.profile.userType], { queryParams: data });
   }

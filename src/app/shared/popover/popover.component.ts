@@ -23,11 +23,13 @@ export class PopoverComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.queryParams
-      .subscribe(params => {
-        this.type = params.popOverType;
-        this.getData();
-      });
+    // this.route.queryParams
+    //   .subscribe(params => {
+    //     this.type = params.popOverType;
+    //     this.getData();
+    //   });
+   this.type = this.route.snapshot.queryParams.popOverType;
+   this.getData();
   }
 
   async getData() {
@@ -159,11 +161,11 @@ export class PopoverComponent implements OnInit {
   }
 
 
-  async logout() {
+   logout() {
+    this.dismissPopover();
     this.storageService.clearStorage();
     localStorage.clear();
     this.navCtrl.navigateRoot('/auth');
-    this.dismissPopover();
   }
 
   filterByOrderDate() {
