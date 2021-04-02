@@ -15,6 +15,23 @@ export class OrderService {
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getOrderList + userId, { params: data });
   }
 
+
+  getAllOrderList(skip: number, limit: number){
+    const data = {skip: skip.toString(), limit: limit.toString()};
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getAllOrderList , {params: data});
+  }
+
+  getOrderListByProvince(province: string, skip: number, limit: number){
+    const data = { skip: skip.toString(), limit: limit.toString()};
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getOrderListByProvince + province, {params: data});
+  }
+
+  getOrderListBySalesman(userId: string, skip: number, limit: number){
+    const data = { skip: skip.toString(), limit: limit.toString()};
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getOrderListForSalesman + userId, {params: data});
+  }
+
+
   calculateTotalNetWeightAndTotalTk(cart) {
     let totalNetWeightLocal = 0;
     let totalTKLocal = 0;
@@ -52,11 +69,15 @@ export class OrderService {
     return this.httpClient.post(environment.baseUrl + environment.endPoints.submitOrder, orderDetails);
   }
 
-  getOrderDetail (orderId: string): any {
-    return this.httpClient.get(environment.baseUrl + environment.endPoints.getOrderDetail + orderId)
+  getOrderDetail(orderId: string): any {
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getOrderDetail + orderId);
   }
 
-  changeOrderStatus (orderId: string, statusObj: Object): any {
-    return this.httpClient.post(environment.baseUrl + environment.endPoints.changeOrderStatus + orderId, statusObj)
+  changeOrderStatus(orderId: string, statusObj: { status: string}): any {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.changeOrderStatus + orderId, statusObj);
+  }
+
+  createOrderToErp(orderId: string){
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.createOrderToErp, {_id: orderId});
   }
 }

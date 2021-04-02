@@ -11,11 +11,15 @@ export const environment = {
     getParentCategory: 'api/category/list/parent',
     getChildCategory: 'api/category/list/child/',
     getOrderList: 'api/order/list/user/',
+    getOrderListByProvince: 'api/order/list/province/',
+    getOrderListForSalesman: 'api/order/list/associated/user/',
+    getAllOrderList: 'api/order/list/',
     getProductList: 'api/product/list/category/',
     searchProductInParentCategory: 'api/product/search/parentCategory/',
     submitOrder: 'api/order/',
     createPayment: 'api/user/create/payment',
     getPaymentHistory: 'api/user/payment/history',
+    getPaymentHistoryForSm: 'api/user/list/payments/SM',
     getOrderDetail: 'api/order/detail/',
     changeOrderStatus: 'api/order/status/',
     addCategories: 'api/category',
@@ -34,7 +38,8 @@ export const environment = {
     resetPassword: 'api/user/resetPassword/',
     getUnitSizeList: 'api/product/list/unitsize',
     getCaptureProductList: 'api/product/list/unitsize/products',
-    captureProduct: 'api/order/capture/price'
+    captureProduct: 'api/order/capture/price',
+    createOrderToErp: 'api/erp/createOrderToERP'
   },
   storageKeys: {}
 };

@@ -12,6 +12,7 @@ import { StorageServiceProvider } from '../../../providers/services/storage/stor
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { CategoryItemModel } from '../../../providers/models/category.model';
 import { Subscription } from 'rxjs';
+import { CONSTANTS } from '../../../providers/utils/constants';
 
 
 
@@ -147,6 +148,7 @@ export class DashboardPage implements OnInit, OnDestroy {
         if (profile.userType === 'SALESMAN' || profile.userType === 'SALESMANAGER') {
           this.userTypeSalesman = true;
           this.selectedUserCustomer = false;
+          this.storageService.removeFromStorage('selectedCustomer');
         } else if (profile.userType === 'CUSTOMER') {
           this.userTypeCustomer = true;
           this.selectedUserCustomer = false;
@@ -171,6 +173,11 @@ export class DashboardPage implements OnInit, OnDestroy {
           });
         }
       }, error => {
+        if (error.statusText === 'Unknown Error') {
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
+        } else {
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
+        }
         this.loaderDownloading.dismiss();
       });
     }
@@ -283,7 +290,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   openCustomerPaymentHistory() {
-    this.router.navigate(['/payment-history']);
+    this.router.navigate(['/payment-history'], {queryParams: {isSelectedCust: true}});
   }
 
   navigateCustomerList() {

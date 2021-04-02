@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="">
+      <ion-back-button [defaultHref]="hrefTag">
       </ion-back-button>
     </ion-buttons>
     <ion-title>Payment History</ion-title>
@@ -10,56 +10,72 @@
 
 <ion-content class="full-background">
   <ion-list>
-  <ion-card *ngFor="let payment of data">
-    <ion-card-content class="ion-text-center">
-      <ion-row *ngIf="payment.lastUpdatedAt">
-        <ion-col >
-          <ion-icon color="grey" name="calendar"></ion-icon> Payment Date: {{payment.lastUpdatedAt}}
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="payment.amount">
-        <ion-col >
-          <ion-icon color="grey" name="cash"></ion-icon> Amount: {{payment.amount}}
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="payment.mode">
-        <ion-col col-12 >
-          <ion-icon color="grey" name="card"></ion-icon>
-          Payment Mode: <strong class="ion-text-uppercase">{{payment.mode}}</strong>
-        </ion-col>
-      </ion-row>
-     <ion-row *ngIf="payment.paidTo">
-        <ion-col col-12 >
-          <ion-icon color="grey" name="star"></ion-icon>SM: <strong class="ion-text-uppercase">{{payment.paidTo}}</strong>
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="payment.transactionId">
-        <ion-col col-12 >
-          <ion-icon color="grey" name="information-circle-outline"></ion-icon>Transaction ID: <strong
-            class="ion-text-uppercase">{{payment.transactionId}}</strong>
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="payment.chequeId">
-        <ion-col col-12 >
-          <ion-icon color="grey" name="information-circle-outline"></ion-icon>Cheque ID: <strong
-            class="ion-text-uppercase">{{payment.chequeId}}</strong>
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="payment.comment">
-        <ion-col col-12 >
-          <ion-icon color="grey" name="information-circle-outline"></ion-icon>Commment: <strong
-            class="ion-text-uppercase">{{payment.comment}}</strong>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-  <ion-card *ngIf="paymentHistoryAvailable && data && (data.length < 1)" class="noDataView">
-    <ion-card-header class="ion-">
-      <ion-icon name="alert" class="alert"></ion-icon>
-      <h4>No record found!</h4>
-    </ion-card-header>
-  </ion-card>
-</ion-list>
+    <ion-card *ngFor="let payment of paymentHistoryList">
+      <ion-card-content class="ion-text-center">
+        <ion-row *ngIf="isSalesman">
+          <ion-col>
+            <ion-icon color="grey" name="person-circle-outline"></ion-icon>
+            <span>Customer Name:</span>
+            {{payment.customerName}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.lastUpdatedAt">
+          <ion-col>
+            <ion-icon color="grey" name="calendar"></ion-icon> <span>Payment Date: </span> {{payment.lastUpdatedAt}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.amount">
+          <ion-col>
+            <ion-icon color="grey" name="cash"></ion-icon> <span>Amount:</span> {{payment.amount}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.mode">
+          <ion-col col-12>
+            <ion-icon color="grey" name="card"></ion-icon>
+            <span>Payment Mode:</span> <strong class="ion-text-uppercase">{{payment.mode}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.paidTo">
+          <ion-col col-12>
+            <ion-icon color="grey" name="star"></ion-icon>
+            <span>SM:</span>
+            <strong class="ion-text-uppercase">{{payment.paidTo}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.transactionId">
+          <ion-col col-12>
+            <ion-icon color="grey" name="information-circle-outline"></ion-icon>
+            <span>Transaction ID:</span>
+            <strong class="ion-text-uppercase">{{payment.transactionId}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.chequeId">
+          <ion-col col-12>
+            <ion-icon color="grey" name="information-circle-outline"></ion-icon>
+            <span>Cheque ID:</span>
+            <strong class="ion-text-uppercase">{{payment.chequeId}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="payment.comment">
+          <ion-col col-12>
+            <ion-icon color="grey" name="information-circle-outline"></ion-icon>
+            <span>Commment:</span>
+            <strong class="ion-text-uppercase">{{payment.comment}}</strong>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  <ion-list class="noDataView" *ngIf="paymentHistoryAvailable && (paymentHistoryList.length < 1)">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="alert" class="alert"></ion-icon>
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+
+
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
