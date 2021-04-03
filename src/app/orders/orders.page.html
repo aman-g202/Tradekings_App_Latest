@@ -77,12 +77,12 @@
           </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center" *ngIf="isAdmin">
-          <ion-col size="5">
-            <ion-button size="small" fill="outline" color="secondary" (click)="getOrderDetial(order)">view order
+          <ion-col>
+            <ion-button  fill="outline" color="secondary" (click)="getOrderDetial(order)">view order
             </ion-button>
           </ion-col>
-          <ion-col size="7">
-            <ion-button size="small" class="importBtn" [disabled]="!(order.showImport)" (click)="importOrder(order)">
+          <ion-col>
+            <ion-button  class="importBtn" [disabled]="!(order.showImport)" (click)="importOrder(order)">
               <ion-icon name="caret-down-circle-outline"></ion-icon>IMPORT ORDER<ion-spinner name="dots"
                 *ngIf="showLoader"></ion-spinner>
             </ion-button>

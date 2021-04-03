@@ -1,3 +1,4 @@
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { AddPaymentPage } from './../add-payment/add-payment.page';
 import { Component, OnInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
 import { MenuController, ModalController } from '@ionic/angular';
@@ -13,6 +14,7 @@ import { ProfileModel } from '../../../providers/models/profile.model';
 import { CategoryItemModel } from '../../../providers/models/category.model';
 import { Subscription } from 'rxjs';
 import { CONSTANTS } from '../../../providers/utils/constants';
+import { ReportsService } from '../../../providers/services/reports/reports.service';
 
 
 
@@ -22,7 +24,7 @@ import { CONSTANTS } from '../../../providers/utils/constants';
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
-  providers: [DashboardService]
+  providers: [DashboardService, ReportsService, DecimalPipe]
 })
 export class DashboardPage implements OnInit, OnDestroy {
   partyName = '';
@@ -49,6 +51,24 @@ export class DashboardPage implements OnInit, OnDestroy {
   loggedInPartyName: string;
   userTypeAdmin = false;
   timeStamp: any;
+  telPh = 'NA';
+  height = 0;
+  width = 0;
+  documentDefinition: any = {};
+  pendingInvoiceData: any = {
+    customerName: '',
+    data: [
+      {
+        billNumber: '',
+        invoiceDate: '',
+        invoiceNo: '',
+        transType: '',
+        days: '',
+        invoiceAmt: '',
+        pendingAmt: ''
+      }
+    ]
+  };
 
 
   constructor(
@@ -59,7 +79,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private menuCtrl: MenuController,
     private router: Router,
-    private modal: ModalController) { }
+    private modal: ModalController,
+    private decimalPipe: DecimalPipe,
+    private reportService: ReportsService) { }
 
   ngOnInit() {
     this.userType = this.route.snapshot.params.userType;
@@ -174,9 +196,9 @@ export class DashboardPage implements OnInit, OnDestroy {
         }
       }, error => {
         if (error.statusText === 'Unknown Error') {
-          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
+          this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {
-          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
+          this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
         }
         this.loaderDownloading.dismiss();
       });
@@ -290,7 +312,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   openCustomerPaymentHistory() {
-    this.router.navigate(['/payment-history'], {queryParams: {isSelectedCust: true}});
+    this.router.navigate(['/payment-history'], { queryParams: { isSelectedCust: true } });
   }
 
   navigateCustomerList() {
@@ -301,7 +323,25 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.router.navigate(['/view-statement']);
   }
 
-  createPendingInvoice() {
+  async createPendingInvoice() {
+    const showLoder = await this.widgetUtil.showLoader('Please wait , Pdf Downloading..', 3000);
+    this.dashboardService.getPendingInvoicData(this.externalId).subscribe((res: any) => {
+      if (res.body && res.body[0] && res.body.length > 0) {
+        showLoder.dismiss();
+        this.pendingInvoiceData = res.body[0];
+        this.createPdf();
+      } else {
+        showLoder.dismiss();
+        this.widgetUtil.presentToast('No record found');
+      }
+    }, (error: any) => {
+      showLoder.dismiss();
+      if (error.statusText === 'Unknown Error') {
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+      } else {
+        this.widgetUtil.presentToast('No record found');
+      }
+    });
 
   }
 
@@ -326,9 +366,250 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
 
+
+
+
+  prepareTableData() {
+    const headingColor = 'black';
+    const textColorSecondary = '#202020';
+    const body = [];
+
+    body.push(
+      [
+        { text: 'Customer Name:', fontSize: 9, bold: true, border: [true, true, false, false] },
+        { text: `${this.pendingInvoiceData.customerName}`, noWrap: false, color: 'blue', fontSize: 9, border: [false, true, false, false] },
+        { text: '', border: [false, true, false, false] },
+        { text: 'Add:', fontSize: 9, bold: true, border: [false, true, false, false] },
+        { text: `${this.selectedUser.province}`, noWrap: true, color: 'blue', fontSize: 9, border: [false, true, false, true] },
+        { text: '', border: [false, true, false, false] },
+        { text: 'Tel:', fontSize: 9, bold: true, border: [false, true, false, false] },
+        { text: `${this.telPh}`, noWrap: true, color: 'blue', fontSize: 9, border: [false, true, true, false] },
+      ]
+    );
+
+    body.push(
+      [
+        {
+          text: 'System Voucher', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], bold: true,
+          border: [true, true, false, true]
+        },
+        {
+          text: 'Document Date', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], bold: true,
+          border: [false, true, false, true]
+        },
+        {
+          text: 'Document No', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], bold: true,
+          border: [false, true, false, true]
+        },
+        {
+          text: 'Type', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6],
+          bold: true, border: [false, true, false, true]
+        },
+        {
+          text: 'Period (Days)', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], bold: true,
+          border: [false, true, false, true]
+        },
+        {
+          text: 'Document Amt', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], alignment: 'right', bold: true,
+          border: [false, true, false, true]
+        },
+        {
+          text: 'Balance\n(ZMW)', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], alignment: 'right', bold: true,
+          border: [false, true, false, true]
+        },
+        {
+          text: 'Ex Rate', color: headingColor, fontSize: 8, margin: [0, 6, 0, 6], alignment: 'right', bold: true,
+          border: [false, true, true, true]
+        },
+      ]
+    );
+    let i = 0;
+    this.pendingInvoiceData.data.forEach(item => {
+      const row = [
+        {
+          text: item.billNumber,
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [true, true, false, false] : [true, false, false, false]
+        },
+        {
+          text: `${new DatePipe('en_ZM').transform(new Date(item.invoiceDate), 'dd.mm.yy')}`,
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, false, false] : [false, false, false, false]
+        },
+        {
+          text: item.invoiceNo,
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, false, false] : [false, false, false, false]
+        },
+        {
+          text: item.transType,
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, false, false] : [false, false, false, false]
+        },
+        {
+          text: `${item.days}`,
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, false, false] : [false, false, false, false]
+        },
+        {
+          text: this.decimalPipe.transform(item.invoiceAmt, '.2'),
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, false, false] : [false, false, false, false],
+          alignment: 'right'
+        },
+        {
+          text: `${this.decimalPipe.transform(item.pendingAmt, '.2')}`,
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, false, false] : [false, false, false, false],
+          alignment: 'right'
+        },
+        {
+          text: 'NA',
+          color: textColorSecondary,
+          fontSize: 8,
+          margin: [0, 6, 0, 6],
+          lineHeight: 1,
+          border: i === 0 ? [false, true, true, false] : [false, false, true, false],
+          alignment: 'right'
+        }
+      ];
+      i++;
+      body.push(row);
+    });
+
+    body.push(
+      [
+        { text: 'Ledger Balance', color: 'brown', fontSize: 10, margin: [0, 6, 0, 6], bold: true, border: [true, true, false, true] },
+        {
+          text: `${this.decimalPipe.transform(this.getInvoicePendingTotalBalance(), '.2')}`, color: 'brown', fontSize: 10,
+          margin: [0, 6, 0, 6], bold: true, border: [false, true, false, true]
+        },
+        { text: 'C Limit', color: 'brown', fontSize: 10, margin: [0, 6, 0, 6], bold: true, border: [false, true, false, true] },
+        { text: `NA`, noWrap: true, color: 'brown', fontSize: 10, margin: [0, 6, 0, 6], bold: true, border: [false, true, false, true] },
+        { text: 'Current Total:', fontSize: 8, border: [false, true, false, true] },
+        {
+          text: `${this.decimalPipe.transform(this.getInvoiceTotalAmount(), '.2')}`, color: headingColor, fontSize: 10,
+          margin: [0, 6, 0, 6], alignment: 'right', bold: true, border: [false, true, false, true]
+        },
+        {
+          text: `${this.decimalPipe.transform(this.getInvoicePendingTotalBalance(), '.2')}`, color: headingColor, fontSize: 10,
+          margin: [0, 6, 0, 6], alignment: 'right', bold: true, border: [false, true, false, true]
+        },
+        { text: '', border: [false, true, true, true] },
+      ]
+    );
+
+    body.push(
+      [
+        { text: '', border: [false, true, false, false] },
+        { text: ``, border: [false, true, false, false] },
+        { text: '', border: [false, true, false, false] },
+        { text: '', border: [false, true, false, false] },
+        {
+          text: 'Report Total', color: headingColor, noWrap: true, fontSize: 10,
+          margin: [0, 6, 0, 6], bold: true, border: [false, true, false, false]
+        },
+        {
+          text: `${this.decimalPipe.transform(this.getInvoiceTotalAmount(), '.2')}`, color: headingColor, fontSize: 10,
+          margin: [0, 6, 0, 6], alignment: 'right', bold: true, border: [false, true, false, false]
+        },
+        {
+          text: `${this.decimalPipe.transform(this.getInvoicePendingTotalBalance(), '.2')}`, color: headingColor, fontSize: 10,
+          margin: [0, 6, 0, 6], alignment: 'right', bold: true, border: [false, true, false, false]
+        },
+        { text: '', border: [false, true, false, false] },
+      ]
+    );
+
+    return body;
+  }
+
+  getInvoiceTotalAmount() {
+    let sum = 0;
+    this.pendingInvoiceData.data.forEach(item => {
+      sum = sum + item.invoiceAmt;
+    });
+    return sum;
+  }
+
+  getInvoicePendingTotalBalance() {
+    let sum = 0;
+    this.pendingInvoiceData.data.forEach(item => {
+      sum = sum + item.pendingAmt;
+    });
+    return sum;
+  }
+
+  createPdf() {
+    this.documentDefinition = {
+      header(currentPage, pageCount, pageSize) {
+        return [
+          {
+            text: `Page ${currentPage} of ${pageCount}`,
+            fontSize: 10,
+            color: 'grey',
+            margin: [0, 10, 40, 0],
+            alignment: 'right'
+          }
+        ];
+      },
+      pageSize: 'A4',
+      content: [
+        {
+          text: `Date ${new DatePipe('en_ZM').transform(new Date(), 'dd/M/yy')}`, fontSize: 10, alignment: 'right', color: 'black',
+          margin: [0, -10, 0, 0]
+        },
+        { text: 'Customer Wise Invoice/Payment Pending Report', fontSize: 13, bold: true, alignment: 'center', color: 'black', decoration: 'underline', margin: [0, 10, 0, 0] },
+        { text: `Due Period ${new DatePipe('en_ZM').transform(new Date(new Date().getFullYear(), 0, 1), 'dd/M/yy')} to ${new DatePipe('en_ZM').transform(new Date(), 'dd/M/yy')}`, fontSize: 12, bold: true, alignment: 'center', color: 'black', margin: [0, 10, 0, 0] },
+        {
+          absolutePosition: { x: 20, y: this.height += 110 },
+          table: {
+            headerRows: 1,
+            widths: [70, 70, 70, 40, 30, 80, 80, 40],
+            body: this.prepareTableData()
+          },
+          layout: { hLineColor: 'black', vLineColor: 'black' }
+        }
+      ],
+      pageBreakBefore(currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
+        let flag = false;
+        if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
+          flag = true;
+        }
+
+        if (currentNode.startPosition.top > 750) {
+          flag = true;
+        }
+        return flag;
+      }
+    };
+    this.reportService.downloadPdf(this.documentDefinition, 'download', 'PendingInvoice');
+  }
+
+
   ngOnDestroy() {
     this.subParams.unsubscribe();
   }
-
 
 }
