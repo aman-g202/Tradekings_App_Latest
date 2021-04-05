@@ -10,7 +10,9 @@ ion-content {
     .col-5 {
       margin: auto;
       .user-type-col {
-        width: 90px;
+        margin-left: -20px;
+        font-size: 12px;
+        width: 115px;
         text-align: center;
         color: var(--ion-color-dark-tint);
       }
@@ -20,14 +22,14 @@ ion-content {
         margin-bottom: auto;
         .user-id {
           display: block;
-          height: 90px;
-          width: 90px;
+          height: 70px;
+          width: 70px;
           background: var(--ion-color-secondary);
           color: var(--ion-color-danger-contrast);
           border-radius: 50px;
           text-align: center;
-          padding: 35px 10px;
-          font-weight: 800;
+          padding: 28px 10px;
+          font-weight: 500;
         }
       }
     }
@@ -50,7 +52,7 @@ ion-content {
       font-size: 10px;
       width: 90%;
       color: var(--ion-color-secondary-tint);
-      font-weight: 800;
+      font-weight: 500;
     }
 
     .rest-pass-btn {
@@ -58,7 +60,7 @@ ion-content {
       font-size: 10px;
       width: 90%;
       margin-left: 7px;
-      font-weight: 800;
+      font-weight: 500;
     }
 
     ion-icon {

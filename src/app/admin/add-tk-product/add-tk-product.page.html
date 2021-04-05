@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]=hrefTag>
       </ion-back-button>
@@ -118,7 +118,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size='12'>
-        <ion-button expand="full" (click)="addTkProduct()" [disabled]="!(addTkProductForm.valid && isAuthorized)">
+        <ion-button color="secondary" expand="full" (click)="addTkProduct()" [disabled]="!(addTkProductForm.valid && isAuthorized)">
           SAVE <ion-spinner name="dots" *ngIf="showLoader"></ion-spinner>
         </ion-button>
       </ion-col>

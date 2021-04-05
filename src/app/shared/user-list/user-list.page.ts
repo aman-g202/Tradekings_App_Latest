@@ -5,6 +5,8 @@ import { StorageServiceProvider } from '../../../providers/services/storage/stor
 import { Router, ActivatedRoute } from '@angular/router';
 import { CONSTANTS } from '../../../providers/utils/constants';
 import { WidgetUtilService } from '../../../providers/utils/widget';
+import { ModalController } from '@ionic/angular';
+import { PriceExecutiveDashboardPage } from '../../price-executive-dashboard/price-executive-dashboard.page';
 
 @Component({
   selector: 'app-user-list',
@@ -32,7 +34,8 @@ export class UserListPage implements OnInit {
     private strogeService: StorageServiceProvider,
     private router: Router,
     private route: ActivatedRoute,
-    private widgetUtil: WidgetUtilService) { }
+    private widgetUtil: WidgetUtilService,
+    private modalCtrl: ModalController) { }
 
   async ngOnInit() {
     this.profile = await this.strogeService.getFromStorage('profile') as ProfileModel;
@@ -45,7 +48,7 @@ export class UserListPage implements OnInit {
         this.isCustomerList = true;
         this.scrolling = true;
         this.getCustomerList();
-     } else {
+      } else {
         this.placeHolderValue = 'Search Salesman...';
         this.title = 'Salesman';
         this.getAllSalemanList();
@@ -137,7 +140,7 @@ export class UserListPage implements OnInit {
   }
 
   // this filter wii be move backend
-  searchUser(value){
+  searchUser(value) {
 
   }
 
@@ -177,13 +180,22 @@ export class UserListPage implements OnInit {
     }
   }
 
-  onNavigateDashboard(user) {
+ async onNavigateDashboard(user) {
     this.strogeService.setToStorage('selectedCustomer', user);
     const data = {
       isAdminFlow: true,
       timeStamp: new Date().getTime()
     };
-    this.router.navigate(['/dashboard/' + this.profile.userType], { queryParams: data });
+    if (user.userType === 'PRICEEXECUTIVE'){
+      const openModel = await this.modalCtrl.create({
+        component: PriceExecutiveDashboardPage,
+        componentProps: data
+   })
+   return await openModel.present();
+   //   this.router.navigate(['/price-executive-dashboard/' + this.profile.userType], { queryParams: data })
+    } else {
+     this.router.navigate(['/dashboard/' + this.profile.userType], { queryParams: data });
+    }
   }
 
   onEditUser(user) {
