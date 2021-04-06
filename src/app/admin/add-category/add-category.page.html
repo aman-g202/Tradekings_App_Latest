@@ -1,9 +1,44 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-category</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="hrefTag">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Category</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-item>
+      <ion-label>Category Type</ion-label>
+      <ion-select [(ngModel)]="selectedCategoryType" interface="popover" (ngModelChange)="onCategoryTypeSelect()">
+        <ion-select-option *ngFor="let categoryType of categoryTypeList" [value]="categoryType">{{categoryType}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="showParentList">
+      <ion-label>Parent Category</ion-label>
+      <ion-select [(ngModel)]="selectedCategory" interface="popover" [compareWith]="compareFn">
+        <ion-select-option *ngFor="let category of categoryList" [value]="category">{{category.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <form [formGroup]="addCategoryForm">
+      <ion-item>
+        <ion-label class="ion-label" position="floating">Name</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
+      </ion-item>
+      <p class="error" *ngIf="addCategoryForm.get('name').hasError('required') && addCategoryForm.get('name').touched">
+        *Name is required
+      </p>
+    </form>
+  </ion-grid>
+  <ion-row>
+    <ion-col size="10" offset="1">
+      <ion-button expand="full" [disabled]="!(addCategoryForm.valid && isUserAuthorized)" (click)="addCategory()">Add
+        Category<ion-spinner name="dots" *ngIf="showLoader"></ion-spinner>
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Review Captured Product</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="full-background">
+  <ion-grid >
+    <ion-row class="ion-text-center thead" >
+      <ion-col size="4">Product</ion-col>
+      <ion-col size="4">MSQ</ion-col>
+      <ion-col size="4">{{rrpLable}}</ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngFor="let product of captureData">
+    <ion-row class="ion-text-center" *ngIf="product.MSQ !==0 || product.RRP !==0" >
+      <ion-col size="4">
+        {{product.productName}}
+      </ion-col>
+      <ion-col size="4">
+        {{product.MSQ}}
+      </ion-col>
+      <ion-col size="4">
+        {{product.RRP}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

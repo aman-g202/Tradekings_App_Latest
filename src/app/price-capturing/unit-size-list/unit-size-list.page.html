@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="hrefTag"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{childCatName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="full-background">
+  <ion-list *ngIf="unitSizeListAvailable && (unitSizeList.length > 0)">
+    <ion-item *ngFor="let unitSize of unitSizeList" (click)="getProduct(unitSize)">
+      <img src="assets/icon/box.svg">{{unitSize}}
+      <ion-buttons slot="end">
+        <ion-button clear color="secondary" item-end>
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+  <ion-list class="noDataView" *ngIf="unitSizeListAvailable && (unitSizeList.length < 1)">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="alert" class="alert"></ion-icon>
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+</ion-content>

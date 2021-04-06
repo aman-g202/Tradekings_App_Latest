@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CapturePricePage } from './capture-price.page';
+import { ParentCategoryPage } from './parent-category.page';
 
-describe('CapturePricePage', () => {
-  let component: CapturePricePage;
-  let fixture: ComponentFixture<CapturePricePage>;
+describe('ParentCategoryPage', () => {
+  let component: ParentCategoryPage;
+  let fixture: ComponentFixture<ParentCategoryPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CapturePricePage ],
+      declarations: [ ParentCategoryPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CapturePricePage);
+    fixture = TestBed.createComponent(ParentCategoryPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

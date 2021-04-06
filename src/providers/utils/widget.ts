@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, ToastController, PopoverController } from '@ionic/angular';
+import { LoadingController, ToastController, PopoverController, AlertController } from '@ionic/angular';
 import { PopoverComponent } from '../../app/shared/popover/popover.component';
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +9,8 @@ export class WidgetUtilService {
   constructor(
     private loadingController: LoadingController,
     public toastController: ToastController,
-    private popoverController: PopoverController) {
+    private popoverController: PopoverController,
+    private alertController: AlertController) {
   }
 
   async showLoader(message: string, duration: number) {
@@ -29,10 +30,6 @@ export class WidgetUtilService {
     toast.present();
   }
 
-  dismissPopover(data = '') {
-    this.popoverController.dismiss();
-  }
-
   async presentPopover(ev: any) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
@@ -41,6 +38,45 @@ export class WidgetUtilService {
       translucent: true
     });
     return await popover.present();
+  }
+
+  showConfirm(header: string, message: string, buttonOneText: string, buttonTowText: string ) {
+    return new Promise(async (resolve, reject) => {
+      const confirm = this.alertController.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: buttonOneText,
+            handler: () => {
+              resolve(buttonOneText);
+            }
+          },
+          {
+            text: buttonTowText,
+            handler: () => {
+              resolve(buttonTowText);
+            }
+          }
+        ]
+      });
+      try {
+        (await confirm).present();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+
+  showAlert(message: string) {
+    this.alertController.create({
+      message,
+      buttons: ['OK']
+    }).then(res => {
+      res.present();
+    });
+
   }
 }
 

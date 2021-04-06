@@ -3,28 +3,28 @@ import { NavParams, ModalController } from '@ionic/angular';
 import { CategoriesService } from '../../../providers/services/categories/categories.service';
 import { WidgetUtilService } from '../../../providers/utils/widget';
 import { CONSTANTS } from '../../../providers/utils/constants';
-import { GenericService } from '../../../providers/services/generic/generic.service';
+
 
 @Component({
   selector: 'app-category-total-modal',
   templateUrl: './category-total-modal.page.html',
   styleUrls: ['./category-total-modal.page.scss'],
-  providers: [GenericService, CategoriesService]
+  // providers: [GenericService, CategoriesService]
 })
 export class CategoryTotalModalPage implements OnInit {
   cartItems: any = {};
   skipValue = 0;
-  limit = 1000;
+  limit = 30;
   categoryListAvailable = false;
   parentCategoryList: Array<any> = [];
   downloadingLoader: any;
 
-  constructor(private navParms: NavParams,
-              private categoriesService: CategoriesService,
-              private widgetUtil: WidgetUtilService,
-              private genericService: GenericService,
-              private modalController: ModalController,
-              ) {}
+  constructor(
+    private navParms: NavParams,
+    private categoriesService: CategoriesService,
+    private widgetUtil: WidgetUtilService,
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
     if (this.navParms.data && this.navParms.data.cartItems) {
@@ -34,12 +34,11 @@ export class CategoryTotalModalPage implements OnInit {
   }
 
 
- async getParentCategoryList() {
+  async getParentCategoryList() {
     /** REFACTORED PART */
     this.downloadingLoader = await this.widgetUtil.showLoader('please wait....', 2000);
-    this.genericService.getParentCategories();
-    const parentCategoryList = this.genericService.parentCategories;
-    if (parentCategoryList.length) {
+    const parentCategoryList = this.categoriesService.getParentCat();
+    if (parentCategoryList.length > 0) {
       this.parentCategoryList = parentCategoryList;
       this.parentCategoryList.map(obj => {
         obj.subTotal = 0;
@@ -47,7 +46,6 @@ export class CategoryTotalModalPage implements OnInit {
       this.calculateTotal();
       this.downloadingLoader.dismiss();
       this.categoryListAvailable = true;
-
     } else {
       this.categoriesService.getParentCategoryList(this.skipValue, this.limit).subscribe((result) => {
         this.parentCategoryList = result.body;
@@ -56,7 +54,6 @@ export class CategoryTotalModalPage implements OnInit {
         this.categoryListAvailable = true;
       }, (error) => {
         if (error.statusText === 'Unknown Error') {
-
           this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {
           this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
@@ -88,7 +85,7 @@ export class CategoryTotalModalPage implements OnInit {
     });
   }
 
- closeModal(){
-   this.modalController.dismiss();
- }
+  closeModal() {
+    this.modalController.dismiss();
+  }
 }

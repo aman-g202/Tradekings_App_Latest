@@ -1,9 +1,92 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-product</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]=hrefTag>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Product</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-item>
+      <ion-label>
+        <ion-icon name="cube" class="ion-padding-end" color="grey"></ion-icon>
+        Category
+      </ion-label>
+      <ion-select [(ngModel)]="selectedCategory" interface="popover">
+        <ion-select-option *ngFor="let category of childCategoriesList" [value]="category">{{category.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <ion-icon name="pin" class="ion-padding-end" color="grey"></ion-icon>
+        Price Type
+      </ion-label>
+      <ion-select [(ngModel)]="selectedPriceType" interface="popover">
+        <ion-select-option *ngFor="let priceType of priceTypeList" [value]="priceType">{{priceType}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <form [formGroup]="addProductForm">
+      <ion-item>
+        <ion-label position="floating">Name</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
+      </ion-item>
+      <p class="error" *ngIf="addProductForm.get('name').hasError('required') && addProductForm.get('name').touched">
+        *Name is required
+      </p>
 
+      <ion-item>
+        <ion-label position="floating">Product Code</ion-label>
+        <ion-input type="text" formControlName="productCode"></ion-input>
+      </ion-item>
+      <p class="error"
+        *ngIf="addProductForm.get('productCode').hasError('required') && addProductForm.get('productCode').touched">
+        *Product code is required
+      </p>
+
+      <ion-item>
+        <ion-label position="floating">Product Sys Code</ion-label>
+        <ion-input type="text" formControlName="productSysCode"></ion-input>
+      </ion-item>
+      <p class="error"
+        *ngIf="addProductForm.get('productSysCode').hasError('required') && addProductForm.get('productSysCode').touched">
+        *Product sys code is required
+      </p>
+
+      <ion-item>
+        <ion-label position="floating">Price</ion-label>
+        <ion-input type="number" formControlName="price" #name1></ion-input>
+      </ion-item>
+      <p class="error" *ngIf="addProductForm.get('price').hasError('required') && addProductForm.get('price').touched">
+        *Price is required*
+      </p>
+      <ion-item>
+        <ion-label position="floating">Pack Type</ion-label>
+        <ion-input type="text" formControlName="packType"></ion-input>
+      </ion-item>
+      <p class="error"
+        *ngIf="addProductForm.get('packType').hasError('required') && addProductForm.get('packType').touched">
+        *Pack Type is required*
+      </p>
+
+      <ion-item>
+        <ion-label position="floating">Current Case Size</ion-label>
+        <ion-input type="number" formControlName="currentCaseSize"></ion-input>
+      </ion-item>
+      <p class="error"
+        *ngIf="addProductForm.get('currentCaseSize').hasError('required') && addProductForm.get('currentCaseSize').touched">
+        *Case size is required
+      </p>
+    </form>
+  </ion-grid>
+  <ion-row>
+    <ion-col size="10" offset="1">
+      <ion-button expand="full" [disabled]="!(addProductForm.valid && isUserAuthorized)" (click)="addProduct()">Add
+        Product<ion-spinner name="dots" *ngIf="showLoader"></ion-spinner>
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>

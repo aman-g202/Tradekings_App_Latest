@@ -1,113 +1,110 @@
 ion-title {
-    font-weight: 800;
+  text-transform: capitalize;
 }
 
-ion-title{
-    text-transform: capitalize;
-  }
-    ion-card{
-        card{
-            border-bottom: none !important;
-        }
+.tabs-wrapper {
+  margin: 0;
+  width: 100% !important;
+  border-bottom: none;
+}
+.card-title {
+  padding-left: 0;
+  font-weight: bold;
+  font-size: 1em;
+}
+.outstanding {
+  margin-left: 10px;
+}
+.switchCategory {
+  float: right;
+}
+// .item-visible {
+//   display: inline-block;
+// }
+// .item-hidden {
+//   display: none;
+// }
+ion-select {
+  font-size: 0.6em;
+  padding-left: 0 !important;
+  margin-top: 5px;
+}
+ion-item {
+  .item-inner {
+    .input-wrapper {
+      ion-label {
+        font-weight: bold;
+        font-size: 0.9em;
+        color: var(--ion-color-primary);
+      }
     }
-  .tabs-wrapper{
-    margin:0;
-    width: 100% !important;
-    border-bottom: none;
   }
-  .card-title{
-    padding-left:0;
-    font-weight: bold;
-    font-size: 1em;
-  }
-  .outstanding {
+}
+.tabs {
+  border: 1px solid var(--ion-color-primary-contrast);
+  text-align: center;
+  margin: 2%;
+  width: 46%;
+  border-radius: 3px;
+  height: 73px;
+  box-shadow: 1px 1px 2px 1px var(--ion-color-medium-shade);
+}
+.tab-label-sm {
+  font-size: 1em;
+  color: var(--ion-color-medium-shade);
+  margin: 0 auto;
+}
+.tab-label-lg {
+  font-size: 1.6em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: var(--ion-color-dark);
+}
+
+.targetBottom {
+  margin-top: 10px;
+  .targetFootnote {
+    font-size: 0.8em;
     margin-left: 10px;
   }
-  .switchCategory{
-      float: right;
+  .toggleView {
+    font-size: 0.9em;
+    color: var(--ion-color-primary);
+    margin-left: 10%;
+    position: fixed;
+    right: 8%;
   }
-  .item-visible{
-    display: inline-block;
-  }
-  .item-hidden{
-      display: none;
-  }
-  ion-select{
-    font-size: 0.6em;
-    padding-left: 0 !important;
-    margin-top: 5px;
-  }
-  ion-item{
-      .item-inner{
-        .input-wrapper{
-            ion-label{
-                font-weight: bold;
-                font-size: 0.9em;
-                color: #333;
-            }
-        }
-      }
-  }
-  .tabs{
-      border: 1px solid #D5D5D5;
-      text-align: center;
-      margin: 2%;
-      width: 46%;
-      border-radius: 3px;
-      height: 73px;
-  }
-  .tab-label-sm{
-      font-size: 1em;
-      color: #7D7D7D;
-      margin: 0 auto;
-  }
-  .tab-label-lg{
-    font-size: 1.6em;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: black;
-  }
+}
 
-  .targetBottom{
-      margin-top: 10px;
-      .targetFootnote{
-        font-size: 0.8em;
-        margin-left: 10px;
+.customerdashboardBtn {
+  width: 98%;
+}
+
+ion-icon {
+  margin-right: 5px;
+}
+
+.boldText,
+.card-title-outstanding {
+  font-weight: 550;
+  color: black;
+  font-size: 17px;
+}
+
+.InvoiceBtn {
+  --background: var(--ion-color-primary-tint);
+}
+
+ion-footer {
+  ion-grid {
+    ion-row {
+      padding: 0px;
     }
-    .toggleView{
-        font-size: 0.9em;
-        color: #225F93;
-        margin-left: 10%;
-        position: fixed;
-        right: 8%;
+    padding: 0px !important;
+    ion-col {
+      padding: 0px !important;
     }
   }
-
-  ion-footer{
-    box-shadow: 0 0px 10px rgba(34, 95, 147, 0.5);
-    background: var(--ion-color-primary)
-  }
-
-  .customerdashboardBtn{
-    background-color: #229BD0;
-    border-radius: 0;
-    font-size: 14px;
-    font-weight: 900;
-    width: 48%;
-    box-shadow: none;
-  }
-
-  ion-icon {
-    margin-right: 5px;
-  }
-
-  .customerhistorybtn{
-    text-align: center;
-    padding-left:5px;
-    padding-right:5px;
-  }
-
-  // ion-card{
-  //   width: 100% !important;
-  //   text-align: center;
-  // }
+  // box-shadow: 0 0px 10px var(--ion-color-primary);
+  background: var(--ion-color-primary);
+}

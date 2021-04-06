@@ -19,6 +19,6 @@ import { CategoriesService } from '../../providers/services/categories/categorie
     ShopPageRoutingModule
   ],
   declarations: [ParentCategoryPage, ChildCategoryPage, ProductPage],
-  providers: [ProductService, CategoriesService]
+  providers: [ProductService]
 })
 export class ShopPageModule {}

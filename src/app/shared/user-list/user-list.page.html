@@ -1,9 +1,58 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>user-list</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="hrefTag">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Select {{title}}</ion-title>
   </ion-toolbar>
+  <form (onSubmit)=searchUser(q.value)>
+    <ion-searchbar #q placeholder={{placeHolderValue}}></ion-searchbar>
+  </form>
 </ion-header>
 
-<ion-content>
-<!-- List Salesman OR Customer -> For Admin via side drawer -->
+<ion-content class="full-background">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="userListAvailable">
+    <ion-card *ngFor="let user of userList">
+      <ion-row>
+        <ion-col size="4" class="col-5">
+          <ion-col class="user-id-col" col="12">
+            <span class="user-id">{{user.externalId}}</span>
+          </ion-col>
+          <div class="user-type-col" *ngIf="!isCustomerList">
+            <ion-col col="12">
+              <span>{{user.userType}}</span>
+            </ion-col>
+          </div>
+        </ion-col>
+        <ion-col size="7" class="col-7">
+          <ion-col class="text-center" size="12" class="user-name-col">
+            <span class="user-name">{{user.name}}</span>
+          </ion-col>
+          <ion-col class="text-center" size="12">
+            <ion-button color="secondary-tint" fill="outline" class="edit-user-btn" (click)="onEditUser(user)">
+              <ion-icon name="create"></ion-icon>EDIT USER
+            </ion-button>
+          </ion-col>
+          <ion-col class="text-center" size="12">
+            <ion-button class="rest-pass-btn" (click)="onNavigateDashboard(user)">View Dashboard</ion-button>
+          </ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </ion-list>
+  <ion-card class="noDataView" *ngIf="!userListAvailable">
+    <ion-card-header>
+      <ion-icon name="alert" class="alert"></ion-icon>
+      <h4>No record found!</h4>
+    </ion-card-header>
+  </ion-card>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="scrolling">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

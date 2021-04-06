@@ -10,7 +10,6 @@ import { AddUserPage } from './admin/add-user/add-user.page';
 import { AuthPage } from './auth/auth.page';
 import { SelectCustomerPage } from './select-customer/select-customer.page';
 import { AddPaymentPage } from './shared/add-payment/add-payment.page';
-import { CapturePricePage } from './shared/capture-price/capture-price.page';
 import { CartPage } from './shared/cart/cart.page';
 import { ChangePasswordPage } from './shared/change-password/change-password.page';
 import { DashboardPage } from './shared/dashboard/dashboard.page';
@@ -50,15 +49,11 @@ const routes: Routes = [
     component: ChangePasswordPage
   },
   {
-    path: 'capture-price',
-    component: CapturePricePage
-  },
-  {
     path: 'select-customer',
     component: SelectCustomerPage
   },
   {
-    path: 'user-list',
+    path: 'user-list/:id',
     component: UserListPage
   },
   {
@@ -100,6 +95,10 @@ const routes: Routes = [
   {
     path: 'reports',
     loadChildren: () => import('./reports/reports.module').then( m => m.ReportsPageModule)
+  },
+  {
+    path: 'capture-price',
+    loadChildren: () => import('./price-capturing/price-capturing.module').then( m => m.PriceCapturingPageModule)
   }
 ];
 
