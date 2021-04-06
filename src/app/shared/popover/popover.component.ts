@@ -144,6 +144,7 @@ export class PopoverComponent implements OnInit {
         break;
       case 'Reports': 
         this.navigateToReports();
+        break;
       case 'Add Category':
         this.addCategory();
         break;
