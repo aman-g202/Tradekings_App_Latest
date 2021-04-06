@@ -2,15 +2,12 @@ ion-content {
   ion-grid {
     margin: 8px 8px 8px 0px;
     ion-item {
-      //box-shadow: 1px 1px 5px ;
       padding-top: 4px;
-      margin-bottom: 2px;
       ion-icon {
         margin-bottom: -3px;
       }
       ion-label {
         color: var(--ion-color-medium-shade);
-        font-size: 18px;
       }
     }
     .error {
