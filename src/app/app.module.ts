@@ -36,6 +36,7 @@ import { TokenInterceptor } from '../../src/providers/interceptors/http.intercep
 import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { PopoverComponent } from './shared/popover/popover.component';
 import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list.page';
+import { PriceExecutiveDashboardPage } from './price-executive-dashboard/price-executive-dashboard.page';
 
 @NgModule({
   declarations: [
@@ -57,8 +58,9 @@ import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list
     AddCategoryPage,
     AddProductPage,
     AddTKProductPage,
+    PriceExecutiveDashboardPage,
     SideBarComponent,
-    PopoverComponent
+    PopoverComponent,
   ],
   entryComponents: [CategoryTotalModalPage, SideBarComponent, PopoverComponent],
   imports: [BrowserModule, CommonModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, FormsModule, HttpClientModule,

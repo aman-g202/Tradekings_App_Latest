@@ -1,0 +1,60 @@
+<app-side-bar *ngIf="hideSideBar" [partyName]="partyName" [userType]="userType"></app-side-bar>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start" *ngIf="!isAdminFlow">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{partyName}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)" fill="clear" *ngIf="!isAdminFlow">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+      <ion-button (click)="colseModal()" *ngIf="isAdminFlow">
+        <ion-icon name="close-circle"></ion-icon>Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main" class="full-background">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="ion-text-start">
+        Outlets
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <p>{{dashboardData.day1.countOfOutlet}}</p>
+          <p>Day-1</p>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card>
+          <p>{{dashboardData.day2.countOfOutlet}}</p>
+          <p>Day-2</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card>
+          <p>{{dashboardData.ftd.countOfOutlet}}</p>
+          <p>FTD</p>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card>
+          <p>{{dashboardData.mtd.countOfOutlet}}</p>
+          <p>MTD</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

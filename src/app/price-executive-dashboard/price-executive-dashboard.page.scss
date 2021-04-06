@@ -1,0 +1,22 @@
+ion-content {
+  --background: #eff7ff;
+  ion-grid {
+    margin-top: 10px;
+    ion-row {
+      text-align: center;
+      font-weight: 500;
+      .ion-text-start {
+        margin: 0px 20px;
+        font-size: 18px;
+      }
+      ion-card {
+        :first-child {
+          color: black;
+          font-size: 24px;
+          margin-top: 10px;
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+}

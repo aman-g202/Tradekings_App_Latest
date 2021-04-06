@@ -1,5 +1,5 @@
 import { AddPaymentPage } from './../add-payment/add-payment.page';
-import { Component, OnInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MenuController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -49,6 +49,9 @@ export class DashboardPage implements OnInit, OnDestroy {
   loggedInPartyName: string;
   userTypeAdmin = false;
   timeStamp: any;
+  hideSideBar = false;
+  useTypePriceExecutive = false;
+  hrefTag = '';
 
 
   constructor(
@@ -75,6 +78,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       this.getData();
     }
   }
+
 
   displayChart() {
     this.pieChart = new Chart(this.pieCanvas.nativeElement, {
@@ -120,38 +124,46 @@ export class DashboardPage implements OnInit, OnDestroy {
       this.selectedUser = await this.storageService.getFromStorage('selectedCustomer');
       this.loggedInPartyName = profile.name;
       this.partyName = this.isSalesmanFlow ? this.selectedUser.name : profile.name;
-      this.externalId = profile.externalId;
       if (this.isSalesmanFlow) {
-        if ((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO' || profile.userType === 'PRICEEXECUTIVE') {
+        if ((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO') {
+          this.hideSideBar = true;
           if ((this.selectedUser.userType === 'SALESMAN') || (this.selectedUser.userType === 'SALESMANAGER')) {
             this.partyName = this.selectedUser.name;
             this.externalId = this.selectedUser.externalId;
-            this.userTypeCustomer = false;
+            // this.userTypeCustomer = false;
             this.selectedUserCustomer = false;
-            this.userTypeSalesman = false;
+            // this.userTypeSalesman = false;
             this.userTypeAdmin = true;
           } else {
             this.partyName = this.selectedUser.name;
             this.externalId = this.selectedUser.externalId;
             this.selectedUserCustomer = true;
-            this.userTypeCustomer = false;
+            // this.userTypeCustomer = false;
             this.userTypeSalesman = false;
-            this.userTypeAdmin = false;
+            // this.userTypeAdmin = false;
           }
-        } else {
+        } else if (profile.userType === 'PRICEEXECUTIVE') {
+          this.externalId = this.selectedUser.externalId;
+          this.useTypePriceExecutive = true;
+          this.hrefTag = '/price-executive-dashboard/' + this.userType;
+        }
+        else {
           this.partyName = this.selectedUser.name;
           this.externalId = this.selectedUser.externalId;
           this.selectedUserCustomer = true;
           this.userTypeSalesman = true;
+          this.hideSideBar = true;
         }
       } else {
+        this.externalId = profile.externalId;
+        this.hideSideBar = true;
         if (profile.userType === 'SALESMAN' || profile.userType === 'SALESMANAGER') {
           this.userTypeSalesman = true;
           this.selectedUserCustomer = false;
           this.storageService.removeFromStorage('selectedCustomer');
         } else if (profile.userType === 'CUSTOMER') {
           this.userTypeCustomer = true;
-          this.selectedUserCustomer = false;
+          // this.selectedUserCustomer = false;
         } else {
           this.selectedUserCustomer = false;
           this.userTypeAdmin = true;
@@ -290,7 +302,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   openCustomerPaymentHistory() {
-    this.router.navigate(['/payment-history'], {queryParams: {isSelectedCust: true}});
+    this.router.navigate(['/payment-history'], { queryParams: { isSelectedCust: true } });
   }
 
   navigateCustomerList() {

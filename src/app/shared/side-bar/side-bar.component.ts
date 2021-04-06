@@ -41,7 +41,14 @@ export class SideBarComponent implements OnInit {
         { title: 'Payments', icon: 'payment', class: 'default', route: '/payment-history' },
         { title: 'Capture Price', icon: 'information', class: 'default', route: '/capture-price' },
       ];
-    } else {
+    } else if (this.userType === 'PRICEEXECUTIVE'){
+      this.pages = [
+        { title: 'Dashboard', icon: 'dashboard-new', class: 'default', route: `/price-executive-dashboard/${this.userType}` },
+        { title: 'Customers', icon: 'shopping-bag-new', class: 'default', route: '/select-customer' },
+        { title: 'Capture Price', icon: 'information', class: 'default', route: '/capture-price' },
+      ];
+    }
+     else {
       this.pages = [
         { title: 'Dashboard', icon: 'dashboard-new', class: 'default', route: `/dashboard/${this.userType}` },
         { title: 'Your Orders', icon: 'cart', class: 'default', route: '/orders' },
@@ -51,8 +58,8 @@ export class SideBarComponent implements OnInit {
   }
 
   onSelectNavigationItem(page: NavigationItem) {
-    this.menuCtrl.toggle('menu');
-    this.router.navigateByUrl(page.route);
+     this.menuCtrl.toggle('menu');
+     this.router.navigateByUrl(page.route);
   }
 
 }

@@ -17,6 +17,7 @@ import { EditUserPage } from './shared/edit-user/edit-user.page';
 import { PaymentHistoryPage } from './shared/payment-history/payment-history.page';
 import { UserListPage } from './shared/user-list/user-list.page';
 import { ViewStatementPage } from './shared/view-statement/view-statement.page';
+import { PriceExecutiveDashboardPage } from './price-executive-dashboard/price-executive-dashboard.page';
 
 const routes: Routes = [
   {
@@ -79,6 +80,9 @@ const routes: Routes = [
   {
     path: 'admin/add-tk-product',
     component: AddTKProductPage
+  },{
+    path: 'price-executive-dashboard/:userType',
+    component: PriceExecutiveDashboardPage
   },
   {
     path: 'admin/add-comp-product',

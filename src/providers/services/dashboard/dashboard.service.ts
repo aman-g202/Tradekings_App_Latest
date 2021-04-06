@@ -26,4 +26,9 @@ export class DashboardService {
   changePassword(data: { currentPassword: string, newPassword: string, userId: string }): any {
     return this.httpClient.post(environment.baseUrl + 'api/user/changePassword', data);
   }
+
+  getPriceExecutiveDashboardData(externalId: string){
+    const data = {externalId};
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getPriceExecutiveDashboardData, {params: data});
+  }
 }

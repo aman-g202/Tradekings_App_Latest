@@ -180,21 +180,20 @@ export class UserListPage implements OnInit {
     }
   }
 
- async onNavigateDashboard(user) {
+  async onNavigateDashboard(user) {
     this.strogeService.setToStorage('selectedCustomer', user);
     const data = {
       isAdminFlow: true,
       timeStamp: new Date().getTime()
     };
-    if (user.userType === 'PRICEEXECUTIVE'){
+    if (user.userType === 'PRICEEXECUTIVE') {
       const openModel = await this.modalCtrl.create({
         component: PriceExecutiveDashboardPage,
         componentProps: data
-   })
-   return await openModel.present();
-   //   this.router.navigate(['/price-executive-dashboard/' + this.profile.userType], { queryParams: data })
+      });
+      return await openModel.present();
     } else {
-     this.router.navigate(['/dashboard/' + this.profile.userType], { queryParams: data });
+      this.router.navigate(['/dashboard/' + this.profile.userType], { queryParams: data });
     }
   }
 
