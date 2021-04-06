@@ -173,7 +173,7 @@ export class PopoverComponent implements OnInit {
 
   navigateToReports() {
     this.dismissPopover();
-    this.navCtrl.navigateForward('/reports')
+    this.router.navigateByUrl('/reports')
   }
 
 

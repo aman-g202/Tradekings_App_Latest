@@ -1,5 +1,5 @@
 <!--
-  Generated template for the ReportCustomerPerformacePage page.
+  Generated template for ion-cole ReportCustomerPerformacePage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,7 +7,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="../">
+      <ion-back-button defaulion-colref="../">
       </ion-back-button>
     </ion-buttons>
     <ion-title>Customer Performance</ion-title>
@@ -29,19 +29,19 @@
           </ion-select>
       </ion-col>
       <ion-col size="6">
-        <ion-button color="secondary" (click)="showTonnage()" size="small">
+        <ion-button color="secondary" (click)="showTonnage()">
           Show in Tonnage {{ includeTonnage ? '(x)' : '' }}
         </ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col size="6">
-        <ion-button color="secondary" (click)="filterFTDBillingOutlet()" size="small">
+        <ion-button color="secondary" (click)="filterFTDBillingOutlet()">
           FTD BILLING OUTLET {{ isFilterMTD ? '(x)' : '' }}
         </ion-button>
       </ion-col>
       <ion-col size="6">
-        <ion-button color="secondary" (click)="filterNonBillingOutlet()" size="small">
+        <ion-button color="secondary" (click)="filterNonBillingOutlet()">
           NON BILLED OUTLET {{ isFilterNonBilling ? '(x)' : '' }}
         </ion-button>
       </ion-col>
@@ -49,12 +49,12 @@
       
     <ion-row>
       <ion-col size="6">
-        <ion-button color="secondary" (click)="filterDegrowingOutlet()" size="small">
+        <ion-button color="secondary" (click)="filterDegrowingOutlet()" >
           DECLINING OUTLET {{ isFilterDegrowing ? '(x)' : '' }}
         </ion-button>
       </ion-col>
       <ion-col size="6">
-        <ion-button color="secondary" (click)="sortList()" size="small">
+        <ion-button color="secondary" (click)="sortList()">
           TOP 10 OUTLET {{ isSortingFilter ? '(x)' : '' }}
         </ion-button>
       </ion-col>
@@ -64,54 +64,51 @@
 </ion-header>
 
 
-<ion-content padding>
-  <div class="table-container" *ngIf="filterdList.length != 0">
-    <table>
-      <thead>
-        <tr>
-            <th>Cust Code</th>
-            <th>Customer Name</th>
-            <th class="number">FTD <span *ngIf="includeTonnage">Tonnage</span></th>
-            <th class="number">MTD <span *ngIf="includeTonnage">Tonnage</span></th>
-            <th class="number">LMTD <span *ngIf="includeTonnage">Tonnage</span></th>
-            <th class="number">LYMTD <span *ngIf="includeTonnage">Tonnage</span></th>    
-            <th class="number">% Growth over LYMTD</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="!filterdList">
-        <tr>
-          <td colspan="6" class="text-center"> No Data Available </td>
-        </tr>
-      </tbody>
-      <tbody>
-        <tr *ngFor="let item of filterdList" (click)="goToInvoiceAgainstOrder(item.customerCode, item.customerName)">
-          <td class="large-space">{{item.customerCode}}</td>
-          <td class="less-space customerName">{{item.customerName}}</td>
-          <td class="number" *ngIf="includeTonnage">{{item.ftd.toFixed(1)}}</td>
-          <td class="number" *ngIf="includeTonnage">{{item.mtd.toFixed(1)}}</td>
-          <td class="number" *ngIf="includeTonnage">{{item.lmtd.toFixed(1)}}</td>
-          <td class="number" *ngIf="includeTonnage">{{item.lymtd.toFixed(1)}}</td>
-          <td class="number" *ngIf="!includeTonnage">{{item.ftd.toFixed(0)}}</td>
-          <td class="number" *ngIf="!includeTonnage">{{item.mtd.toFixed(0)}}</td>
-          <td class="number" *ngIf="!includeTonnage">{{item.lmtd.toFixed(0)}}</td>
-          <td class="number" *ngIf="!includeTonnage">{{item.lymtd.toFixed(0)}}</td>
-          <td class="number" *ngIf="item.percentage == 0">0</td>
-          <td class="number" *ngIf="item.percentage != 0" [ngClass]="item.percentage >= 0?'positive':'negative'">{{item.percentage}}</td>
-        </tr>
-      </tbody>
-    </table>
+<ion-content>
+  <div class="table-container">
+    <ion-grid >
+      <ion-row>
+        <ion-col>Cust Code</ion-col>
+        <ion-col>Customer Name</ion-col>
+        <ion-col>FTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col>MTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col>LMTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col>LYMTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>    
+        <ion-col>% Growion-col over LYMTD</ion-col>
+      </ion-row>
+          
+      <ion-row *ngIf="!filterdList">
+        <ion-col>
+          No Data Available
+        </ion-col>
+      </ion-row>
+        <ion-row *ngFor="let item of filterdList" (click)="goToInvoiceAgainstOrder(item.customerCode, item.customerName)">
+          <ion-col>{{item.customerCode}}</ion-col>
+          <ion-col>{{item.customerName}}</ion-col>
+          <ion-col *ngIf="includeTonnage">{{item.ftd.toFixed(1)}}</ion-col>
+          <ion-col *ngIf="includeTonnage">{{item.mtd.toFixed(1)}}</ion-col>
+          <ion-col *ngIf="includeTonnage">{{item.lmtd.toFixed(1)}}</ion-col>
+          <ion-col *ngIf="includeTonnage">{{item.lymtd.toFixed(1)}}</ion-col>
+          <ion-col *ngIf="!includeTonnage">{{item.ftd.toFixed(0)}}</ion-col>
+          <ion-col *ngIf="!includeTonnage">{{item.mtd.toFixed(0)}}</ion-col>
+          <ion-col *ngIf="!includeTonnage">{{item.lmtd.toFixed(0)}}</ion-col>
+          <ion-col *ngIf="!includeTonnage">{{item.lymtd.toFixed(0)}}</ion-col>
+          <ion-col *ngIf="item.percentage == 0">0</ion-col>
+          <ion-col *ngIf="item.percentage != 0" [ngClass]="item.percentage >= 0?'positive':'negative'">{{item.percentage}}</ion-col>
+        </ion-row>
+    </ion-grid>
   </div>
-  <ion-fab right bottom *ngIf="filterdList.length != 0">
+  <ion-fab right bottom *ngIf="filterdList.lengion-col != 0">
     <ion-fab>
       <ion-icon name="share"></ion-icon>
     </ion-fab>
   </ion-fab>
-  <div *ngIf="filterdList.length === 0">
+  <div *ngIf="filterdList.lengion-col === 0">
     <ion-card class="noDataView">
       <ion-card-header text-center>
         <ion-icon name="alert"></ion-icon>
-          <h4 *ngIf="list.length != 0">No record matched!</h4>
-          <h4 *ngIf="list.length == 0">No record found!</h4>
+          <h4 *ngIf="list.lengion-col != 0">No record matched!</h4>
+          <h4 *ngIf="list.lengion-col == 0">No record found!</h4>
         </ion-card-header>
     </ion-card>
   </div>
