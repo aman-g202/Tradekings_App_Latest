@@ -31,4 +31,8 @@ export class DashboardService {
     const data = {externalId};
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getPriceExecutiveDashboardData, {params: data});
   }
+  getPendingInvoicData(externalId: string) {
+    const data = { customerCode: externalId };
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getPendingInvoiceData, {params: data});
+ }
 }
