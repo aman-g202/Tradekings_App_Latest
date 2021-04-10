@@ -10,6 +10,7 @@ import { ProfileModel } from '../../providers/models/profile.model';
 import { AlertController } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import * as json2Csv from 'json2csv';
+import { Observable } from 'rxjs';
 
 
 
@@ -30,7 +31,6 @@ export class OrdersPage implements OnInit {
   hrefTag = '';
   loaderDownloading: any;
   profile: ProfileModel;
-  endPoint: any;
   isSalesman = false;
   smCustomer: ProfileModel;
   toggleValue = false;
@@ -66,30 +66,34 @@ export class OrdersPage implements OnInit {
     this.getUserOrderList();
   }
 
-
+  getObservable(): Observable<any> {
+    let endPoint$: Observable<any>;
+    if (this.userType === 'ADMINHO') {
+    endPoint$ = this.orderService.getAllOrderList(this.skipValue, this.limit);
+  } else if (this.userType === 'ADMIN') {
+    endPoint$ = this.orderService.getOrderListByProvince(this.profile.province, this.skipValue, this.limit);
+  } else if (this.userType === 'SALESMAN' || this.userType === 'SALESMANAGER') {
+    if (this.smCustomer && this.toggleValue === true) {
+      endPoint$ = this.orderService.getOrderListByUser
+        (this.smCustomer._id, this.skipValue, this.limit, this.isSalesman, this.smCustomer.externalId);
+    } else {
+      endPoint$ = this.orderService.getOrderListBySalesman(this.profile.externalId, this.skipValue, this.limit);
+    }
+  } else {
+    endPoint$ = this.orderService.getOrderListByUser
+      (this.profile._id, this.skipValue, this.limit, this.isSalesman, this.profile.externalId);
+  }
+    return endPoint$;
+}
   async getUserOrderList() {
     this.loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 15000);
     const skip = 0;
     const limit = 20;
     this.userType = this.profile.userType;
     this.userName = this.profile.name;
-    if (this.userType === 'ADMINHO') {
-      this.endPoint = this.orderService.getAllOrderList(skip, limit);
-    } else if (this.userType === 'ADMIN') {
-      this.endPoint = this.orderService.getOrderListByProvince(this.profile.province, skip, limit);
-    } else if (this.userType === 'SALESMAN' || this.userType === 'SALESMANAGER') {
-      if (this.smCustomer && this.toggleValue === true) {
-        this.endPoint = this.orderService.getOrderListByUser
-          (this.smCustomer._id, skip, limit, this.isSalesman, this.smCustomer.externalId);
-      } else {
-        this.endPoint = this.orderService.getOrderListBySalesman(this.profile.externalId, skip, limit);
-      }
-    } else {
-      this.endPoint = this.orderService.getOrderListByUser
-        (this.profile._id, this.skipValue, this.limit, this.isSalesman, this.profile.externalId);
-    }
+
     this.hrefTag = '/dashboard/' + this.userType;
-    this.endPoint.subscribe((result) => {
+    this.getObservable().subscribe((result) => {
       this.orderList = result.body;
       this.orderList.map((value) => {
         value.orderTotal = parseFloat((Math.round(+value.orderTotal * 100) / 100).toString()).toFixed(2);
@@ -112,22 +116,7 @@ export class OrdersPage implements OnInit {
 
   async doInfinite(infiniteScroll) {
     this.skipValue = this.skipValue + this.limit;
-    if (this.userType === 'ADMINHO') {
-      this.endPoint = this.orderService.getAllOrderList(this.skipValue, this.limit);
-    } else if (this.userType === 'ADMIN') {
-      this.endPoint = this.orderService.getOrderListByProvince(this.profile.province, this.skipValue, this.limit);
-    } else if (this.userType === 'SALESMAN' || this.userType === 'SALESMANAGER') {
-      if (this.smCustomer && this.toggleValue === true) {
-        this.endPoint = this.orderService.getOrderListByUser
-          (this.smCustomer._id, this.skipValue, this.limit, this.isSalesman, this.smCustomer.externalId);
-      } else {
-        this.endPoint = this.orderService.getOrderListBySalesman(this.profile.externalId, this.skipValue, this.limit);
-      }
-    } else {
-      this.endPoint = this.orderService.getOrderListByUser
-        (this.profile._id, this.skipValue, this.limit, this.isSalesman, this.profile.externalId);
-    }
-    this.endPoint.subscribe((result) => {
+    this.getObservable().subscribe((result) => {
       if (result.body.length > 0) {
         result.body.map((value) => {
           value.orderTotal = parseFloat((Math.round(+value.orderTotal * 100) / 100).toString()).toFixed(2);

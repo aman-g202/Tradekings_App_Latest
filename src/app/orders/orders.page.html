@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="hrefTag">
       </ion-back-button>
@@ -21,6 +21,16 @@
   <ion-list *ngIf="orderListAvailable && (orderList.length > 0)">
     <ion-card *ngFor="let order of orderList">
       <ion-card-content>
+        <ion-row>
+          <ion-col style="text-align: center;">
+            <ion-icon color="grey" name="calendar"></ion-icon>
+            <span style="white-space: pre">Date: </span>{{order.lastUpdatedAt}}
+          </ion-col>
+          <ion-col class="statusCol">
+            <ion-icon name="radio-button-on" class="{{order.status}}"></ion-icon><span>Status:</span> <strong
+              class="ion-text-uppercase {{order.status}}">{{order.status}}</strong>
+          </ion-col>
+        </ion-row>
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
             <ion-icon color="grey" name=help-buoy></ion-icon>
@@ -31,12 +41,6 @@
           <ion-col size="12">
             <ion-icon color="grey" name="cart"></ion-icon>
             <span>Order Id:</span> {{order.orderId}}
-          </ion-col>
-        </ion-row>
-        <ion-row class="ion-align-items-center">
-          <ion-col size="12">
-            <ion-icon color="grey" name="calendar"></ion-icon>
-            <span>Date: </span>{{order.lastUpdatedAt}}
           </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center">
@@ -53,7 +57,7 @@
         </ion-row>
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
-            <ion-icon name="pin" color="grey"></ion-icon> <span>Province:</span> {{order.userDetail.country}} [
+            <ion-icon name="location" color="grey"></ion-icon> <span>Province:</span> {{order.userDetail.country}} [
             {{order.userDetail.province}} ]
           </ion-col>
         </ion-row>
@@ -64,12 +68,12 @@
             <strong class="ion-text-uppercase">{{order.totalNetWeight | number: '.2-2'}} tonnage</strong>
           </ion-col>
         </ion-row>
-        <ion-row class="ion-align-items-center">
-          <ion-col size="12">
+        <!-- <ion-row class="ion-align-items-center">
+          <ion-col size="6">
             <ion-icon color="grey" name="podium"></ion-icon><span>Status:</span> <strong
               class="ion-text-uppercase {{order.status}}">{{order.status}}</strong>
           </ion-col>
-        </ion-row>
+        </ion-row> -->
         <ion-row class="ion-align-items-center" *ngIf="!isAdmin">
           <ion-col size="12">
             <ion-button size="small" fill="outline" color="secondary" item-end (click)="getOrderDetial(order)">view
@@ -105,7 +109,7 @@
 </ion-content>
 
 <ion-footer *ngIf="isAdmin">
-  <ion-button (click)="filterOrderToExport()">
+  <ion-button (click)="filterOrderToExport()" color="secondary">
     <ion-icon name="document" class="ion-margin-end"></ion-icon>export to csv
   </ion-button>
 </ion-footer>

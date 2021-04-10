@@ -1,32 +1,32 @@
-.ion-align-items-center {
+ion-content {
+  .ion-align-items-center {
     text-align: center;
-}
-ion-icon {
-    margin-right: 6px;
-}
-ion-list{
-    padding:0px;
-}
-ion-card{
-    margin-top: 0px;
-}
-.edit-btn{
-    margin-left: 0px;
-    margin-right: 0px;
-}
+  }
 
-.cancel{
-    color: var(--ion-color-danger)
-}
-
-.in-progress{
-    color: var(--ion-color-primary)
-}
- 
-ion-col{
-    color: black
-}
-
-.editOrder{
-    color: var(--ion-color-primary)
+  ion-list {
+    padding: 0px;
+    ion-card {
+      margin-top: 0px;
+      box-shadow: 0px 0px 1px 0px;
+      border-radius: 10px; 
+      ion-icon {
+        margin-right: 6px;
+      }
+      .edit-btn {
+        margin: 5px 0px;
+      }
+      .recieved {
+        color: var(--ion-color-success-shade);
+      }
+      .cancel {
+        color: var(--ion-color-danger);
+      }
+      .in-progress {
+        color: var(--ion-color-primary);
+      }
+      ion-col{
+        color: var(--ion-color-dark);
+      }
+    }
+  }
 }

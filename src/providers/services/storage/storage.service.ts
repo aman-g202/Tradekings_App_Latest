@@ -53,23 +53,7 @@ export class StorageServiceProvider {
     });
   }
 
-  getExistCartFromStorage() {
-    return new Promise((resolve, reject) => {
-      this.storage.get('existCart')
-        .then(result => {
-          if (result) {
-            resolve(result);
-          } else {
-            this.storage.set('existCart', []).then(res => {
-              resolve([]);
-            });
-          }
-        }).catch(err => {
-          reject(err);
-        });
-    });
-  }
-
+ 
   getTkPointsFromStorage() {
     return new Promise((resolve, reject) => {
       this.storage.get('tkpoint')
@@ -89,8 +73,8 @@ export class StorageServiceProvider {
 
   async clearCart() {
     await this.setToStorage('cart', []);
-    await this.setToStorage('existCart', [])
     await this.removeFromStorage('tkpoint');
     await this.setToStorage('totalNetWeight', 0);
+    await this.setToStorage('orderTotal', 0);
   }
 }

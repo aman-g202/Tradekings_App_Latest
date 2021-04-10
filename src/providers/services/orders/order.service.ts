@@ -80,4 +80,45 @@ export class OrderService {
   createOrderToErp(orderId: string){
     return this.httpClient.post(environment.baseUrl + environment.endPoints.createOrderToErp, {_id: orderId});
   }
+
+  createEditOrderToErp(editOrder: {
+    lastUpdatedAt: string,
+    orderId: string,
+    orderTotal: string,
+    productList: [
+      {
+        netWeight: number,
+        parentCategoryId: string,
+        price: string,
+        productDetail: {
+          _id: string,
+          name: string,
+          price: string | number,
+          porductCode: string,
+          productSysCode: string
+        },
+        productSysCode: string,
+        quantity: number,
+        subTotal: string | number,
+        tkPoint: number
+      }
+    ],
+    province: string,
+    salesmanCode?: string,
+    salesmanName?: string,
+    status: string,
+    totalNetWeight: number,
+    totalTkPoint: number,
+    userDetail: {
+      name: string,
+      _id: string,
+      country: string,
+      province: string,
+      externalId: string
+    },
+    userId: string,
+    _id: string
+  }) {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.createEditOrderToErp, editOrder)
+  }
 }

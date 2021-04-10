@@ -8,6 +8,7 @@ import { ProductModel } from '../../../providers/models/product.model';
 import { OrderItemModel } from '../../../providers/models/order.model';
 import { ProfileModel } from '../../../providers/models/profile.model';
 
+
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.page.html',
@@ -32,13 +33,17 @@ export class OrderDetailPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private widgetUtil: WidgetUtilService
-  ) {}
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.checkData();
     const order = this.route.snapshot.queryParamMap.get('order');
+
     // convert Json object into javaObj
     this.orderDetail = JSON.parse(order);
+    //   this.orderDetail.productList.map((item) => {
+    //     item.name = item.productDetail.name;
+    //  });
     this.orderItems = this.orderDetail.productList;
     this.orderItems.map((value) => {
       value.subTotal = parseFloat(
@@ -59,15 +64,8 @@ export class OrderDetailPage implements OnInit {
   }
 
   async checkData() {
-    this.profile = (await this.storageService.getFromStorage(
-      'profile'
-    )) as ProfileModel;
+    this.profile = (await this.storageService.getFromStorage('profile')) as ProfileModel;
     this.userType = this.profile.userType;
-    /* if(!(window['cordova']) && (this.userType === 'admin')) {
-      this.showCsvButton = true
-    }else{
-      this.showCsvButton = false
-    } */
     if (
       this.userType === 'ADMIN' &&
       this.orderDetail.status != CONSTANTS.ORDER_STATUS_RECEIVED &&
@@ -110,6 +108,7 @@ export class OrderDetailPage implements OnInit {
         (result) => {
           this.getOrderDetail();
           this.widgetUtil.presentToast(message);
+          this.loaderDownloading.dismiss();
         },
         (error) => {
           if (error.statusText === 'Unknown Error') {
@@ -122,13 +121,16 @@ export class OrderDetailPage implements OnInit {
       );
   }
 
-  getOrderDetail() {
+ async getOrderDetail() {
+    const showLoader = await this.widgetUtil.showLoader('Please wait', 5000);
     this.orderService.getOrderDetail(this.orderDetail._id).subscribe(
       (result) => {
         this.orderDetail = result.body[0];
         this.checkData();
+        showLoader.dismiss();
       },
       (error) => {
+        showLoader.dismiss();
         if (error.statusText === 'Unknown Error') {
           this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
         } else {
@@ -151,16 +153,15 @@ export class OrderDetailPage implements OnInit {
     }, 500);
   }
 
-  eidtOrder() {
-    this.orderItems.map((item) => {
-        item.name = item.productDetail.name;
-     });
-    this.storageService.setToStorage('existCart' , this.orderItems);
-    const orderObj = {
-      orderTotal: this.orderDetail.orderTotal,
+ async editOrder() {
+  await this.storageService.setToStorage('order', this.orderDetail);
+  await this.storageService.setToStorage('totalNetWeight', this.orderDetail.totalNetWeight);
+  await this.storageService.setToStorage('orderTotal', this.orderDetail.orderTotal);
+  console.log(this.orderDetail.totalNetWeight);
+  const orderObj = {
       isEditOrderFlow: this.isEditOrderFlow
     };
-    this.router.navigate(['../', 'edit-order'], {
+  this.router.navigate(['../', 'edit-order'], {
       queryParams: orderObj,
       relativeTo: this.route,
     });
