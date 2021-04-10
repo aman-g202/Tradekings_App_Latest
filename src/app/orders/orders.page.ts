@@ -310,6 +310,7 @@ export class OrdersPage implements OnInit {
   }
 
   customerOrderList(event) {
+    this.orderListAvailable = false;
     this.toggleValue = event.target.checked;
     if (this.toggleValue === true) {
       this.getUserOrderList();

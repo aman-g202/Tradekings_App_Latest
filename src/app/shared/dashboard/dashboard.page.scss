@@ -18,12 +18,12 @@ ion-title {
 .switchCategory {
   float: right;
 }
-// .item-visible {
-//   display: inline-block;
-// }
-// .item-hidden {
-//   display: none;
-// }
+.item-visible {
+  display: inline-block;
+}
+.item-hidden {
+  display: none;
+}
 ion-select {
   font-size: 0.6em;
   padding-left: 0 !important;
@@ -84,8 +84,7 @@ ion-icon {
   margin-right: 5px;
 }
 
-.boldText,
-.card-title-outstanding {
+.boldText, .card-title-outstanding {
   font-weight: 550;
   color: black;
   font-size: 17px;

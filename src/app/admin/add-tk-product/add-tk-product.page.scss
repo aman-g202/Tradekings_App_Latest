@@ -1,16 +1,9 @@
-ion-header {
-  ion-toolbar {
-    --background: var(--ion-color-primary);
-    color: var(--ion-color-secondary-contrast);
-  }
-}
-
 ion-content {
   //  --background: var( --ion-color-light-tint);
   ion-item {
-    margin-top: 1px;
-    margin-bottom: 1px;
-    padding-bottom: 2px;
+    // margin-top: 1px;
+    // margin-bottom: 1px;
+    // padding-bottom: 2px;
     //   --border-color: var(--ion-color-medium-tint);
     ion-label {
       color: var(--ion-color-medium-shade);
@@ -18,8 +11,5 @@ ion-content {
   }
   .error {
     color: var(--ion-color-danger);
-  }
-  ion-button {
-    --background: var(--ion-color-primary-tint);
   }
 }

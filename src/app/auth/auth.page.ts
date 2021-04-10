@@ -47,7 +47,11 @@ export class AuthPage implements OnInit {
         this.storageService.setToStorage('profile', responseData.body[0]);
         this.storageService.setToStorage('userType', responseData.body[0].userType);
         localStorage.setItem('token', responseData.body[0].token);
-        this.router.navigateByUrl('/dashboard/' + responseData.body[0].userType);
+        if (responseData.body[0].userType === 'PRICEEXECUTIVE') {
+          this.router.navigateByUrl('/price-executive-dashboard/' + responseData.body[0].userType);
+        } else {
+          this.router.navigateByUrl('/dashboard/' + responseData.body[0].userType);
+        }
       }
     }, (error: any) => {
       this.showLoginLoader = false;
