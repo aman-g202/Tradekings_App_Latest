@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://41.218.83.178:6002/',
+  baseUrl: 'http://localhost:6002/',
   endPoints: {
     login: 'api/user/authenticate',
     getDashboard: 'api/user/get/dashboard',
@@ -40,6 +40,7 @@ export const environment = {
     getCaptureProductList: 'api/product/list/unitsize/products',
     captureProduct: 'api/order/capture/price',
     createOrderToErp: 'api/erp/createOrderToERP',
+    getPriceExecutiveDashboardData: 'api/user/priceExecutive/dashboard',
     getPendingInvoiceData: 'api/user/customer/pendinginvoice'
   },
   storageKeys: {}

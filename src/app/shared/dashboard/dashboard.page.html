@@ -1,13 +1,14 @@
-<app-side-bar [partyName]="loggedInPartyName" [userType]="userType"></app-side-bar>
+<app-side-bar *ngIf="hideSideBar" [partyName]="loggedInPartyName" [userType]="userType"></app-side-bar>
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button (click)="toggleMenu()">
+      <ion-button  *ngIf="hideSideBar" (click)="toggleMenu() ">
         <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
       </ion-button>
+      <ion-back-button *ngIf="useTypePriceExecutive" [defaultHref]="hrefTag"></ion-back-button>
     </ion-buttons>
     <ion-title>{{partyName}}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="hideSideBar">
       <ion-button (click)="presentPopover($event)" fill="clear">
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
@@ -15,9 +16,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="full-background" id="main">
+<ion-content class="full-background" id="main" style="margin-right: 15px; margin-left: 15px;"> 
   <ion-card class="tabs-wrapper">
-    <ion-row *ngIf="selectedUserCustomer" class="text-align-center">
+    <ion-row *ngIf="selectedUserCustomer || useTypePriceExecutive" class="text-align-center">
       <ion-col size="6">
         <ion-button color="primary" expand="full" (click)="navigateToViewSatetement()">VIEW STATEMENTS</ion-button>
       </ion-col>
@@ -169,7 +170,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button *ngIf="userTypeCustomer || userTypeSalesman && selectedUserCustomer" expand="full" color="primary"
+        <ion-button *ngIf="userTypeCustomer || userTypeSalesman && selectedUserCustomer || useTypePriceExecutive" expand="full" color="primary"
           class="customerHistoryBtn" (click)="openCustomerPaymentHistory()">
           View Customer Payments
         </ion-button>

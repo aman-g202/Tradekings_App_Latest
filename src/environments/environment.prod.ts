@@ -36,6 +36,7 @@ export const environment = {
     getCaptureProductList: 'api/product/list/unitsize/products',
     captureProduct: 'api/order/capture/price',
     createOrderToErp: 'api/erp/createOrderToERP',
+    getPriceExecutiveDashboardData: 'api/user/priceExecutive/dashboard',
     getPendingInvoiceData: 'api/user/customer/pendinginvoice'
   },
   storageKeys: {}

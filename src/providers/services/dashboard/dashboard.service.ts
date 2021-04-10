@@ -27,6 +27,10 @@ export class DashboardService {
     return this.httpClient.post(environment.baseUrl + 'api/user/changePassword', data);
   }
 
+  getPriceExecutiveDashboardData(externalId: string){
+    const data = {externalId};
+    return this.httpClient.get(environment.baseUrl + environment.endPoints.getPriceExecutiveDashboardData, {params: data});
+  }
   getPendingInvoicData(externalId: string) {
     const data = { customerCode: externalId };
     return this.httpClient.get(environment.baseUrl + environment.endPoints.getPendingInvoiceData, {params: data});

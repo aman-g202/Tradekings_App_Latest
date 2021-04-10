@@ -33,7 +33,7 @@ export class ReportsService {
     }
     const pdfObj = pdfMake.createPdf(documentDefinition);
     if (window['cordova']) {
-      this.pdfObj.getBuffer(buffer => {
+      pdfObj.getBuffer(buffer => {
         const utf8 = new Uint8Array(buffer); // Convert to UTF-8...
         const binaryArray = utf8.buffer;
         let storageLocation: any;

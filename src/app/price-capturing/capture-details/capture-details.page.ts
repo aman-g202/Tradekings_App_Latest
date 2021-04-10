@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageServiceProvider } from '../../../providers/services/storage/storage.service';
 import { WidgetUtilService } from '../../../providers/utils/widget';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { ProfileModel } from '../../../providers/models/profile.model';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
@@ -26,7 +26,6 @@ export class CaptureDetailsPage implements OnInit {
   async ngOnInit() {
     this.createAddCustomerForm();
     const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
-    this.hrefTag = '/dashboard/' + profile.userType;
     const customerInfo: any = await this.storageService.getFromStorage('customerInfo');
     if (!!customerInfo) {
       const agree = await this.widgetUtil.showConfirm('Capturing Exists!', `Continue with the last captured shop name : ${customerInfo.shopName}`, 'No', 'Yes');
@@ -36,6 +35,11 @@ export class CaptureDetailsPage implements OnInit {
         await this.storageService.removeFromStorage('customerInfo');
         this.addCustomerForm.reset();
       }
+    }
+    if (profile.userType === 'PRICEEXECUTIVE') {
+      this.hrefTag = '/price-executive-dashboard/' + profile.userType;
+    } else {
+      this.hrefTag = '/dashboard/' + profile.userType;
     }
   }
 
