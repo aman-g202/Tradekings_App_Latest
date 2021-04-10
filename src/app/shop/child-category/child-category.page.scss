@@ -29,3 +29,24 @@ ion-badge {
     width: 18px;
     font-size: 10px;
 }
+
+.noDataView {
+    ion-card {
+      margin-top: 20%;
+      box-shadow: none;
+      ion-card-header {
+        text-align: center;
+      }
+      ion-icon {
+        border-radius: 20px;
+        width: 30px;
+        height: 30px;
+        background-color: var(--ion-color-primary);
+        color: var(--ion-color-primary-contrast);
+      }
+      h4 {
+        color: var(--ion-color-dark);
+        font-size: 1.3rem;
+      }
+    }
+  }

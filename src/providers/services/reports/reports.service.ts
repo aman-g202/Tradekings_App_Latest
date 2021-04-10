@@ -64,7 +64,6 @@ export class ReportsService {
                       }
                     } else if (type === 'share') {
                       this.socialSharing.share(`${storageLocation}${pdfName}`, null).then(result => {
-                        console.log('Shared');
                       }).catch(err => {
                         this.widgetUtil.showAlert('368' + JSON.stringify(err.message));
                       });

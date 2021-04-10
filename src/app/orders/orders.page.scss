@@ -1,10 +1,3 @@
-ion-header {
-  ion-toolbar {
-    --background: var(--ion-color-primary);
-    color: var(--ion-color-primary-contrast);
-  }
-}
-
 ion-content {
   ion-item {
     ion-label {
@@ -12,8 +5,10 @@ ion-content {
     }
   }
   ion-card {
+    box-shadow: 0px 0px 1px 0px;
+    border-radius: 10px; 
     ion-col {
-      color: var(--ion-color-dark-tint);
+      color: var(--ion-color-light-contrast);
       span {
         color: var(--ion-color-medium-shade);
         margin-right: 5px;
@@ -29,10 +24,6 @@ ion-content {
     box-shadow: 0px 0px 1px;
   }
 
-  .ion-align-items-center {
-    text-align: center;
-  }
-
   .cancel {
     color: var(--ion-color-danger);
   }
@@ -41,6 +32,14 @@ ion-content {
     color: var(--ion-color-primary);
   }
 
+  .ion-align-items-center {
+    text-align: center;
+  }
+  .statusCol {
+    white-space: pre;
+    text-align: center;
+    text-transform: capitalize;
+  }
   .recieved {
     color: var(--ion-color-success-shade);
   }
@@ -67,9 +66,6 @@ ion-content {
 }
 
 ion-footer {
-  background-color: var(--ion-color-primary);
+  background-color: var(--ion-color-primary-contrast);
   text-align: center;
-  ion-button {
-    --background: var(--ion-color-primary-tint);
-  }
 }

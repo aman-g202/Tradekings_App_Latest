@@ -17,8 +17,8 @@
   </div>
    <ion-list>
     <ion-card>
-      <ion-button class="edirOrder" expand="full" [disabled]="orderDetail.status !== 'in-progress'" class="edit-btn"
-        (click)="eidtOrder()">EDIT ORDER</ion-button>
+      <ion-button color="primary" expand="full" [disabled]="orderDetail.status !== 'in-progress'" class="edit-btn"
+        (click)="editOrder()">EDIT ORDER</ion-button>
       <ion-card-content>
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
@@ -32,7 +32,7 @@
             <ion-icon name=help-buoy color="grey"></ion-icon> SM Name: <span>{{orderDetail.salesmanName}}</span>
           </ion-col>
           <ion-col size="12">
-            <ion-icon name="pin" color="grey"></ion-icon> Province: <span>{{orderDetail.userDetail.country}} [
+            <ion-icon name="location" color="grey"></ion-icon> Province: <span>{{orderDetail.userDetail.country}} [
               {{orderDetail.userDetail.province}} ]</span>
           </ion-col>
           <ion-col size="12">

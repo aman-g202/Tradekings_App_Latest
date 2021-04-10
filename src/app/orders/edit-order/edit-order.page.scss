@@ -1,61 +1,70 @@
 ion-label {
-    display: block;
+  display: block;
 }
 .acc-label {
-    position: relative;
-    white-space: normal;
-    &::after{
-        content: '+';
-        position: absolute;
-        right: 0;
-        background: #229bd0;
-        border-radius: 12px;
-        height: 24px;
-        width: 24px;
-        color: #fff;
-        text-align: center;
-        line-height: 23px;
-        z-index: -1;
+  position: relative;
+  white-space: normal;
+  &::after {
+    content: "+";
+    position: absolute;
+    right: 0;
+    background: var(--ion-color-secondary);
+    border-radius: 12px;
+    height: 24px;
+    width: 24px;
+    color: var(--ion-color-secondary-contrast);
+    text-align: center;
+    line-height: 23px;
+    z-index: -1;
+  }
+  &.expand {
+    &::after {
+      content: "-";
     }
-    &.expand {
-        &::after{
-            content: '-';
-        }
-    }
-    ion-col {
-        padding: 5px 40px 10px 0;
-    }
+  }
+  ion-col {
+    padding: 5px 40px 10px 0;
+  }
 }
 
-.cnt-badge{
-    background: #229BD0;
-    height: 22px;
-    width: 22px;
-    font-size: 16px;
-    display: inline-block;
-    color: #fff;
-    text-align: center;
+.cnt-badge {
+  background: var(--ion-color-secondary);
+  height: 22px;
+  width: 22px;
+  font-size: 16px;
+  display: inline-block;
+  color: var(--ion-color-secondary-contrast);
+  text-align: center;
 }
 .expand-wrapper {
-    height: auto !important;
-    transition: 0.2s linear;
-}  
-
-.item-visible{
-    display: inline-block;
-    text-transform: capitalize;
-    color: #6b6b6b;
+  height: auto !important;
+  transition: 0.2s linear;
 }
 
-.item-hidden{
-    display: none;
+.item-visible {
+  display: inline-block;
+  text-transform: capitalize;
+  color: var(--ion-color-medium);
+}
+
+.item-hidden {
+  display: none;
 }
 
 ion-icon {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
-strong{
-    color: black;
-    font-size: 16px;
+strong {
+  color: black;
+  font-size: 16px;
+}
+
+.custName {
+  color: var(--ion-color-medium-shade);
+}
+
+ion-item {
+  margin-bottom: 0px;
+  margin-top: 0px;
 }

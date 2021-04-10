@@ -23,6 +23,7 @@ export class ParentCategoryPage implements OnInit {
   cart: any = [];
   tkPoint: any = 0;
   placeOrder: boolean;
+  isEditOrderFlow = false;
 
   constructor(
     private widgetUtil: WidgetUtilService,
@@ -33,18 +34,21 @@ export class ParentCategoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getList();
-    this.getCartItems();
     this.route.queryParams.subscribe(params => {
+      this.isEditOrderFlow = params.isEditOrderFlow;
       this.placeOrder = params.placeOrder;
+      this.getCartItems();
     });
+    this.getList();
   }
+
 
   getChildCategory(category: CategoryItemModel) {
     const categoryObj = {
       parentCategoryId: category._id,
       categoryName: category.name,
-      placeOrder: this.placeOrder
+      placeOrder: this.placeOrder,
+      isEditOrderFlow: this.isEditOrderFlow
     };
     this.router.navigate(['../', 'child-category'], { queryParams: categoryObj, relativeTo: this.route });
   }
@@ -92,6 +96,7 @@ export class ParentCategoryPage implements OnInit {
             this.parentCategoryList.push(value);
           }
         });
+        infiniteScroll.target.complete();
       } else {
         this.skipValue = this.limit;
       }
@@ -115,19 +120,19 @@ export class ParentCategoryPage implements OnInit {
       this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
     } else {
       const orderTotal = await this.storageService.getFromStorage('orderTotal');
-      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal } });
+      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal , isEditOrderFlow: this.isEditOrderFlow} });
     }
   }
 
   async getCartItems() {
-    const storedEditedOrder: any = await this.storageService.getFromStorage('order');
     // update cart count badge when edit order flow is in active state
-    if (storedEditedOrder) {
+    if (this.isEditOrderFlow) {
+      const storedEditedOrder: any = await this.storageService.getFromStorage('order');
       this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : [];
-      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
+     // this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
     } else {
       this.cart = await this.storageService.getCartFromStorage();
-      this.tkPoint = await this.storageService.getTkPointsFromStorage();
+      // this.tkPoint = await this.storageService.getTkPointsFromStorage();
     }
   }
 }

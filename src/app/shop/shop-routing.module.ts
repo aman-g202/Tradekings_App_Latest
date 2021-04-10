@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ChildCategoryPage } from './child-category/child-category.page';
 import { ParentCategoryPage } from './parent-category/parent-category.page';
 import { ProductPage } from './product/product.page';
+import { EditProductPage } from './edit-product/edit-product.page';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'product',
     component: ProductPage
+  },
+  {
+    path: 'edit-product',
+    component: EditProductPage
   }
 ];
 

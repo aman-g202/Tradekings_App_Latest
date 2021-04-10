@@ -107,4 +107,16 @@ export class ProductService {
     }) {
         return this.httpClient.post(environment.baseUrl + environment.endPoints.appProduct, productDetail);
     }
+
+ updateProduct(updateProductdata: {
+     productId: string,
+     name: string,
+     price: number,
+     prodcutCode: string,
+     productSysCode: string,
+     lastUpdatedAt: string,
+     tkPoint: number
+ }): any {
+  return this.httpClient.post(environment.baseUrl + environment.endPoints.updateProduct, updateProductdata);
+ }
 }

@@ -10,7 +10,7 @@
       <ion-badge class="cart-badge">{{cart.length}}</ion-badge>
     </ion-button>
     <ion-button (click)="presentPopover($event)" fill="clear">
-      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+      <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
     </ion-button>
   </ion-buttons>
 </ion-toolbar>
@@ -19,19 +19,25 @@
 </form>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let category of childCategoryList" (click)="getProducts(category)">
-        <img src="assets/imgs/productcategory.svg">{{category.name}}
-        <ion-buttons slot="end" fill="clear">
-          <ion-button color="secondary" item-end><ion-icon name="arrow-forward"></ion-icon></ion-button>
-        </ion-buttons>
+  <ion-list *ngIf="categoryListAvailable && childCategoryList.length > 0">
+    <ion-item *ngFor="let category of childCategoryList" (click)="navigateProductsPage(category)">
+      <img src="assets/imgs/productcategory.svg">{{category.name}}
+      <ion-buttons slot="end" fill="clear">
+        <ion-button color="secondary" >
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
   </ion-list>
-  <ion-card *ngIf="categoryListAvailable && (childCategoryList.length < 1)">
-    <ion-card-header text-center>
-      <h4>No record found</h4>
-    </ion-card-header>
-  </ion-card>
+  <ion-list *ngIf="categoryListAvailable && (childCategoryList.length < 1)" class="noDataView ">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="alert"></ion-icon>
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>

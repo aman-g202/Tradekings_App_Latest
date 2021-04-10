@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="hrefTag"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <form [formGroup]="editProductForm">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Name</ion-label>
+            <ion-input formControlName="name"></ion-input>
+          </ion-item>
+        <p class="error"  *ngIf="editProductForm.get('name').hasError('required') && editProductForm.get('name').touched">*Name is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Product Code</ion-label>
+            <ion-input formControlName="productCode"></ion-input>
+          </ion-item>
+          <p class="error"   *ngIf="editProductForm.get('productCode').hasError('required') && editProductForm.get('productCode').touched">*ProductCode is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Product Sys Code</ion-label>
+            <ion-input formControlName="productSysCode"></ion-input>
+          </ion-item>
+          <p class="error"   *ngIf="editProductForm.get('productSysCode').hasError('required') && editProductForm.get('productSysCode').touched">*ProductSys Code is required</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Price</ion-label>
+            <ion-input type="number" formControlName="price"></ion-input>
+          </ion-item>
+          <p class="error" *ngIf="editProductForm.get('price').hasError('required') && editProductForm.get('price').touched">*Price is required</p>
+        </ion-col>
+      </ion-row>
+    </form>
+    <ion-row>
+      <ion-col>
+        <ion-button color="secondary" expand="full" [disabled]="editProductForm.invalid" (click)="updateProduct()">Save <ion-spinner name="dots" *ngIf="showLoader"></ion-spinner></ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
