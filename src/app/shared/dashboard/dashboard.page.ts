@@ -76,6 +76,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     }
   }
 
+
   displayChart() {
     this.pieChart = new Chart(this.pieCanvas.nativeElement, {
       type: 'pie',
@@ -119,7 +120,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
       this.selectedUser = await this.storageService.getFromStorage('selectedCustomer');
       this.loggedInPartyName = profile.name;
-      this.partyName = this.isSalesmanFlow ? this.selectedUser.name : profile.name;
+      this.partyName = !this.isSalesmanFlow ? profile.name : this.selectedUser.name;
       this.externalId = profile.externalId;
       if (this.isSalesmanFlow) {
         if ((profile.userType === 'ADMIN') || profile.userType === 'ADMINHO' || profile.userType === 'PRICEEXECUTIVE') {
