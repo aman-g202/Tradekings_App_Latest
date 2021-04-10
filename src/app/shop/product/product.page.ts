@@ -8,6 +8,7 @@ import { StorageServiceProvider } from '../../../providers/services/storage/stor
 import { ProductService } from '../../../providers/services/products/products.service';
 import { ProductModel } from '../../../providers/models/product.model';
 import { Observable } from 'rxjs';
+import { ProfileModel } from '../../../providers/models/profile.model';
 
 @Component({
   selector: 'app-product',
@@ -46,7 +47,7 @@ export class ProductPage implements OnInit {
     private storageService: StorageServiceProvider,
     private router: Router) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.parentCategoryId = params.parentCategoryId;
       this.categoryId = params.categoryId;
@@ -54,6 +55,8 @@ export class ProductPage implements OnInit {
       this.keyword = params.keyword;
       this.isSearch = params.isSearch;
       this.placeOrder = params.placeOrder;
+      this.isEditOrderFlow = params.isEditOrderFlow;
+      this.getWareHouseList();
       this.getProductList();
       this.getCartItems();
     });
@@ -107,8 +110,9 @@ export class ProductPage implements OnInit {
       } else {
         this.skipValue = this.limit;
       }
+      infiniteScroll.target.complete();
     }, (error) => {
-      infiniteScroll.complete();
+      infiniteScroll.target.complete();
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else {
@@ -117,13 +121,15 @@ export class ProductPage implements OnInit {
     });
   }
 
+
   async getCartItems() {
-    this.cart = await this.storageService.getCartFromStorage();
     if (this.isEditOrderFlow) {
       const storedEditedOrder: any = await this.storageService.getFromStorage('order');
+      this.cart = storedEditedOrder.productList;
       // update cart count badge when edit order flow is in active state
       this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
     } else {
+      this.cart = await this.storageService.getCartFromStorage();
       this.tkPoint = await this.storageService.getTkPointsFromStorage();
     }
     if (this.cart.length > 0) {
@@ -142,19 +148,14 @@ export class ProductPage implements OnInit {
     await this.storageService.setToStorage('orderTotal', this.orderTotal);
   }
 
+
   searchProducts(searchQuery) {
     this.filteredProductList = this.productList.filter(item => {
       return item.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
+    this.productListAvailable = true;
   }
 
-  reviewAndSubmitOrder() {
-    if (this.cart.length <= 0) {
-      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
-    } else {
-      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal: this.orderTotal, isEditorderFlow: this.isEditOrderFlow } });
-    }
-  }
 
   async addToCart(product: ProductModel, qty: number | string) {
     qty = +qty;
@@ -176,7 +177,6 @@ export class ProductPage implements OnInit {
           productSysCode: product.productSysCode
         };
         const order: any = await this.storageService.getFromStorage('order');
-
         let presentInCart = false;
         const productsInCart = order.productList.map((value) => {
           if (value.productSysCode === product.productSysCode) {
@@ -192,18 +192,16 @@ export class ProductPage implements OnInit {
           // tslint:disable-next-line: no-string-literal
           obj['quantity'] = qty;
           order.productList.push(obj);
+          this.cart.push(obj);
         } else {
           order.productList = productsInCart;
         }
-
         const obj = this.orderService.calculateTotalNetWeightAndTotalTk(order.productList);
-
         order.totalTkPoints = obj.totalTKPoint;
-        this.tkPoint = obj.totalTKPoint;
         order.totalNetWeight = obj.totalNetWeight;
-
         order.orderTotal = obj.orderTotal;
-
+        //  await this.storageService.setToStorage('tkpoint', obj.totalTKPoint);
+        //  await this.storageService.setToStorage('totalNetWeight', obj.totalNetWeight);
         await this.storageService.setToStorage('order', order);
         this.widgetUtil.presentToast(`${product.name} added to cart!`);
       }
@@ -232,15 +230,14 @@ export class ProductPage implements OnInit {
           this.cart = productsInCart;
         }
         const obj = this.orderService.calculateTotalNetWeightAndTotalTk(this.cart);
-
-        this.tkPoint = obj.totalTKPoint;
-        this.totalNetWeight = obj.totalNetWeight;
-        this.storageService.setToStorage('tkpoint', this.tkPoint);
-        this.storageService.setToStorage('totalNetWeight', this.totalNetWeight);
-
+        // this.tkPoint = obj.totalTKPoint;
+        // this.totalNetWeight = obj.totalNetWeight;
+        this.storageService.setToStorage('tkpoint', obj.totalTKPoint);
+        this.storageService.setToStorage('totalNetWeight', obj.totalNetWeight);
+        this.storageService.setToStorage('orderTotal', obj.orderTotal);
         this.cartDetail = await this.storageService.setToStorage('cart', this.cart);
-        this.orderTotal = obj.orderTotal;
-        this.cartQuantity = obj.totalQuantity;
+        // this.orderTotal = obj.orderTotal;
+        // this.cartQuantity = obj.totalQuantity;
 
         this.storageService.setToStorage('cart', this.cart);
       } else {
@@ -249,13 +246,25 @@ export class ProductPage implements OnInit {
     }
   }
 
+
+  reviewAndSubmitOrder() {
+    if (this.cart.length <= 0) {
+      this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
+    } else {
+      this.router.navigate(['/orders/edit-order'], { queryParams: { isEditOrderFlow: this.isEditOrderFlow } });
+    }
+  }
+
+
   resetQty(product: ProductModel) {
     product.quantity = '';
   }
 
+
   setQty(product: ProductModel) {
     product.quantity = product.quantity && product.quantity !== '' ? product.quantity : 1;
   }
+
 
   decrementQty(qty: string | number) {
     qty = +qty;
@@ -265,8 +274,21 @@ export class ProductPage implements OnInit {
     return qty;
   }
 
+
   incrementQty(qty: string | number) {
     return +qty + 1;
   }
 
+
+  async getWareHouseList() {
+    const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
+    this.isUserAuthorized = profile.isAuthorized;
+    if (profile.associatedStore && profile.associatedStore.length) {
+      this.loggedInUserStore = profile.associatedStore;
+    }
+  }
+
+  editProduct(product){
+    this.router.navigate(['../', 'edit-product'], {queryParams: product, relativeTo: this.route});
+  }
 }

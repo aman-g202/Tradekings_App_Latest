@@ -24,6 +24,7 @@ export class ChildCategoryPage implements OnInit {
   limit: number = CONSTANTS.PAGINATION_LIMIT;
   searchQuery = '';
   categoryName = '';
+  isEditOrderFlow = false;
 
   constructor(
     private widgetUtil: WidgetUtilService,
@@ -35,22 +36,23 @@ export class ChildCategoryPage implements OnInit {
   ngOnInit() {
     this.route.queryParams
       .subscribe(params => {
+        this.isEditOrderFlow = params.isEditOrderFlow;
         this.parentCategoryId = params.parentCategoryId;
         this.categoryName = params.categoryName;
-        this.categoryListAvailable = false;
         this.placeOrder = params.placeOrder;
-        this.childCategoryList = [];
         this.skipValue = 0;
         this.limit = CONSTANTS.PAGINATION_LIMIT;
-        this.getList();
         this.getCartItems();
       });
+      this.getList();
   }
+
 
   async getList() {
     const loaderDownloading = await this.widgetUtil.showLoader('Please wait...', 2000);
     this.categoryService.getChildCategoryList(this.parentCategoryId, this.skipValue, this.limit).subscribe((result) => {
       this.childCategoryList = result.body;
+      console.log(this.childCategoryList)
       this.categoryListAvailable = true;
       loaderDownloading.dismiss();
     }, (error) => {
@@ -64,12 +66,13 @@ export class ChildCategoryPage implements OnInit {
     });
   }
 
-  getProducts(category: CategoryItemModel) {
+  navigateProductsPage(category: CategoryItemModel) {
     const categoryObj = {
       parentCategoryId: category.parentCategoryId,
       categoryId: category._id,
       categoryName: category.name,
-      placeOrder: this.placeOrder
+      placeOrder: this.placeOrder,
+      isEditOrderFlow: this.isEditOrderFlow
     };
     this.router.navigate(['../', 'product'], { queryParams: categoryObj, relativeTo: this.route });
   }
@@ -84,7 +87,9 @@ export class ChildCategoryPage implements OnInit {
       } else {
         this.skipValue = this.limit;
       }
+      infiniteScroll.target.complete();
     }, (error) => {
+      infiniteScroll.target.complete();
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
       } else {
@@ -128,7 +133,7 @@ export class ChildCategoryPage implements OnInit {
         parentCategoryId: this.parentCategoryId,
         isSearch: true,
         categoryName: this.categoryName,
-        placeOrder: this.placeOrder
+        placeOrder: this.placeOrder,
       };
       this.searchQuery = '';
       if (profile.userType === 'ADMIN') {
@@ -140,14 +145,14 @@ export class ChildCategoryPage implements OnInit {
   }
 
   async getCartItems() {
-    const storedEditedOrder: any = await this.storageService.getFromStorage('order');
     // update cart count badge when edit order flow is in active state
-    if (storedEditedOrder) {
+    if (this.isEditOrderFlow) {
+      const storedEditedOrder: any = await this.storageService.getFromStorage('order');
       this.cart = storedEditedOrder.productList ? storedEditedOrder.productList : [];
-      this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
+     // this.tkPoint = storedEditedOrder.totalTkPoints ? storedEditedOrder.totalTkPoints : 0;
     } else {
       this.cart = await this.storageService.getCartFromStorage();
-      this.tkPoint = await this.storageService.getTkPointsFromStorage();
+     // this.tkPoint = await this.storageService.getTkPointsFromStorage();
     }
   }
 }

@@ -1,24 +1,27 @@
-<ion-toolbar color="primary">
-  <ion-buttons slot="start">
-    <ion-back-button defaultHref="shop">
-    </ion-back-button>
-  </ion-buttons>
-  <ion-title>{{categoryName}}</ion-title>
-  <ion-buttons  slot="end">
-    <ion-button class="cart-btn" fill="clear"(click)="reviewAndSubmitOrder()">
-      <ion-icon slot="icon-only" name="cart"></ion-icon>
-      <ion-badge class="cart-badge">{{cart.length}}</ion-badge>
-    </ion-button>
-    <ion-button (click)="presentPopover($event)" fill="clear">
-      <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
-    </ion-button>
-  </ion-buttons>
-</ion-toolbar>
-<div class="search">
-  <ion-searchbar *ngIf="keyword == undefined && keyword != ''" #q (ionChange)="searchProducts(q.value)" placeholder="Search any product in {{categoryName}}"></ion-searchbar>
-  <ion-label *ngIf="keyword && keyword != ''" class="search-result">Matching Results For : <b>&nbsp;{{ keyword }}</b></ion-label>
-</div>
-
+<ion-header color="primary">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="shop">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>{{categoryName}}</ion-title>
+    <ion-buttons slot="end" *ngIf="placeOrder">
+      <ion-button class="cart-btn" fill="clear" (click)="reviewAndSubmitOrder()">
+        <ion-icon slot="icon-only" name="cart"  *ngIf="!isEditOrderFlow"></ion-icon>
+        <ion-badge class="cart-badge" *ngIf="!isEditOrderFlow">{{cart.length}}</ion-badge>
+        <ion-icon name="create" *ngIf="isEditOrdeFlow"></ion-icon>
+      </ion-button>
+      <ion-button (click)="presentPopover($event)" fill="clear">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar *ngIf="keyword == undefined && keyword != ''" #q (ionChange)="searchProducts(q.value)"
+    placeholder="Search any product in {{categoryName}}"></ion-searchbar>
+  <ion-item class="search" *ngIf="keyword && keyword != ''" lines="full" color="primary">
+    <ion-label class="search-result">Matching Results For : <b>&nbsp;{{ keyword }}</b></ion-label>
+  </ion-item>
+</ion-header>
 <ion-content>
   <ion-list *ngIf="productListAvailable &&  (filteredProductList.length > 0)">
     <ion-card *ngFor="let product of filteredProductList">
@@ -26,7 +29,7 @@
         <ion-row class="ion-align-items-center">
           <ion-col>
             <ion-icon name="cube" color="grey"></ion-icon>
-              <span>{{product.name}} [{{product.productCode}}]</span>
+            <span>{{product.name}} [{{product.productCode}}]</span>
           </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center">
@@ -42,7 +45,7 @@
           <ion-col>
             SysCode: <span>{{product.productSysCode}}</span>
           </ion-col>
-          <ion-col >
+          <ion-col>
             CaseSize: <span>{{product.currentCaseSize}}</span>
           </ion-col>
         </ion-row>
@@ -52,49 +55,62 @@
             Net Weight: <span>{{product.netWeight | number: '.2-2'}} Kg</span>
           </ion-col>
         </ion-row>
-        <hr>
-        <div *ngIf="loggedInUserStore.length" class="warehouse">
-          <ion-row *ngFor="let assocStores of loggedInUserStore">
-            <ng-container *ngFor="let store of product.inventoryDetails">
-              <ion-col size="8" *ngIf="assocStores === store.storeName" class="store-name">{{assocStores}}</ion-col>
-              <ion-col size="4" *ngIf="assocStores === store.storeName">{{store.inventory}}<span class="in-transit">({{store.inTransit}})</span></ion-col>
-            </ng-container>
-          </ion-row>
-        </div>
         <ion-row *ngIf="placeOrder">
           <ion-col size="12">
             <ion-row>
               <ion-col size="2" class="ion-text-left">
-                <ion-button (click)="(product.quantity = decrementQty(product.quantity))" fill="clear"><ion-icon slot="icon-only" name="remove-circle" ></ion-icon></ion-button>
+                <ion-button (click)="(product.quantity = decrementQty(product.quantity))" fill="clear">
+                  <ion-icon slot="icon-only" name="remove-circle" class="removeIcon"></ion-icon>
+                </ion-button>
               </ion-col>
               <ion-col size="2" class="ion-text-center">
-                <input type='text' (blur)="setQty(product)" (focus)="resetQty(product)" name='quantity' [(ngModel)]="product.quantity" value='0' class='qty' style="width: 40px;height: 25px;text-align: center;margin-top: 10px;margin-left: 10px;" />
+                <input type='text' (blur)="setQty(product)" (focus)="resetQty(product)" name='quantity'
+                  [(ngModel)]="product.quantity" value='0' class='qty'
+                  style="width: 40px;height: 25px;text-align: center;margin-top: 12px;margin-left: 10px;" />
               </ion-col>
               <ion-col size="2" class="ion-text-left">
-                <ion-button (click)="(product.quantity = incrementQty(product.quantity))" fill="clear"><ion-icon slot="icon-only" name="add-circle" ></ion-icon></ion-button>
+                <ion-button (click)="(product.quantity = incrementQty(product.quantity))" fill="clear">
+                  <ion-icon slot="icon-only" name="add-circle" class="addIcon"></ion-icon>
+                </ion-button>
               </ion-col>
               <ion-col size="6" class="ion-text-right">
-                <ion-button [disabled]="!(product.price > 1)" color="primary" (click)="addToCart(product, product.quantity)" style="color: white!important;">
-                  <strong><ion-icon name="cart"></ion-icon>Add</strong>
+                <ion-button [disabled]="!(product.price >= 1)" color="secondary"
+                  (click)="addToCart(product, product.quantity)" style="color: white!important;">
+                  <strong>
+                    <ion-icon name="cart"></ion-icon>Add
+                  </strong>
                 </ion-button>
               </ion-col>
             </ion-row>
           </ion-col>
         </ion-row>
-        <hr>
-
-
-        <!--<ion-row class="ion-align-items-center">
-          <ion-col>
-            <ion-button fill="outline" color="secondary" [disabled]="!isUserAuthorized ? 'disabled': null" color="secondary" ion-button outline (click)="editProduct(product)">
-              <ion-icon name="create"></ion-icon>Edit
-            </ion-button>
+        <div *ngIf="loggedInUserStore.length " class="warehouse" style="text-align: center; color: black">
+          <ion-item-divider></ion-item-divider>
+          <ion-row *ngFor="let assocStores of loggedInUserStore" >
+            <ng-container *ngFor="let store of product.inventoryDetails">
+              <ion-col size="8" *ngIf="assocStores === store.storeName" class="store-name">{{assocStores}}</ion-col>
+              <ion-col size="4" *ngIf="assocStores === store.storeName" >{{store.inventory}}<span
+                  class="in-transit" *ngIf="!placeOrder">({{store.inTransit}})</span></ion-col>
+            </ng-container>
+          </ion-row>
+        </div>
+        <ion-row>
+          <ion-col class="ion-align-items-center" *ngIf="!placeOrder">
+            <ion-button [disabled]=!isUserAuthorized fill="outline" color="secondary" (click)="editProduct(product)"><ion-icon name="create"></ion-icon>Edit</ion-button>
           </ion-col>
-        </ion-row>-->
+        </ion-row>
       </ion-card-content>
     </ion-card>
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
+  </ion-list>
+  <ion-list class="noDataView" *ngIf="productListAvailable  && (filteredProductList.length < 1)">
+    <ion-card>
+      <ion-card-header>
+        <ion-icon name="alert"></ion-icon>
+        <h4>No record found!</h4>
+      </ion-card-header>
+    </ion-card>
   </ion-list>
 </ion-content>
