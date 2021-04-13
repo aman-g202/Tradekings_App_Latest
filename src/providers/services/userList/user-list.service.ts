@@ -47,7 +47,7 @@ export class UserListService {
     return this.httpClient.post(environment.baseUrl + environment.endPoints.resetPassword + externalId, {});
   }
 
-  createUser(userDetails: Object): any {
-    return this.httpClient.post(environment.baseUrl + environment.endPoints.createUser, userDetails);
+  createUser(data: { name: string, userLoginId: string, password: string, userType:string, country:string, province:string, externalId:string }): any {
+    return this.httpClient.post(environment.baseUrl + environment.endPoints.createUser, data);
   }
 }

@@ -35,8 +35,7 @@ export class AddUserPage implements OnInit {
   selectedCountry : string = 'ZAMBIA'
   selectedProvince : string = 'BOTSWANA'
   showCustomerForm: string = 'CUSTOMER'
-  isUserAuthorized = false
-
+  isUserAuthorized = false;
   constructor (private userService: UserListService,
                private widgetUtil: WidgetUtilService,
                private dashboardService: DashboardService) {
@@ -144,52 +143,59 @@ export class AddUserPage implements OnInit {
   createUser (userType) {
     let message = ''
     this.showLoader = true
-    let userDetails = {}
-    userDetails['lastUpdatedAt'] = Date.now()
+    let data:any = {}
     if(userType === 'customer') {
       message = CONSTANTS.CUSTOMER_CREATED
-      userDetails['name'] = this.name.value.trim()
-      userDetails['userLoginId'] = this.userLoginId.value.trim()
-      userDetails['password'] = this.password.value.trim()
-      userDetails['userType'] = this.selectedUserType
-      userDetails['country'] = this.selectedCountry.trim()
-      userDetails['channel'] = this.channel.value.trim()
-      userDetails['province'] = this.selectedProvince.trim()
-      userDetails['externalId'] = this.externalId.value.trim()
+      data = {
+        lastUpdatedAt: Date.now(),
+        name: this.name.value.trim(),
+        userLoginId :this.userLoginId.value.trim(),
+        password : this.password.value.trim(),
+        userType : this.selectedUserType,
+        country :this.selectedCountry.trim(),
+        channel: this.channel.value.trim(),
+        province : this.selectedProvince.trim(),  
+        externalId : this.externalId.value.trim()  
+      }
     } else if(userType === 'admin') {
       message = CONSTANTS.ADMIN_CREATED
-      userDetails['name'] = this.name.value.trim()
-      userDetails['userLoginId'] = this.userLoginId.value.trim()
-      userDetails['password'] = this.password.value.trim()
-      userDetails['userType'] = this.selectedUserType
-      userDetails['country'] = this.selectedCountry.trim()
-      userDetails['province'] = this.selectedProvince.trim()
+      data = {
+        lastUpdatedAt: Date.now(),
+        name: this.name.value.trim(),
+        userLoginId :this.userLoginId.value.trim(),
+        password : this.password.value.trim(),
+        userType : this.selectedUserType,
+        country :this.selectedCountry.trim(),
+        province : this.selectedProvince.trim(),  
+      }
     } else if(userType === 'ADMINHO') {
       message = CONSTANTS.ADMINHO_CREATED
-      userDetails['name'] = this.name.value.trim()
-      userDetails['userLoginId'] = this.userLoginId.value.trim()
-      userDetails['password'] = this.password.value.trim()
-      userDetails['userType'] = this.selectedUserType
-      userDetails['country'] = this.selectedCountry.trim()
-      userDetails['province'] = this.selectedProvince.trim()
+      data = {
+        lastUpdatedAt: Date.now(),
+        name: this.name.value.trim(),
+        userLoginId :this.userLoginId.value.trim(),
+        password : this.password.value.trim(),
+        userType : this.selectedUserType,
+        country :this.selectedCountry.trim(),
+        province : this.selectedProvince.trim()      }
     } else {
-      
       if(userType === 'salesmanager'){
       message = CONSTANTS.SALESMANAGER_CREATED
-      }
-
-      else{
+      } else{
         message = CONSTANTS.SALESMAN_CREATED
       }
-      userDetails['name'] = this.name.value.trim()
-      userDetails['userLoginId'] = this.userLoginId.value.trim()
-      userDetails['password'] = this.password.value.trim()
-      userDetails['userType'] = this.selectedUserType
-      userDetails['country'] = this.selectedCountry.trim()
-      userDetails['province'] = this.selectedProvince.trim()  
-      userDetails['externalId'] = this.externalId.value.trim()    
+      data = {
+        lastUpdatedAt: Date.now(),
+        name: this.name.value.trim(),
+        userLoginId :this.userLoginId.value.trim(),
+        password : this.password.value.trim(),
+        userType : this.selectedUserType,
+        country :this.selectedCountry.trim(),
+        province : this.selectedProvince.trim(),  
+        externalId : this.externalId.value.trim()  
+      }  
     }
-    this.userService.createUser(userDetails).subscribe((result) => {
+    this.userService.createUser(data).subscribe((result) => {
       this.widgetUtil.presentToast(message);
       this.showLoader = false;
       this.addAdminForm.reset()
