@@ -180,7 +180,9 @@ export class AddUserPage implements OnInit {
         province : this.selectedProvince.trim()      }
     } else {
       if(userType === 'salesmanager'){
-      message = CONSTANTS.SALESMANAGER_CREATED
+        message = CONSTANTS.SALESMANAGER_CREATED
+      } else if(userType === 'priceexecutive') {
+        message = CONSTANTS.PRICEEXECUTIVE_CREATED
       } else{
         message = CONSTANTS.SALESMAN_CREATED
       }
