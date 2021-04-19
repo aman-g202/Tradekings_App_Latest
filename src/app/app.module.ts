@@ -73,6 +73,9 @@ import { PriceExecutiveDashboardPage } from './price-executive-dashboard/price-e
   ],
   providers: [
     StatusBar,
+    File,
+    SocialSharing,
+    FileOpener,
     SplashScreen,
     File,
     FileOpener,

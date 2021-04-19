@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { File } from '@ionic-native/file/ngx';
 import { Injectable, NgModule } from '@angular/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
@@ -8,10 +9,10 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import { WidgetUtilService } from '../../utils/widget';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+import { environment } from '../../../environments/environment';
+
 @Injectable()
-
-
-export class ReportsService {
+export class ReportService {
   pdfObj: any = {};
   showLoder: any;
 
@@ -20,10 +21,38 @@ export class ReportsService {
     private file: File,
     private platform: Platform,
     private socialSharing: SocialSharing,
-    private widgetUtil: WidgetUtilService
-
+    private widgetUtil: WidgetUtilService,
+    private http: HttpClient,
   ) { }
 
+  getCustomerPerformanceData (externalId: string): any {
+    return this.http.get(environment.baseUrl + 'api/user/customer/report/performance?externalId=' + externalId);
+  }
+
+  getVANPerformanceData (externalId: string): any {
+    return this.http.get(environment.baseUrl + 'api/user/van/report/performance?externalId=' + externalId);
+  }
+
+  getSKUPerformanceData (externalId: string): any {
+    return this.http.get(environment.baseUrl + 'api/user/sku/report/performance?externalId=' + externalId);
+  }
+
+  getSKUPerformanceFilterData (filter: {externalId?: string, skip: string, limit: string, skuName?: string, categoryName?: string, searchQuery?: string }):any {
+    return this.http.get(environment.baseUrl + 'api/user/filter/sku/report/performance', {params: filter});
+    }
+
+    downloadReport (type: string): any {
+    return this.http.get(environment.baseUrl + `api/category/pricelist/download?type=${type}`,
+      {
+        responseType: 'blob'
+      }
+    )
+  }
+
+  getInvoiceAgainstOrderData (filter: {externalId?: any, skip: string, limit: string, fromDate?: string, throughDate?: string}): any {
+    filter = JSON.parse(JSON.stringify(filter));
+    return this.http.get(environment.baseUrl + 'api/user/customer/report/invoiceagainstorder', { params: filter });
+  }  
 
   async downloadPdf(documentDefinition, type, fileName) {
     if (type === 'share') {

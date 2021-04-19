@@ -1,9 +1,42 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>reports</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Reports</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-<!-- List All 4 Types of Reports Here -->
-</ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button size="small" expand="block" color="secondary" (click)="openCustomerPerformancePage()">
+          Customer Performance
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button size="small" expand="block" color="secondary" (click)="openSKUPerformancePage()">
+          SKU Performance
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button size="small" expand="block" color="secondary" (click)="openVANPerformancePage()">
+          VAN Performance
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button size="small" expand="block" color="secondary" (click)="openPriceListPage()">
+          Price List
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+  </ion-content>

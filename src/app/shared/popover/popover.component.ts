@@ -142,6 +142,9 @@ export class PopoverComponent implements OnInit {
       case 'Reset':
         this.resetFilter();
         break;
+      case 'Reports': 
+        this.navigateToReports();
+        break;
       case 'Add Category':
         this.addCategory();
         break;
@@ -164,12 +167,18 @@ export class PopoverComponent implements OnInit {
   }
 
 
-   logout() {
+  logout() {
     this.dismissPopover();
     this.storageService.clearStorage();
     localStorage.clear();
     this.navCtrl.navigateRoot('/auth');
   }
+
+  navigateToReports() {
+    this.dismissPopover();
+    this.router.navigateByUrl('/reports')
+  }
+
 
   filterByOrderDate() {
     this.dismissPopover('filterbyorderdate');

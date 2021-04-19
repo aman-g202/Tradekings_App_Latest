@@ -5,14 +5,14 @@ import { StorageServiceProvider } from '../../../providers/services/storage/stor
 import { WidgetUtilService } from '../../../providers/utils/widget';
 import { PaymentService } from '../../../providers/services/payment/payment.service ';
 import { CONSTANTS } from '../../../providers/utils/constants';
-import { ReportsService } from '../../../providers/services/reports/reports.service';
+import { ReportService } from '../../../providers/services/reports/reports.service';
 
 
 @Component({
   selector: 'app-view-statement',
   templateUrl: './view-statement.page.html',
   styleUrls: ['./view-statement.page.scss'],
-  providers: [PaymentService, DecimalPipe, ReportsService]
+  providers: [PaymentService, DecimalPipe, ReportService]
 })
 
 export class ViewStatementPage implements OnInit {
@@ -38,7 +38,7 @@ export class ViewStatementPage implements OnInit {
     private widgetUtil: WidgetUtilService,
     private paymentService: PaymentService,
     private decimalPipe: DecimalPipe,
-    private report: ReportsService
+    private report: ReportService
 
   ) { }
 

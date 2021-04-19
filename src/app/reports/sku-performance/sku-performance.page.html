@@ -1,9 +1,99 @@
 <ion-header>
+  <ion-navbar>
+    <ion-title>SKU Performance</ion-title>
+  </ion-navbar>
   <ion-toolbar>
-    <ion-title>sku-performance</ion-title>
+    <form (ngSubmit)="searchSKU(q.value)">
+      <ion-searchbar #q placeholder="Search sku by name"></ion-searchbar>
+    </form>
   </ion-toolbar>
+
+  <ion-grid class="filters">
+    <ion-row>
+      <ion-col>
+        <ion-select [(ngModel)]="categoryName" interface="popover" #category (ngModelChange)="onCategoryTypeSelect(category.value)" placeholder="Select Category">
+          <ion-option value="total">Total</ion-option>
+          <ion-option value="Confectionery">Confectionery</ion-option>
+          <ion-option value="Household">HouseHold</ion-option>
+          <ion-option value="Laundry">Laundry</ion-option>
+          <ion-option value="Personal Care">Personal Care</ion-option>
+        </ion-select>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="secondary" (click)="includeTonnage = !includeTonnage">
+          Show in Tonnage {{ includeTonnage ? '(x)' : '' }}
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="secondary" (click)="onGetSkuValue('NONBILLED')">
+          NON BILLED SKU {{ isFilterNonBilling ? '(x)' : '' }}
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="secondary" (click)="onGetSkuValue('DCLSKU')">
+          DECLINING SKU {{ isFilterDegrowing ? '(x)' : '' }}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)" spinner="crescent">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="table-container" style="position: sticky;  z-index: 1;" (scroll) = "updateScrollHeader()" #scrollTwo>
+    <table style="table-layout:fixed;">
+      <thead *ngIf="filterdList.length != 0">
+        <tr>
+            <th class="w-70">SKU Code</th>
+            <th class="w-240">SKU Name</th>
+            <th class="number w-70">FTD <span *ngIf="includeTonnage">Tonnage</span></th>
+            <th class="number w-70">MTD <span *ngIf="includeTonnage">Tonnage</span></th>
+            <th class="number w-70">LMTD <span *ngIf="includeTonnage">Tonnage</span></th>
+            <th class="number w-70">LYMTD <span *ngIf="includeTonnage">Tonnage</span></th>    
+            <th class="number w-70">% Growth over LYMTD</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-container"  *ngIf="filterdList.length != 0" (scroll)="updateScroll()" #scrollOne>
+    <table style="table-layout:fixed;">
+      <tbody>
+        <tr *ngFor="let item of filterdList">
+          <td class="large-space w-70">{{item.productCode}}</td>
+          <td class="less-space w-240">{{item.productName}}</td>
+          <td class="number w-70" *ngIf="includeTonnage">{{item.ftdTonnage.toFixed(1)}}</td>
+          <td class="number w-70" *ngIf="includeTonnage">{{item.mtdTonnage.toFixed(1)}}</td>
+          <td class="number w-70" *ngIf="includeTonnage">{{item.lmtdTonnage.toFixed(1)}}</td>
+          <td class="number w-70" *ngIf="includeTonnage">{{item.lymtdTonnage.toFixed(1)}}</td>
+          <td class="number w-70" *ngIf="!includeTonnage">{{item.ftd.toFixed(0)}}</td>
+          <td class="number w-70" *ngIf="!includeTonnage">{{item.mtd.toFixed(0)}}</td>
+          <td class="number w-70" *ngIf="!includeTonnage">{{item.lmtd.toFixed(0)}}</td>
+          <td class="number w-70" *ngIf="!includeTonnage">{{item.lymtd.toFixed(0)}}</td>
+          <td class="number w-70" *ngIf="item.percentage == 0">0</td>
+          <td class="number w-70" *ngIf="item.percentage != 0" [ngClass]="item.percentage > 0?'positive':'negative'">{{item.percentage}}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ion-fab right bottom *ngIf="filterdList.length != 0">
+    <button ion-fab (click)="onSharePdf()">
+      <ion-icon name="share"></ion-icon>
+    </button>
+  </ion-fab>
+  <div *ngIf="filterdList.length === 0">
+    <ion-card class="noDataView">
+      <ion-card-header text-center>
+        <ion-icon name="alert"></ion-icon>
+          <h4>No record found!</h4>
+        </ion-card-header>
+    </ion-card>
+  </div>
+  <ion-infinite-scroll  (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

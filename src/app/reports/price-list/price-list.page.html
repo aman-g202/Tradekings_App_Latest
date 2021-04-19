@@ -1,9 +1,87 @@
+<!--
+  Generated template for the ReportsPriceListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
-  <ion-toolbar>
-    <ion-title>price-list</ion-title>
-  </ion-toolbar>
+
+  <ion-navbar>
+    <ion-title>Price List</ion-title>
+  </ion-navbar>
+
 </ion-header>
 
-<ion-content>
 
+<ion-content padding>
+  <ion-grid>
+        <ion-row>
+      <ion-col>
+        <button ion-button color="secondary">
+          Laundry Retail
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('laundry-retail', 'download')">
+          <ion-icon name="download"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('laundry-retail', 'share')">
+          <ion-icon name="share"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="secondary">
+          Confectionery Retail
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('confectionery-retail', 'download')">
+          <ion-icon name="download"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('confectionery-retail', 'share')">
+          <ion-icon name="share"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="secondary">
+          Personal Care Retail
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('presonalcare-retail', 'download')">
+          <ion-icon name="download"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('presonalcare-retail', 'share')">
+          <ion-icon name="share"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="secondary">
+          Household Retail
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('household-retail', 'download')">
+          <ion-icon name="download"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-fab (click)="downloadReport('household-retail', 'share')">
+          <ion-icon name="share"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
