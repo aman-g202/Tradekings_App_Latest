@@ -31,12 +31,15 @@ export class SelectCustomerPage implements OnInit {
 
   async ngOnInit() {
     this.profile = await this.storageService.getFromStorage('profile') as ProfileModel;
+    const existingCart: any = await this.storageService.getCartFromStorage();
     if (this.profile.userType === 'PRICEEXECUTIVE') {
       this.hrefTag = '/price-executive-dashboard/' + this.profile.userType;
       this.getCustomerList();
     } else {
+      if (existingCart.length > 0){
+        this.clearCart();
+      }
       this.hrefTag = '/dashboard/' + this.profile.userType;
-      this.clearCart();
       this.getCustomerList();
     }
   }

@@ -35,6 +35,12 @@ ion-col {
   }
 }
 
+.search-spinner{
+  top:45%;
+  left: 45%;
+  position: fixed;
+}
+
 .noDataView {
   box-shadow: none;
   ion-card-header {

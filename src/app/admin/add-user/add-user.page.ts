@@ -14,9 +14,9 @@ import { DashboardService } from '../../../providers/services/dashboard/dashboar
 export class AddUserPage implements OnInit {
   hrefTag = '';
 
-  addAdminForm : FormGroup;
-  addAdminHOForm : FormGroup;
-  addCustomerForm : FormGroup;
+  addAdminForm: FormGroup;
+  addAdminHOForm: FormGroup;
+  addCustomerForm: FormGroup;
   addSalesmanForm: FormGroup;
   addSalesmanagerForm: FormGroup;
   name: FormControl;
@@ -27,38 +27,38 @@ export class AddUserPage implements OnInit {
   channel: FormControl;
   province: FormControl;
   showLoader = false;
-  userTypeList: Array<any> =  [ 'CUSTOMER', 'ADMIN','ADMINHO','SALESMAN','SALESMANAGER','PRICEEXECUTIVE']
-  countryList: Array<any> =  [ 'ZAMBIA']
+  userTypeList: Array<any> =  [ 'CUSTOMER', 'ADMIN', 'ADMINHO', 'SALESMAN', 'SALESMANAGER', 'PRICEEXECUTIVE'];
+  countryList: Array<any> =  [ 'ZAMBIA'];
   provinceList: Array<any> =  [ 'BOTSWANA', 'COPPERBELT', 'DRC', 'EASTERN', 'KENYA', 'LUAPULA', 'LUSAKA', 'MALAWI', 'MOZAMBIQUE', 'NORTH WESTERN', 'NORTHERN'
-  ,'SOUTH AFRICA', 'SOUTHERN', 'TANZANIA', 'WESTERN', 'ZIMBABWE' ]
-  selectedUserType : string = 'CUSTOMER'
-  selectedCountry : string = 'ZAMBIA'
-  selectedProvince : string = 'BOTSWANA'
-  showCustomerForm: string = 'CUSTOMER'
+  , 'SOUTH AFRICA', 'SOUTHERN', 'TANZANIA', 'WESTERN', 'ZIMBABWE' ];
+  selectedUserType = 'CUSTOMER';
+  selectedCountry = 'ZAMBIA';
+  selectedProvince = 'BOTSWANA';
+  showCustomerForm = 'CUSTOMER';
   isUserAuthorized = false;
-  constructor (private userService: UserListService,
-               private widgetUtil: WidgetUtilService,
-               private dashboardService: DashboardService) {
-    this.showCustomerForm = this.selectedUserType
+  constructor(private userService: UserListService,
+              private widgetUtil: WidgetUtilService,
+              private dashboardService: DashboardService) {
+    this.showCustomerForm = this.selectedUserType;
   }
 
-  async ngOnInit () {
+  async ngOnInit() {
     this.hrefTag = '/dashboard/ADMIN';
-    this.createFormControls()
-    this.createAdminForm()
-    this.createAdminHOForm()
-    this.createCustomerForm()
-    this.createSalesmanForm()
+    this.createFormControls();
+    this.createAdminForm();
+    this.createAdminHOForm();
+    this.createCustomerForm();
+    this.createSalesmanForm();
 
-    //Salesmanager Form
-    this.createSalesmanagerForm()
+    // Salesmanager Form
+    this.createSalesmanagerForm();
 
     // enable, disable CRUD button
-    this.isUserAuthorized = await this.dashboardService.isAuthorized()
+    this.isUserAuthorized = await this.dashboardService.isAuthorized();
 
   }
 
-  createFormControls () {
+  createFormControls() {
     this.userLoginId = new FormControl('', [
       Validators.required
     ]);
@@ -85,7 +85,7 @@ export class AddUserPage implements OnInit {
     ]);
   }
 
-  createAdminForm () {
+  createAdminForm() {
     this.addAdminForm = new FormGroup({
       name: this.name,
       userLoginId: this.userLoginId,
@@ -93,8 +93,8 @@ export class AddUserPage implements OnInit {
     });
   }
 
-  //ADMINHO Form
-  createAdminHOForm () {
+  // ADMINHO Form
+  createAdminHOForm() {
     this.addAdminHOForm = new FormGroup({
       name: this.name,
       userLoginId: this.userLoginId,
@@ -102,7 +102,7 @@ export class AddUserPage implements OnInit {
     });
   }
 
-  createSalesmanForm () {
+  createSalesmanForm() {
     this.addSalesmanForm = new FormGroup({
       name: this.name,
       userLoginId: this.userLoginId,
@@ -111,8 +111,8 @@ export class AddUserPage implements OnInit {
     });
   }
 
-  //Salesmanager Form
-  createSalesmanagerForm () {
+  // Salesmanager Form
+  createSalesmanagerForm() {
     this.addSalesmanagerForm = new FormGroup({
       name: this.name,
       userLoginId: this.userLoginId,
@@ -121,7 +121,7 @@ export class AddUserPage implements OnInit {
     });
   }
 
-  createCustomerForm () {
+  createCustomerForm() {
     this.addCustomerForm = new FormGroup({
       name: this.name,
       userLoginId: this.userLoginId,
@@ -131,87 +131,87 @@ export class AddUserPage implements OnInit {
     });
   }
 
-  onUserTypeSelect () {
-    this.showCustomerForm = this.selectedUserType
-    this.addAdminForm.reset()
-    this.addAdminHOForm.reset()
-    this.addCustomerForm.reset()
-    this.addSalesmanForm.reset()
-    this.addSalesmanagerForm.reset()
-  } 
+  onUserTypeSelect() {
+    this.showCustomerForm = this.selectedUserType;
+    this.addAdminForm.reset();
+    this.addAdminHOForm.reset();
+    this.addCustomerForm.reset();
+    this.addSalesmanForm.reset();
+    this.addSalesmanagerForm.reset();
+  }
 
-  createUser (userType) {
-    let message = ''
-    this.showLoader = true
-    let data:any = {}
-    if(userType === 'customer') {
-      message = CONSTANTS.CUSTOMER_CREATED
+  createUser(userType) {
+    let message = '';
+    this.showLoader = true;
+    let data: any = {};
+    if (userType === 'customer') {
+      message = CONSTANTS.CUSTOMER_CREATED;
       data = {
         lastUpdatedAt: Date.now(),
         name: this.name.value.trim(),
-        userLoginId :this.userLoginId.value.trim(),
+        userLoginId : this.userLoginId.value.trim(),
         password : this.password.value.trim(),
         userType : this.selectedUserType,
-        country :this.selectedCountry.trim(),
+        country : this.selectedCountry.trim(),
         channel: this.channel.value.trim(),
-        province : this.selectedProvince.trim(),  
-        externalId : this.externalId.value.trim()  
-      }
-    } else if(userType === 'admin') {
-      message = CONSTANTS.ADMIN_CREATED
+        province : this.selectedProvince.trim(),
+        externalId : this.externalId.value.trim()
+      };
+    } else if (userType === 'admin') {
+      message = CONSTANTS.ADMIN_CREATED;
       data = {
         lastUpdatedAt: Date.now(),
         name: this.name.value.trim(),
-        userLoginId :this.userLoginId.value.trim(),
+        userLoginId : this.userLoginId.value.trim(),
         password : this.password.value.trim(),
         userType : this.selectedUserType,
-        country :this.selectedCountry.trim(),
-        province : this.selectedProvince.trim(),  
-      }
-    } else if(userType === 'ADMINHO') {
-      message = CONSTANTS.ADMINHO_CREATED
+        country : this.selectedCountry.trim(),
+        province : this.selectedProvince.trim(),
+      };
+    } else if (userType === 'ADMINHO') {
+      message = CONSTANTS.ADMINHO_CREATED;
       data = {
         lastUpdatedAt: Date.now(),
         name: this.name.value.trim(),
-        userLoginId :this.userLoginId.value.trim(),
+        userLoginId : this.userLoginId.value.trim(),
         password : this.password.value.trim(),
         userType : this.selectedUserType,
-        country :this.selectedCountry.trim(),
-        province : this.selectedProvince.trim()      }
+        country : this.selectedCountry.trim(),
+        province : this.selectedProvince.trim()      };
     } else {
-      if(userType === 'salesmanager'){
-        message = CONSTANTS.SALESMANAGER_CREATED
-      } else if(userType === 'priceexecutive') {
-        message = CONSTANTS.PRICEEXECUTIVE_CREATED
+      if (userType === 'salesmanager'){
+        message = CONSTANTS.SALESMANAGER_CREATED;
+      } else if (userType === 'priceexecutive') {
+        message = CONSTANTS.PRICEEXECUTIVE_CREATED;
       } else{
-        message = CONSTANTS.SALESMAN_CREATED
+        message = CONSTANTS.SALESMAN_CREATED;
       }
       data = {
         lastUpdatedAt: Date.now(),
         name: this.name.value.trim(),
-        userLoginId :this.userLoginId.value.trim(),
+        userLoginId : this.userLoginId.value.trim(),
         password : this.password.value.trim(),
         userType : this.selectedUserType,
-        country :this.selectedCountry.trim(),
-        province : this.selectedProvince.trim(),  
-        externalId : this.externalId.value.trim()  
-      }  
+        country : this.selectedCountry.trim(),
+        province : this.selectedProvince.trim(),
+        externalId : this.externalId.value.trim()
+      }
     }
     this.userService.createUser(data).subscribe((result) => {
       this.widgetUtil.presentToast(message);
       this.showLoader = false;
-      this.addAdminForm.reset()
-      this.addCustomerForm.reset()
+      this.addAdminForm.reset();
+      this.addCustomerForm.reset();
     }, (error) => {
       this.showLoader = false;
       if (error.statusText === 'Unknown Error'){
-        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
-      } else if(error.error.message === 'UserLoginId already exist') {
-        this.widgetUtil.presentToast(CONSTANTS.USER_LOGIN_ID_ALREADY_EXIST)
+        this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE);
+      } else if (error.error.message === 'UserLoginId already exist') {
+        this.widgetUtil.presentToast(CONSTANTS.USER_LOGIN_ID_ALREADY_EXIST);
       }else {
-        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR)
+        this.widgetUtil.presentToast(CONSTANTS.SERVER_ERROR);
       }
-    })
+    });
   }
 
 }

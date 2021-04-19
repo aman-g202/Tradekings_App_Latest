@@ -107,7 +107,7 @@ export class ChildCategoryPage implements OnInit {
       this.widgetUtil.presentToast(CONSTANTS.CART_EMPTY);
     } else {
       const orderTotal = await this.storageService.getFromStorage('orderTotal');
-      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal } });
+      this.router.navigate(['/orders/edit-order'], { queryParams: { orderTotal , isEditOrderFlow: this.isEditOrderFlow } });
     }
   }
 

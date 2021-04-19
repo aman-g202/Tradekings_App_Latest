@@ -7,6 +7,9 @@ ion-content {
   ion-card {
     box-shadow: 0px 0px 1px 0px;
     border-radius: 10px; 
+    ion-card-content{
+      padding: 10px 2px
+    }
     ion-col {
       color: var(--ion-color-light-contrast);
       span {
@@ -42,6 +45,9 @@ ion-content {
   }
   .recieved {
     color: var(--ion-color-success-shade);
+  }
+  .dateCol{
+    white-space: pre;
   }
   .noDataView {
     ion-card {

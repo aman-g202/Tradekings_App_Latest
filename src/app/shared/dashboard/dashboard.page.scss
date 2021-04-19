@@ -44,7 +44,6 @@ ion-item {
   border: 1px solid var(--ion-color-primary-contrast);
   text-align: center;
   margin: 2%;
-  width: 46%;
   border-radius: 3px;
   height: 73px;
   box-shadow: 1px 1px 2px 1px var(--ion-color-medium-shade);
@@ -92,7 +91,7 @@ ion-icon {
 
 .InvoiceBtn {
   --background: var(--ion-color-primary-tint);
-   white-space: pre-wrap;
+  //  white-space: pre-wrap;
 }
 
 

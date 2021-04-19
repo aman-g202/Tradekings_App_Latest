@@ -37,6 +37,7 @@ import { SideBarComponent } from './shared/side-bar/side-bar.component';
 import { PopoverComponent } from './shared/popover/popover.component';
 import { EditUserSmListPage } from './shared/edit-user-sm-list/edit-user-sm-list.page';
 import { PriceExecutiveDashboardPage } from './price-executive-dashboard/price-executive-dashboard.page';
+import { SchedulersPage } from './schedulers/schedulers.page';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { PriceExecutiveDashboardPage } from './price-executive-dashboard/price-e
     PriceExecutiveDashboardPage,
     SideBarComponent,
     PopoverComponent,
+    SchedulersPage
   ],
   entryComponents: [CategoryTotalModalPage, SideBarComponent, PopoverComponent],
   imports: [BrowserModule, CommonModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, FormsModule, HttpClientModule,

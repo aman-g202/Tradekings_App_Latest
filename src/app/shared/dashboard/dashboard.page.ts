@@ -57,6 +57,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   telPh = 'NA';
   height = 0;
   width = 0;
+  selectedValue = 'Total';
   documentDefinition: any = {};
   pendingInvoiceData: any = {
     customerName: '',

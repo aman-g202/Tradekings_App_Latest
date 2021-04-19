@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content class="full-background">
-  <div class="ion-text-center" *ngIf="!userListAvailable">
+  <div class=" search-spinner" *ngIf="!userListAvailable">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

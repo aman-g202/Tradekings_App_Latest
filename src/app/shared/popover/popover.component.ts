@@ -34,7 +34,8 @@ export class PopoverComponent implements OnInit {
 
   async getData() {
     const profile = await this.storageService.getFromStorage('profile') as ProfileModel;
-    if (profile.userType === 'ADMIN' || profile.userType === 'ADMINHO') {
+    if (profile.userType === 'ADMIN' &&
+    profile.userLoginId !== 'R0001'|| profile.userType === 'ADMINHO' && profile.userLoginId !== 'R0001') {
       if (this.type === 'filter') {
         this.popoverOptions = [
           {
@@ -103,7 +104,7 @@ export class PopoverComponent implements OnInit {
           }
         ];
       } else {
-        if (profile.userType === 'PRICEEXECUTIVE' || profile.userType === 'CUSTOMER') {
+        if (profile.userType === 'PRICEEXECUTIVE' || profile.userType === 'CUSTOMER' || profile.userLoginId === 'R0001') {
           this.popoverOptions = [
             {
               name: 'Change Password',

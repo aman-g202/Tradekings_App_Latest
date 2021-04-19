@@ -1,0 +1,117 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)" fill="clear">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="createNewProductInMongo()">Create Product in App
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="updateProductInMongo()">Update Proudct </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="createNewCustomerInMongo()">Create Customer in App
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="updateCustomerInMongo()">Update Customer </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="updateParentIdInUserDoc()">Update User Parent Id in App
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="updateUserDashboardData()">Update Customer Dashboard
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="updateNonUserDashboardData()">Update Executive
+          Dashboard</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="updateAssociatedSMListToMongo()">Update Sales Tree
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="createCustomerStatements()">Create Customer Statements
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="createCustomerPendingInvoice()">Create Customer Pending
+          Invoice </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="ion-text-wrap" (click)="createCustomerInvoiceAgainstOrder()">Update Invoice
+          against Order </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="erp-action-btn ion-text-wrap" (click)="storeInProgressOrderInErp()">Store
+          In-Progress Order </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="erp-action-btn ion-text-wrap" (click)="updateOrderStatusToBilled()">Update
+          Status To Billed </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="erp-action-btn ion-text-wrap" (click)="updateInvoiceOrderGap()">Update INVOICE
+          ORDER GAP </ion-button>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="erp-action-btn ion-text-wrap" (click)="updateCustomerPerformance()">Update
+          CUSTOMER PERFORMANCE </ion-button>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="erp-action-btn ion-text-wrap" (click)="updateSkuPerformance()">Update SKU
+          PERFORMANCE</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" size="large" class="erp-action-btn ion-text-wrap" (click)="updateVanPerformance()">Update VAN
+          PERFORMANCE </ion-button>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
