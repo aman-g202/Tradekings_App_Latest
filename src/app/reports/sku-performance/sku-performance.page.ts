@@ -30,6 +30,7 @@ export class SkuPerformancePage implements OnInit {
   heightOfPDF: number;
   _minWidth: number;
   pdfObj: any;
+  dataAvailable = false;
   months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   @ViewChild('scrollOne') scrollOne: ElementRef;
@@ -64,6 +65,7 @@ export class SkuPerformancePage implements OnInit {
     const loader = await this.widgetUtil.showLoader('Getting Data...', 30000);
     this.reportService.getSKUPerformanceFilterData(this.prepareQuery()).subscribe((data: any) => {
       this.filterdList = data.body;
+      this.dataAvailable = true;
       loader.dismiss();
     }, error => {
       loader.dismiss();
@@ -140,9 +142,9 @@ export class SkuPerformancePage implements OnInit {
           this.filterdList.push(value)
         })
       }
-      infiniteScroll.complete();
+      infiniteScroll.target.complete();
     }, (error) => {
-      infiniteScroll.complete();
+      infiniteScroll.target.complete();
       if (error.statusText === 'Unknown Error') {
         this.widgetUtil.presentToast(CONSTANTS.INTERNET_ISSUE)
       } else {
@@ -237,11 +239,13 @@ export class SkuPerformancePage implements OnInit {
           return flag;
         }
       };
-
-      this.pdfObj = pdfMake.createPdf(documentDefinition);
-      this.downloadPdf(type);
+      this.reportService.downloadPdf(documentDefinition, 'share', 'SKU PERFORMANCE');
+      this.loaderDownloading.dismiss()
+      // this.pdfObj = pdfMake.createPdf(documentDefinition);
+      // this.downloadPdf(type);
 
     }, 1000);
+  
   }
 
 
@@ -323,79 +327,79 @@ export class SkuPerformancePage implements OnInit {
     return body;
   }
 
-  async downloadPdf (type: string) {
-    if (window['cordova']) {
-      this.pdfObj.getBuffer(buffer => {
-        var utf8 = new Uint8Array(buffer); // Convert to UTF-8...
-        let binaryArray = utf8.buffer; //
-        let storageLocation: any;
-        const pdfName = `${"SKU PERFORMANCE"}-${new Date().getFullYear()}-${this.months[new Date().getMonth()]}-${new Date().getDate()}.pdf`;
-        if (this.platform.is('ios')) {
-          storageLocation = this.file.dataDirectory;
-        } else {
-          storageLocation = this.file.externalRootDirectory;
-        }
-        this.file.resolveDirectoryUrl(storageLocation)
-          .then(dirEntry => {
-            this.file.getFile(dirEntry, pdfName, { create: true })
-              .then(fileEntry => {
-                fileEntry.createWriter(writer => {
-                  writer.onwrite = async () => {
-                    this.loaderDownloading.dismiss()
-                    if (type === 'download') {
-                      const confirm = await this.alertCtrl.create({
-                        message: `Your Pdf is downloaded with named as ${pdfName} in your storage ${storageLocation}, Do you want to open now!`,
-                        buttons: [
-                          {
-                            text: 'Cancel',
-                            handler: () => {
-                              console.log('Confirmed Cancel');
-                            }
-                          },
-                          {
-                            text: 'Okay',
-                            handler: () => {
-                              this.fileOpener.open(`${storageLocation}${pdfName}`, 'application/pdf')
-                                .then(res => { })
-                                .catch(async err => {
-                                  const alert = await this.alertCtrl.create({ message: "225" + JSON.stringify(err.message), buttons: ['Ok'] });
-                                  alert.present();
-                                });
-                            }
-                          }
-                        ]
-                      });
-                      confirm.present();
-                    } else if (type === 'share') {
-                      this.socialSharing.share(`Van Performance `, null, `${storageLocation}${pdfName}`, null).then(result => {
-                        console.log('Shared');
-                      }).catch(async err => {
-                        const alert = await this.alertCtrl.create({ message: "368" + err.message, buttons: ['Ok'] });
-                        alert.present();;
-                      });
-                    }
-                  }
-                  writer.write(binaryArray);
-                })
-              })
-              .catch(async err => {
-                this.loaderDownloading.dismiss()
-                const alert = await this.alertCtrl.create({ message: "245" + JSON.stringify(err), buttons: ['Ok'] });
-                alert.present();
-              });
-          })
-          .catch(async err => {
-            this.loaderDownloading.dismiss()
-            const alert = await this.alertCtrl.create({ message: "251" + JSON.stringify(err), buttons: ['Ok'] });
-            alert.present();
-          });
+  // async downloadPdf (type: string) {
+  //   if (window['cordova']) {
+  //     this.pdfObj.getBuffer(buffer => {
+  //       var utf8 = new Uint8Array(buffer); // Convert to UTF-8...
+  //       let binaryArray = utf8.buffer; //
+  //       let storageLocation: any;
+  //       const pdfName = `${"SKU PERFORMANCE"}-${new Date().getFullYear()}-${this.months[new Date().getMonth()]}-${new Date().getDate()}.pdf`;
+  //       if (this.platform.is('ios')) {
+  //         storageLocation = this.file.dataDirectory;
+  //       } else {
+  //         storageLocation = this.file.externalRootDirectory;
+  //       }
+  //       this.file.resolveDirectoryUrl(storageLocation)
+  //         .then(dirEntry => {
+  //           this.file.getFile(dirEntry, pdfName, { create: true })
+  //             .then(fileEntry => {
+  //               fileEntry.createWriter(writer => {
+  //                 writer.onwrite = async () => {
+  //                   this.loaderDownloading.dismiss()
+  //                   if (type === 'download') {
+  //                     const confirm = await this.alertCtrl.create({
+  //                       message: `Your Pdf is downloaded with named as ${pdfName} in your storage ${storageLocation}, Do you want to open now!`,
+  //                       buttons: [
+  //                         {
+  //                           text: 'Cancel',
+  //                           handler: () => {
+  //                             console.log('Confirmed Cancel');
+  //                           }
+  //                         },
+  //                         {
+  //                           text: 'Okay',
+  //                           handler: () => {
+  //                             this.fileOpener.open(`${storageLocation}${pdfName}`, 'application/pdf')
+  //                               .then(res => { })
+  //                               .catch(async err => {
+  //                                 const alert = await this.alertCtrl.create({ message: "225" + JSON.stringify(err.message), buttons: ['Ok'] });
+  //                                 alert.present();
+  //                               });
+  //                           }
+  //                         }
+  //                       ]
+  //                     });
+  //                     confirm.present();
+  //                   } else if (type === 'share') {
+  //                     this.socialSharing.share(`Van Performance `, null, `${storageLocation}${pdfName}`, null).then(result => {
+  //                       console.log('Shared');
+  //                     }).catch(async err => {
+  //                       const alert = await this.alertCtrl.create({ message: "368" + err.message, buttons: ['Ok'] });
+  //                       alert.present();;
+  //                     });
+  //                   }
+  //                 }
+  //                 writer.write(binaryArray);
+  //               })
+  //             })
+  //             .catch(async err => {
+  //               this.loaderDownloading.dismiss()
+  //               const alert = await this.alertCtrl.create({ message: "245" + JSON.stringify(err), buttons: ['Ok'] });
+  //               alert.present();
+  //             });
+  //         })
+  //         .catch(async err => {
+  //           this.loaderDownloading.dismiss()
+  //           const alert = await this.alertCtrl.create({ message: "251" + JSON.stringify(err), buttons: ['Ok'] });
+  //           alert.present();
+  //         });
 
-      });
-    } else {
-      this.loaderDownloading.dismiss()
-      this.pdfObj.open();
-    }
-  }
+  //     });
+  //   } else {
+  //     this.loaderDownloading.dismiss()
+  //     this.pdfObj.open();
+  //   }
+  // }
 
   onSharePdf () {
     this.onCreatePdf('share');

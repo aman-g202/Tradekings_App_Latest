@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
@@ -13,7 +13,8 @@ import pdfMake from 'pdfmake/build/pdfmake';
   styleUrls: ['./van-performance.page.scss'],
 })
 export class VanPerformancePage implements OnInit {
-
+  @ViewChild('scrollOne') scrollOne: ElementRef;
+  @ViewChild('scrollTwo') scrollTwo: ElementRef;
   list = [];
   filterdList = [];
   isFilterDegrowing = false;
@@ -22,7 +23,8 @@ export class VanPerformancePage implements OnInit {
   searchQuery: string = '';
   profile = {}
   externalId: string = '';
-
+  hrefTag = '';
+  dataAvailable = false;
   heightOfPDF;
   _minWidth;
   pdfObj;
@@ -54,7 +56,7 @@ export class VanPerformancePage implements OnInit {
     this.getData();
   }
 
-  async getData () {
+  async getData() {
     const loader = await this.widgetUtil.showLoader("Getting Data...", 30000);
     loader.present()
     this.reportService.getVANPerformanceData(this.externalId).subscribe((data: any) => {
@@ -64,6 +66,7 @@ export class VanPerformancePage implements OnInit {
         this.filterdList = this.filterdList.filter(item => {
           return item.categoryName.toLowerCase() === 'total';
         })
+        this.dataAvailable = true;
         loader.dismiss();
       })
     }, err => {
@@ -256,10 +259,12 @@ export class VanPerformancePage implements OnInit {
         }
       };
 
-      this.pdfObj = pdfMake.createPdf(documentDefinition);
-      this.downloadPdf(type);
+      // this.pdfObj = pdfMake.createPdf(documentDefinition);
+      // this.downloadPdf(type);
+      this.reportService.downloadPdf(documentDefinition, 'share', 'VAN PERFORMANCE')
 
     }, 1000);
+    this.loaderDownloading.dismiss();
   }
 
 
@@ -327,7 +332,7 @@ export class VanPerformancePage implements OnInit {
           lineHeight: 1
         },
         {
-          text: `${this.filterdList[i].percentage}`,
+          text: `${this.selectedCategoryType === 'all' ?  this.filterdList[i].percentage.toFixed(2) : this.filterdList[i].percentage}`,
           color: textColorSecondary,
           fontSize: 8,
           margin: [0, 6, 0, 6],
@@ -340,82 +345,94 @@ export class VanPerformancePage implements OnInit {
     return body;
   }
 
-  downloadPdf(type: string) {
-    if (window['cordova']) {
-      this.pdfObj.getBuffer(buffer => {
-        var utf8 = new Uint8Array(buffer); // Convert to UTF-8...
-        let binaryArray = utf8.buffer; //
-        let storageLocation: any;
-        const pdfName = `${"VAN PERFORMANCE"}-${new Date().getFullYear()}-${this.months[new Date().getMonth()]}-${new Date().getDate()}.pdf`;
-        if (this.platform.is('ios')) {
-          storageLocation = this.file.documentsDirectory;
-        } else {
-          storageLocation = this.file.externalRootDirectory;
-        }
-        this.file.resolveDirectoryUrl(storageLocation)
-          .then(dirEntry => {
-            this.file.getFile(dirEntry, pdfName, { create: true })
-              .then(fileEntry => {
-                fileEntry.createWriter(writer => {
-                  writer.onwrite = async () => {
-                    this.loaderDownloading.dismiss()
-                    if (type === 'download') {
-                      const confirm = await this.alertCtrl.create({
-                        message: `Your Pdf is downloaded with named as ${pdfName} in your storage ${storageLocation}, Do you want to open now!`,
-                        buttons: [
-                          {
-                            text: 'Cancel',
-                            handler: () => {
-                              console.log('Confirmed Cancel');
-                            }
-                          },
-                          {
-                            text: 'Okay',
-                            handler: () => {
-                              this.fileOpener.open(`${storageLocation}${pdfName}`, 'application/pdf')
-                                .then(res => { })
-                                .catch(async err => {
-                                  const alert = await this.alertCtrl.create({ message: "225" + JSON.stringify(err.message), buttons: ['Ok'] });
-                                  alert.present();
-                                });
-                            }
-                          }
-                        ]
-                      });
-                      confirm.present();
-                    } else if (type === 'share') {
-                      this.socialSharing.share(`Van Performance `, null, `${storageLocation}${pdfName}`, null).then(result => {
-                        console.log('Shared');
-                      }).catch(async err => {
-                        const alert = await this.alertCtrl.create({ message: "368" + err.message, buttons: ['Ok'] });
-                        alert.present();
-                      });
-                    }
-                  }
-                  writer.write(binaryArray);
-                })
-              })
-              .catch(async err => {
-                this.loaderDownloading.dismiss()
-                const alert = await this.alertCtrl.create({ message: "245" + JSON.stringify(err), buttons: ['Ok'] });
-                alert.present();
-              });
-          })
-          .catch(async err => {
-            this.loaderDownloading.dismiss()
-            const alert = await this.alertCtrl.create({ message: "251" + JSON.stringify(err), buttons: ['Ok'] });
-            alert.present();
-          });
+  // downloadPdf(type: string) {
+  //   if (window['cordova']) {
+  //     this.pdfObj.getBuffer(buffer => {
+  //       var utf8 = new Uint8Array(buffer); // Convert to UTF-8...
+  //       let binaryArray = utf8.buffer; //
+  //       let storageLocation: any;
+  //       const pdfName = `${"VAN PERFORMANCE"}-${new Date().getFullYear()}-${this.months[new Date().getMonth()]}-${new Date().getDate()}.pdf`;
+  //       if (this.platform.is('ios')) {
+  //         storageLocation = this.file.documentsDirectory;
+  //       } else {
+  //         storageLocation = this.file.externalRootDirectory;
+  //       }
+  //       this.file.resolveDirectoryUrl(storageLocation)
+  //         .then(dirEntry => {
+  //           this.file.getFile(dirEntry, pdfName, { create: true })
+  //             .then(fileEntry => {
+  //               fileEntry.createWriter(writer => {
+  //                 writer.onwrite = async () => {
+  //                   this.loaderDownloading.dismiss()
+  //                   if (type === 'download') {
+  //                     const confirm = await this.alertCtrl.create({
+  //                       message: `Your Pdf is downloaded with named as ${pdfName} in your storage ${storageLocation}, Do you want to open now!`,
+  //                       buttons: [
+  //                         {
+  //                           text: 'Cancel',
+  //                           handler: () => {
+  //                             console.log('Confirmed Cancel');
+  //                           }
+  //                         },
+  //                         {
+  //                           text: 'Okay',
+  //                           handler: () => {
+  //                             this.fileOpener.open(`${storageLocation}${pdfName}`, 'application/pdf')
+  //                               .then(res => { })
+  //                               .catch(async err => {
+  //                                 const alert = await this.alertCtrl.create({ message: "225" + JSON.stringify(err.message), buttons: ['Ok'] });
+  //                                 alert.present();
+  //                               });
+  //                           }
+  //                         }
+  //                       ]
+  //                     });
+  //                     confirm.present();
+  //                   } else if (type === 'share') {
+  //                     this.socialSharing.share(`Van Performance `, null, `${storageLocation}${pdfName}`, null).then(result => {
+  //                       console.log('Shared');
+  //                     }).catch(async err => {
+  //                       const alert = await this.alertCtrl.create({ message: "368" + err.message, buttons: ['Ok'] });
+  //                       alert.present();
+  //                     });
+  //                   }
+  //                 }
+  //                 writer.write(binaryArray);
+  //               })
+  //             })
+  //             .catch(async err => {
+  //               this.loaderDownloading.dismiss()
+  //               const alert = await this.alertCtrl.create({ message: "245" + JSON.stringify(err), buttons: ['Ok'] });
+  //               alert.present();
+  //             });
+  //         })
+  //         .catch(async err => {
+  //           this.loaderDownloading.dismiss()
+  //           const alert = await this.alertCtrl.create({ message: "251" + JSON.stringify(err), buttons: ['Ok'] });
+  //           alert.present();
+  //         });
 
-      });
-    } else {
-      this.loaderDownloading.dismiss()
-      this.pdfObj.open();
-    }
-  }
+  //     });
+  //   } else {
+  //     this.loaderDownloading.dismiss()
+  //     this.pdfObj.open();
+  //   }
+  // }
 
   onSharePdf() {
     this.onCreatePdf('share');
+  }
+
+  updateScroll() {
+    const scrollOne = this.scrollOne.nativeElement as HTMLElement;
+    const scrollTwo = this.scrollTwo.nativeElement as HTMLElement;
+    scrollTwo.scrollLeft = scrollOne.scrollLeft;
+  }
+
+  updateScrollHeader() {
+    const scrollOne = this.scrollOne.nativeElement as HTMLElement;
+    const scrollTwo = this.scrollTwo.nativeElement as HTMLElement;
+    scrollOne.scrollLeft = scrollTwo.scrollLeft;
   }
 
 

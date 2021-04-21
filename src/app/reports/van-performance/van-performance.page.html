@@ -5,36 +5,39 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="reports">
+      </ion-back-button>
+    </ion-buttons>
     <ion-title>VAN Performance</ion-title>
-  </ion-navbar>
-  <ion-toolbar>
-    <ion-searchbar #q [(ngModel)]="searchQuery" placeholder="Search VAN" (ionChange)="searchVAN(q.value)"></ion-searchbar>
   </ion-toolbar>
+  <ion-searchbar #q [(ngModel)]="searchQuery" placeholder="Search VAN" (ionChange)="searchVAN(q.value)">
+  </ion-searchbar>
 
-  <ion-grid class="filters">
+  <ion-grid>
     <ion-row>
-      <ion-col>
-        <ion-select [(ngModel)]="selectedCategoryType" interface="popover" #category (ngModelChange)="onCategoryTypeSelect(category.value)" placeholder="Select Category">
-          <ion-option value="all">Total</ion-option>
-          <ion-option value="confectionery">Confectionery</ion-option>
-          <ion-option value="household">HouseHold</ion-option>
-          <ion-option value="Laundry">Laundry</ion-option>
-          <ion-option value="Personal Care">Personal Care</ion-option>
+      <ion-col class="catCol">
+        <ion-select [(ngModel)]="selectedCategoryType" interface="popover" #category
+          (ngModelChange)="onCategoryTypeSelect(category.value)" placeholder="Select Category">
+          <ion-select-option value="all">Total</ion-select-option>
+          <ion-select-option value="confectionery">Confectionery</ion-select-option>
+          <ion-select-option value="household">HouseHold</ion-select-option>
+          <ion-select-option value="Laundry">Laundry</ion-select-option>
+          <ion-select-option value="Personal Care">Personal Care</ion-select-option>
         </ion-select>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>
-        <button ion-button color="secondary" (click)="filterNonBillingOutlet()">
+      <ion-col size="6" class="ion-text-center">
+        <ion-button color="secondary" (click)="filterNonBillingOutlet()" expand="full">
           NON BILLED VAN {{ isFilterNonBilling ? '(x)' : '' }}
-        </button>
+        </ion-button>
       </ion-col>
-      <ion-col>
-        <button ion-button color="secondary" (click)="filterDegrowingOutlet()">
+      <ion-col class="ion-text-center">
+        <ion-button ion-button color="secondary" (click)="filterDegrowingOutlet()" expand="full">
           DECLINING VAN {{ isFilterDegrowing ? '(x)' : '' }}
-        </button>
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -43,50 +46,48 @@
 
 
 <ion-content padding>
-  <div class="table-container" *ngIf="filterdList.length != 0">
-    <table>
-      <thead>
-        <tr>
-            <th>VAN Code</th>
-            <th>VAN Name</th>
-            <th class="number">FTD Tonnage</th>
-            <th class="number">MTD Tonnage</th>
-            <th class="number">LMTD Tonnage</th>
-            <th class="number">LYMTD Tonnage</th>
-            <th class="number">% Growth over LYMTD</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="!filterdList">
-        <tr>
-          <td colspan="6" class="text-center"> No Data Available </td>
-        </tr>
-      </tbody>
-      <tbody>
-        <tr *ngFor="let item of filterdList">
-          <td class="large-space">{{item.vanCode}}</td>
-          <td class="less-space">{{item.vanName}}</td>
-          <td class="number">{{item.ftdTonnage.toFixed(1)}}</td>
-          <td class="number">{{item.mtdTonnage.toFixed(1)}}</td>
-          <td class="number">{{item.lmtdTonnage.toFixed(1)}}</td>
-          <td class="number">{{item.lymtdTonnage.toFixed(1)}}</td>
-          <td class="number" *ngIf="item.percentage == 0">{{item.percentage}}</td>
-          <td class="number" *ngIf="item.percentage != 0" [ngClass]="item.percentage >= 0?'positive':'negative'">{{item.percentage}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="table-container-1" style="position: sticky;  z-index: 0;" (scroll)="updateScrollHeader()" *ngIf="filterdList.length != 0 &&  dataAvailable" #scrollTwo> 
+    <ion-grid>
+      <ion-row>
+        <ion-col>VAN Code</ion-col>
+        <ion-col>VAN Name</ion-col>
+        <ion-col>FTD Tonnage</ion-col>
+        <ion-col>MTD Tonnage</ion-col>
+        <ion-col>LMTD Tonnage</ion-col>
+        <ion-col>LYMTD Tonnage</ion-col>
+        <ion-col>% Growth over LYMTD</ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
-  <ion-fab right bottom *ngIf="filterdList.length != 0">
-    <button ion-fab (click)="onSharePdf()">
+
+  <div class="table-container-2" style="z-index: 0" *ngIf="filterdList.length != 0 &&  dataAvailable"
+    (scroll)="updateScroll()" #scrollOne>
+    <ion-grid>
+      <ion-row *ngFor="let item of filterdList" class="list">
+        <ion-col>{{item.vanCode}}</ion-col>
+        <ion-col class="nameCol">{{item.vanName}}</ion-col>
+        <ion-col>{{item.ftdTonnage.toFixed(1)}}</ion-col>
+        <ion-col>{{item.mtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col>{{item.lmtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col>{{item.lymtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="item.percentage == 0">{{item.percentage | number: '.2-2'}}</ion-col>
+        <ion-col *ngIf="item.percentage != 0" [ngClass]="item.percentage >= 0?'positive':'negative'">{{item.percentage | number: '.2-2'}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="filterdList.length != 0 ">
+    <ion-fab-button (click)="onSharePdf()">
       <ion-icon name="share"></ion-icon>
-    </button>
+    </ion-fab-button>
   </ion-fab>
-  <div *ngIf="filterdList.length === 0">
-    <ion-card class="noDataView">
+  <div *ngIf="filterdList.length === 0 &&  dataAvailable" class="noDataView">
+    <ion-card>
       <ion-card-header text-center>
         <ion-icon name="alert"></ion-icon>
-          <h4 *ngIf="list.length != 0">No record matched!</h4>
-          <h4 *ngIf="list.length == 0">No record found!</h4>
-        </ion-card-header>
+        <h4 *ngIf="list.length != 0">No record matched!</h4>
+        <h4 *ngIf="list.length == 0">No record found!</h4>
+      </ion-card-header>
     </ion-card>
   </div>
 </ion-content>

@@ -94,7 +94,9 @@ export class ReportService {
                     } else if (type === 'share') {
                       this.socialSharing.share(`${storageLocation}${pdfName}`, null).then(result => {
                         console.log('Shared');
+                        this.showLoder.dismiss();
                       }).catch(err => {
+                        this.showLoder.dismiss();
                         this.widgetUtil.showAlert('368' + JSON.stringify(err.message));
                       });
                     }
@@ -114,8 +116,8 @@ export class ReportService {
 
       });
     } else {
-      this.showLoder.dismiss();
       pdfObj.open();
+      this.showLoder.dismiss();
     }
   }
 }

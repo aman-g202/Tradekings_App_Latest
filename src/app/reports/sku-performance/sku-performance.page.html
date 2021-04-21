@@ -1,99 +1,98 @@
 <ion-header>
-  <ion-navbar>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="reports">
+      </ion-back-button>
+    </ion-buttons>
     <ion-title>SKU Performance</ion-title>
-  </ion-navbar>
-  <ion-toolbar>
-    <form (ngSubmit)="searchSKU(q.value)">
-      <ion-searchbar #q placeholder="Search sku by name"></ion-searchbar>
-    </form>
   </ion-toolbar>
-
+  <form (ngSubmit)="searchSKU(q.value)">
+    <ion-searchbar #q placeholder="Search sku by name"></ion-searchbar>
+  </form>
   <ion-grid class="filters">
     <ion-row>
-      <ion-col>
-        <ion-select [(ngModel)]="categoryName" interface="popover" #category (ngModelChange)="onCategoryTypeSelect(category.value)" placeholder="Select Category">
-          <ion-option value="total">Total</ion-option>
-          <ion-option value="Confectionery">Confectionery</ion-option>
-          <ion-option value="Household">HouseHold</ion-option>
-          <ion-option value="Laundry">Laundry</ion-option>
-          <ion-option value="Personal Care">Personal Care</ion-option>
+      <ion-col class="catCol">
+        <ion-select [(ngModel)]="categoryName" interface="popover" #category
+          (ngModelChange)="onCategoryTypeSelect(category.value)" placeholder="Select Category">
+          <ion-select-option value="total">Total</ion-select-option>
+          <ion-select-option value="Confectionery">Confectionery</ion-select-option>
+          <ion-select-option value="Household">HouseHold</ion-select-option>
+          <ion-select-option value="Laundry">Laundry</ion-select-option>
+          <ion-select-option value="Personal Care">Personal Care</ion-select-option>
         </ion-select>
       </ion-col>
       <ion-col>
-        <button ion-button color="secondary" (click)="includeTonnage = !includeTonnage">
+        <ion-button color="secondary" expand="full" (click)="includeTonnage = !includeTonnage">
           Show in Tonnage {{ includeTonnage ? '(x)' : '' }}
-        </button>
+        </ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <button ion-button color="secondary" (click)="onGetSkuValue('NONBILLED')">
+        <ion-button expand="full" color="secondary" (click)="onGetSkuValue('NONBILLED')">
           NON BILLED SKU {{ isFilterNonBilling ? '(x)' : '' }}
-        </button>
+        </ion-button>
       </ion-col>
       <ion-col>
-        <button ion-button color="secondary" (click)="onGetSkuValue('DCLSKU')">
+        <ion-button expand="full" color="secondary" (click)="onGetSkuValue('DCLSKU')">
           DECLINING SKU {{ isFilterDegrowing ? '(x)' : '' }}
-        </button>
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
 
 </ion-header>
 
-<ion-content padding>
-  <ion-refresher (ionRefresh)="doRefresh($event)" spinner="crescent">
+<ion-content class="padding">
+  <ion-refresher (ionRefresh)="doRefresh($event)" spinner="crescent" slot="fixed">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="table-container" style="position: sticky;  z-index: 1;" (scroll) = "updateScrollHeader()" #scrollTwo>
-    <table style="table-layout:fixed;">
-      <thead *ngIf="filterdList.length != 0">
-        <tr>
-            <th class="w-70">SKU Code</th>
-            <th class="w-240">SKU Name</th>
-            <th class="number w-70">FTD <span *ngIf="includeTonnage">Tonnage</span></th>
-            <th class="number w-70">MTD <span *ngIf="includeTonnage">Tonnage</span></th>
-            <th class="number w-70">LMTD <span *ngIf="includeTonnage">Tonnage</span></th>
-            <th class="number w-70">LYMTD <span *ngIf="includeTonnage">Tonnage</span></th>    
-            <th class="number w-70">% Growth over LYMTD</th>
-        </tr>
-      </thead>
-    </table>
+  <div class="table-container-1" style="position: sticky;  z-index: 0;"  *ngIf="filterdList.length != 0 && dataAvailable" (scroll)="updateScrollHeader()" #scrollTwo>
+    <ion-grid>
+      <ion-row style="table-layout:fixed">
+        <ion-col class="w-70">SKU Code</ion-col>
+        <ion-col class="w-240">SKU Name</ion-col>
+        <ion-col class="number w-70">FTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col class="number w-70">MTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col class="number w-70">LMTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col class="number w-70">LYMTD <span *ngIf="includeTonnage">Tonnage</span></ion-col>
+        <ion-col class="number w-70">% Growth over LYMTD</ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
-  <div class="table-container"  *ngIf="filterdList.length != 0" (scroll)="updateScroll()" #scrollOne>
-    <table style="table-layout:fixed;">
-      <tbody>
-        <tr *ngFor="let item of filterdList">
-          <td class="large-space w-70">{{item.productCode}}</td>
-          <td class="less-space w-240">{{item.productName}}</td>
-          <td class="number w-70" *ngIf="includeTonnage">{{item.ftdTonnage.toFixed(1)}}</td>
-          <td class="number w-70" *ngIf="includeTonnage">{{item.mtdTonnage.toFixed(1)}}</td>
-          <td class="number w-70" *ngIf="includeTonnage">{{item.lmtdTonnage.toFixed(1)}}</td>
-          <td class="number w-70" *ngIf="includeTonnage">{{item.lymtdTonnage.toFixed(1)}}</td>
-          <td class="number w-70" *ngIf="!includeTonnage">{{item.ftd.toFixed(0)}}</td>
-          <td class="number w-70" *ngIf="!includeTonnage">{{item.mtd.toFixed(0)}}</td>
-          <td class="number w-70" *ngIf="!includeTonnage">{{item.lmtd.toFixed(0)}}</td>
-          <td class="number w-70" *ngIf="!includeTonnage">{{item.lymtd.toFixed(0)}}</td>
-          <td class="number w-70" *ngIf="item.percentage == 0">0</td>
-          <td class="number w-70" *ngIf="item.percentage != 0" [ngClass]="item.percentage > 0?'positive':'negative'">{{item.percentage}}%</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="table-container-2" style="z-index: 0" *ngIf="filterdList.length != 0 && dataAvailable"
+    (scroll)="updateScroll()" #scrollOne>
+    <ion-grid>
+      <ion-row *ngFor="let item of filterdList" class="list" style="table-layout:fixed;">
+        <ion-col>{{item.productCode}}</ion-col>
+        <ion-col>{{item.productName}}</ion-col>
+        <ion-col *ngIf="includeTonnage">{{item.ftdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="includeTonnage">{{item.mtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="includeTonnage">{{item.lmtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="includeTonnage">{{item.lymtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="!includeTonnage">{{item.ftdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="!includeTonnage">{{item.mtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="!includeTonnage">{{item.lmtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="!includeTonnage">{{item.lymtdTonnage.toFixed(1)}}</ion-col>
+        <ion-col *ngIf="item.percentage == 0">0</ion-col>
+        <ion-col *ngIf="item.percentage != 0" [ngClass]="item.percentage > 0 ? 'positive':'negative'">{{item.percentage}}</ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
-  <ion-fab right bottom *ngIf="filterdList.length != 0">
-    <button ion-fab (click)="onSharePdf()">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="filterdList.length != 0 ">
+    <ion-fab-button (click)="onSharePdf()">
       <ion-icon name="share"></ion-icon>
-    </button>
+    </ion-fab-button>
   </ion-fab>
-  <div *ngIf="filterdList.length === 0">
-    <ion-card class="noDataView">
+  <div *ngIf="filterdList.length < 1 && dataAvailable" class="noDataView">
+    <ion-card>
       <ion-card-header text-center>
         <ion-icon name="alert"></ion-icon>
-          <h4>No record found!</h4>
-        </ion-card-header>
+        <h4>No record found!</h4>
+      </ion-card-header>
     </ion-card>
   </div>
-  <ion-infinite-scroll  (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
