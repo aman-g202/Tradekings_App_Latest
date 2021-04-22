@@ -65,7 +65,7 @@ export class ReportsService {
                         console.log('Confirmed Cancel');
                       }
                     } else if (type === 'share') {
-                      this.socialSharing.share(`${storageLocation}${pdfName}`, null).then(result => {
+                      this.socialSharing.share(`${pdfName}`, null, `${storageLocation}${pdfName}`, null).then(result => {
                       }).catch(err => {
                         this.widgetUtil.showAlert('368' + JSON.stringify(err.message));
                       });
