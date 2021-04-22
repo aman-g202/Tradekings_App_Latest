@@ -14,6 +14,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class ReportsService {
   pdfObj: any = {};
   showLoder: any;
+  months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 
   constructor(
     private fileOpener: FileOpener,
@@ -37,7 +39,7 @@ export class ReportsService {
         const utf8 = new Uint8Array(buffer); // Convert to UTF-8...
         const binaryArray = utf8.buffer;
         let storageLocation: any;
-        const pdfName = `${fileName}-${new Date().getFullYear()}-${[new Date().getMonth()]}-${new Date().getDate()}.pdf`;
+        const pdfName = `${fileName}-${new Date().getFullYear()}-${this.months[new Date().getMonth()]}-${new Date().getDate()}.pdf`;
         if (this.platform.is('ios')) {
           storageLocation = this.file.dataDirectory;
         } else {
