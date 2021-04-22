@@ -13,18 +13,13 @@ import { StorageServiceProvider } from '../../providers/services/storage/storage
 })
 export class SchedulersPage implements OnInit {
   endPointObs$: Observable<any>;
-  name = '';
 
   constructor(
     private schedulersService: SchedulersService,
-    private widgetUtil: WidgetUtilService,
-    private storageService: StorageServiceProvider
+    private widgetUtil: WidgetUtilService
   ) { }
 
-async  ngOnInit() {
-  const profile: ProfileModel = await this.storageService.getFromStorage('profile') as ProfileModel;
-  this.name = profile.name;
-  }
+async  ngOnInit() {}
 
   presentPopover(event){
    this.widgetUtil.presentPopover(event);
