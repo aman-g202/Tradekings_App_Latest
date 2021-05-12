@@ -225,90 +225,95 @@ export class ViewStatementPage implements OnInit {
 
 
   async createPdf() {
-    this.height = 0;
-    this.width = 0;
-    const textColorPrimary = '#000000';
-    this.documentDefinition = {
-      header(currentPage, pageCount) {
-        return [
-          {
-            text: `Page ${currentPage} of ${pageCount}`,
-            fontSize: 12,
-            color: 'grey',
-            margin: 20,
-            alignment: 'right'
-          }
-        ];
-      },
-      pageSize: 'A4',
-      content: [
-        { text: 'STATEMENT', fontSize: 18, bold: true, alignment: 'center', color: 'blue', decoration: 'underline', margin: 10 },
-        { text: 'CUSTOMER\'S NAME & ADDRESS', bold: true, color: textColorPrimary },
-        {
-          canvas: [
+    const showLoader = await this.widgetUtil.showLoader('Please wait PDF downloading...', 5000);
+    setTimeout( () => {
+      this.height = 0;
+      this.width = 0;
+      const textColorPrimary = '#000000';
+      this.documentDefinition = {
+        header(currentPage, pageCount) {
+          return [
             {
-              type: 'rect',
-              x: 0.5,
-              y: this.height += 2,
-              w: 203,
-              h: 105,
-              r: 4,
-              lineColor: '#D3D3D3',
-              color: '#D3D3D3'
-            },
-            {
-              type: 'rect',
-              x: 0.5,
-              y: this.height,
-              w: 200,
-              h: 102,
-              r: 4,
-              lineColor: '#D3D3D3',
-              color: 'white'
+              text: `Page ${currentPage} of ${pageCount}`,
+              fontSize: 12,
+              color: 'grey',
+              margin: 20,
+              alignment: 'right'
             }
-          ]
+          ];
         },
-        {
-          text: this.selectedCustomer.customerName,
-          absolutePosition: { x: 50, y: this.height += 115 },
-          fontSize: 10,
-          color: textColorPrimary
-        },
-        {
-          text: this.selectedCustomer.customerAddress,
-          absolutePosition: { x: 50, y: this.height += 20 },
-          fontSize: 9,
-          color: textColorPrimary
-        },
-        {
-          text: `Period ${new DatePipe('en_ZM').transform(this.statements[0].date, 'dd/M/yy')} to ${new DatePipe('en_ZM').transform(this.statements[this.statements.length - 1].date, 'dd/M/yy')}`,
-          absolutePosition: { x: 50, y: this.height += 60 },
-          fontSize: 9,
-          alignment: 'right',
-          bold: true,
-          color: textColorPrimary
-        },
-        {
-          absolutePosition: { x: 50, y: this.height += 30 },
-          table: {
-            headerRows: 1,
-            widths: ['*', '*', 100, 70, 70, 80],
-            body: this.prepareRowData()
+        pageSize: 'A4',
+        content: [
+          { text: 'STATEMENT', fontSize: 18, bold: true, alignment: 'center', color: 'blue', decoration: 'underline', margin: 10 },
+          { text: 'CUSTOMER\'S NAME & ADDRESS', bold: true, color: textColorPrimary },
+          {
+            canvas: [
+              {
+                type: 'rect',
+                x: 0.5,
+                y: this.height += 2,
+                w: 203,
+                h: 105,
+                r: 4,
+                lineColor: '#D3D3D3',
+                color: '#D3D3D3'
+              },
+              {
+                type: 'rect',
+                x: 0.5,
+                y: this.height,
+                w: 200,
+                h: 102,
+                r: 4,
+                lineColor: '#D3D3D3',
+                color: 'white'
+              }
+            ]
           },
-          layout: { hLineColor: 'black', vLineColor: 'black' }
+          {
+            text: this.selectedCustomer.customerName,
+            absolutePosition: { x: 50, y: this.height += 115 },
+            fontSize: 10,
+            color: textColorPrimary
+          },
+          {
+            text: this.selectedCustomer.customerAddress,
+            absolutePosition: { x: 50, y: this.height += 20 },
+            fontSize: 9,
+            color: textColorPrimary
+          },
+          {
+            text: `Period ${new DatePipe('en_ZM').transform(this.statements[0].date, 'dd/M/yy')} to ${new DatePipe('en_ZM').transform(this.statements[this.statements.length - 1].date, 'dd/M/yy')}`,
+            absolutePosition: { x: 50, y: this.height += 60 },
+            fontSize: 9,
+            alignment: 'right',
+            bold: true,
+            color: textColorPrimary
+          },
+          {
+            absolutePosition: { x: 50, y: this.height += 30 },
+            table: {
+              headerRows: 1,
+              widths: ['*', '*', 100, 70, 70, 80],
+              body: this.prepareRowData()
+            },
+            layout: { hLineColor: 'black', vLineColor: 'black' }
+          }
+        ],
+        pageBreakBefore(currentNode, followingNodesOnPage) {
+          let flag = false;
+          if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
+            flag = true;
+          }
+          if (currentNode.startPosition.top > 750) {
+            flag = true;
+          }
+          return flag;
         }
-      ],
-      pageBreakBefore(currentNode, followingNodesOnPage) {
-        let flag = false;
-        if (currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0) {
-          flag = true;
-        }
-        if (currentNode.startPosition.top > 750) {
-          flag = true;
-        }
-        return flag;
-      }
-    };
-    this.report.downloadPdf(this.documentDefinition, this.type, this.fileName);
+      };
+      this.report.downloadPdf(this.documentDefinition, this.type, this.fileName);
+      showLoader.dismiss();
+
+    }, 1000);
   }
 }

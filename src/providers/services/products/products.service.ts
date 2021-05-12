@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { ProfileModel } from '../../models/profile.model';
-import { ProductModel } from '../../models/product.model';
+
 
 @Injectable()
 export class ProductService {

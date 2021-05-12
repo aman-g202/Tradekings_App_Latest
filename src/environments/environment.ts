@@ -44,8 +44,29 @@ export const environment = {
     updateProduct: 'api/product/update',
     getPriceExecutiveDashboardData: 'api/user/priceExecutive/dashboard',
     getPendingInvoiceData: 'api/user/customer/pendinginvoice',
-    createUser: 'api/user/'
-  },
+    createUser: 'api/user/',
+    // oracles endpoint
+    updateProductInMongo: 'api/erp/update/product/mongo',
+    updateProductStatInERP: 'api/erp/update/product/erp',
+    updateCustomerInMongo: 'api/erp/update/customer/mongo',
+    updateCustomerStatInERP: 'api/erp/update/customer/erp',
+    createNewCustomerInMongo: 'api/erp/create/new/customer/mongo',
+    createNewProductInMongo: 'api/erp/create/new/product/mongo',
+    updateParentIdInUserDoc: 'api/erp/update/parent/mongo',
+    updateUserDashboardData: 'api/erp/update/dashboard/data',
+    updateNonCustomerDashboardData: 'api/erp/update/noncustomer/dashboard/data',
+    updateAssociatedSMListToMongo: 'api/erp/update/associated/sm/mongo',
+    storeInProgressOrderInErp: 'api/erp/store/inprogress/order/to/erp',
+    updateOrderStatusToBilled: 'api/erp/update/order/status/billed/mongo',
+    createCustomerStatements: 'api/erp/create/customer/statements',
+    createCustomerPendingInvoice: 'api/erp/create/customer/pendinginvoice',
+    createCustomerInvoiceAgainstOrder: 'api/erp/customer/report/invoiceagainstorder',
+    updateInvoiceOrderGap: 'api/erp/customer/report/invoiceagainstorder',
+    updateCustomerPerformance: 'api/erp/customer/report/customerperformance',
+    updateSkuPerformance: 'api/erp/customer/report/skuperformance',
+    updateVanPerformance: 'api/erp/customer/report/vanperformance',
+
+ },
   storageKeys: {}
 };
 

@@ -16,11 +16,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="full-background" id="main" style="margin-right: 15px; margin-left: 15px;"> 
+<ion-content class="full-background" id="main"> 
   <ion-card class="tabs-wrapper">
     <ion-row *ngIf="selectedUserCustomer || useTypePriceExecutive" class="text-align-center">
       <ion-col size="6">
-        <ion-button color="primary"  class="ion-text-wrap" expand="full" (click)="navigateToViewSatetement()">VIEW STATEMENTS</ion-button>
+        <ion-button color="primary"  expand="full" (click)="navigateToViewSatetement()">VIEW STATEMENTS</ion-button>
       </ion-col>
       <ion-col size="6">
         <ion-button class="InvoiceBtn"  expand="full" (click)="createPendingInvoice()">PENDING INVOICE</ion-button>
@@ -32,8 +32,8 @@
       <ion-card-title>
         <ion-item lines="none">
           <ion-label class="boldText">TARGET vs ACHIEVEMENT</ion-label>
-          <ion-select placeholder="Total"  interface="popover" (ionChange)="targetCategorySelectionChanged($event)" >
-            <ion-select-option selected="true"  value="Total">Total</ion-select-option>
+          <ion-select placeholder="Total"  interface="popover" (ionChange)="targetCategorySelectionChanged($event)" [(ngModel)]="selectedValue">
+            <ion-select-option value="Total">Total</ion-select-option>
             <ion-select-option *ngFor="let category of categoryList" [value]="category.name">{{category.name}}
             </ion-select-option>
           </ion-select>

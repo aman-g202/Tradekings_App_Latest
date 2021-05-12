@@ -102,7 +102,7 @@
 
 <ion-footer class="full-background" *ngIf="showImportOrder || showCancelOrder">
   <ion-row class="ion-align-items-center">
-    <ion-col>
+    <ion-col class="ion-text-center">
       <ion-button *ngIf="showImportOrder" color="secondary" (click)="importOrder()">
         <ion-icon name="arrow-dropdown-circle"></ion-icon> Import Order<ion-spinner name="dots" *ngIf="showLoader">
         </ion-spinner>

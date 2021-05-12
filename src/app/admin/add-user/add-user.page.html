@@ -209,11 +209,11 @@
             *Password is required
           </p>
           <ion-item>
-            <ion-label class="ion-label" position="floating">SM Code</ion-label>
+            <ion-label class="ion-label" position="floating">PE Code</ion-label>
             <ion-input type="text" formControlName="externalId"></ion-input>
           </ion-item>
           <p class="error" *ngIf="externalId.hasError('required') && externalId.touched">
-            *SM code is required
+            *PE code is required
           </p>
           <ion-grid>
             <ion-button expand="full" color="secondary" [disabled]="!(addSalesmanForm.controls.name.valid && addSalesmanForm.controls.userLoginId.valid && addSalesmanForm.controls.password.valid && isUserAuthorized)"

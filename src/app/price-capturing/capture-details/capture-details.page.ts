@@ -49,7 +49,7 @@ export class CaptureDetailsPage implements OnInit {
       priceType: ['CASE', Validators.required],
       channel: ['formal_trade', Validators.required],
       shopName: ['', Validators.required],
-      mobile: [' ', Validators.required],
+      mobile: ['', Validators.required],
       province: ['', Validators.required],
       city: ['', Validators.required],
       area: ['', Validators.required]
@@ -58,7 +58,7 @@ export class CaptureDetailsPage implements OnInit {
 
   async addCustomer() {
     const prepareCustDetail: any = this.addCustomerForm.value;
-    prepareCustDetail.mobile = this.addCustomerForm.value.mobile.toString();
+    // prepareCustDetail.mobile = this.addCustomerForm.value.mobile.toString();
     await this.storageService.setToStorage('customerInfo', prepareCustDetail);
     this.router.navigateByUrl('/capture-price/parent-category');
   }

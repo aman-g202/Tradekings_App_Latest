@@ -22,9 +22,9 @@
     <ion-card *ngFor="let order of orderList">
       <ion-card-content>
         <ion-row>
-          <ion-col style="text-align: center;">
+          <ion-col class="dateCol ion-align-items-center">
             <ion-icon color="grey" name="calendar"></ion-icon>
-            <span style="white-space: pre">Date: </span>{{order.lastUpdatedAt}}
+            <span>Date: </span>{{order.lastUpdatedAt}}
           </ion-col>
           <ion-col class="statusCol">
             <ion-icon name="radio-button-on" class="{{order.status}}"></ion-icon><span>Status:</span> <strong
@@ -82,12 +82,12 @@
         </ion-row>
         <ion-row class="ion-align-items-center" *ngIf="isAdmin">
           <ion-col>
-            <ion-button  fill="outline" color="secondary" (click)="getOrderDetial(order)">view order
+            <ion-button  fill="outline" size="small" color="secondary" (click)="getOrderDetial(order)">view order
             </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button  class="importBtn" [disabled]="!(order.showImport)" (click)="importOrder(order)">
-              <ion-icon name="caret-down-circle-outline"></ion-icon>IMPORT ORDER<ion-spinner name="dots"
+            <ion-button  class="importBtn" size="small" [disabled]="!(order.showImport)" (click)="importOrder(order)">
+              <ion-icon name="caret-down-circle-outline"></ion-icon>IMPORT ORDER<ion-spinner color="primary" name="dots"
                 *ngIf="showLoader"></ion-spinner>
             </ion-button>
           </ion-col>
